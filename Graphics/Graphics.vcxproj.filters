@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{33f31b0b-aeba-41da-96d6-4668a39f077d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{cf054cce-3635-45c3-9ee4-230d979a3cbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Window">
+      <UniqueIdentifier>{2477a0fb-7485-417a-bc86-53a41e9c5fd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Camera">
+      <UniqueIdentifier>{ce55ff84-ed64-46cd-bb49-c7139e0a0591}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Text">
+      <UniqueIdentifier>{7db63649-64cb-466f-bf13-1a924e3b63e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Drawing">
+      <UniqueIdentifier>{278cb8bc-d112-4e2a-9e44-05d9295e1247}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Image">
+      <UniqueIdentifier>{bb80f615-583e-4a15-81b4-b08892b28577}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Image\Texture">
+      <UniqueIdentifier>{9dfb79eb-223a-40dd-927f-a99e447fe2a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Animation">
+      <UniqueIdentifier>{e7717414-b5c3-4016-86d5-5aff4ce15e1d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Math\mat3.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\vec2.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\vec3.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\PATH.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\EventHandler.hpp">
+      <Filter>Graphics\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Camera.hpp">
+      <Filter>Graphics\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\CameraView.hpp">
+      <Filter>Graphics\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\BitmapFont.hpp">
+      <Filter>Graphics\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Text.hpp">
+      <Filter>Graphics\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Texture.hpp">
+      <Filter>Graphics\Image\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Draw.hpp">
+      <Filter>Graphics\Drawing</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Mesh.h">
+      <Filter>Graphics\Drawing</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Shader.h">
+      <Filter>Graphics\Drawing</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Vertices.h">
+      <Filter>Graphics\Drawing</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\VerticesDescription.h">
+      <Filter>Graphics\Drawing</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Transform.hpp">
+      <Filter>Graphics\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Color4f.hpp">
+      <Filter>Graphics\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\ColorInChar.hpp">
+      <Filter>Graphics\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Image.hpp">
+      <Filter>Graphics\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Screenshot.hpp">
+      <Filter>Graphics\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Angle.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\PlatformWindowGLFW.hpp">
+      <Filter>Graphics\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\OpenGLWindow.hpp">
+      <Filter>Graphics\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Animation.hpp">
+      <Filter>Graphics\Animation</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Graphics\Camera.cpp">
+      <Filter>Graphics\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\CameraView.cpp">
+      <Filter>Graphics\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\BitmapFont.cpp">
+      <Filter>Graphics\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Text.cpp">
+      <Filter>Graphics\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Texture.cpp">
+      <Filter>Graphics\Image\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Draw.cpp">
+      <Filter>Graphics\Drawing</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Mesh.cpp">
+      <Filter>Graphics\Drawing</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Shader.cpp">
+      <Filter>Graphics\Drawing</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Vertices.cpp">
+      <Filter>Graphics\Drawing</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\VerticesDescription.cpp">
+      <Filter>Graphics\Drawing</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Transform.cpp">
+      <Filter>Graphics\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Color.cpp">
+      <Filter>Graphics\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Image.cpp">
+      <Filter>Graphics\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Screenshot.cpp">
+      <Filter>Graphics\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\PlatformWindowGLFW.cpp">
+      <Filter>Graphics\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\OpenGLWindowGLFW.cpp">
+      <Filter>Graphics\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Animation.cpp">
+      <Filter>Graphics\Animation</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

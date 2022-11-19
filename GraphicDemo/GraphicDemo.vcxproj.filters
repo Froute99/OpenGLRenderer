@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="AnimationDemo.cpp">
+      <Filter>Demo\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Demo.cpp">
+      <Filter>Demo</Filter>
+    </ClCompile>
+    <ClCompile Include="ShapeDrawingDemo.cpp">
+      <Filter>Demo\ShapeDrawing</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureDrawingDemo.cpp">
+      <Filter>Demo\TextureDrawing</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformParentDemo.cpp">
+      <Filter>Demo\TransformParent</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="AnimationDemo.hpp">
+      <Filter>Demo\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Demo.hpp">
+      <Filter>Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="ShapeDrawingDemo.hpp">
+      <Filter>Demo\ShapeDrawing</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureDrawingDemo.hpp">
+      <Filter>Demo\TextureDrawing</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformParentDemo.hpp">
+      <Filter>Demo\TransformParent</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Demo">
+      <UniqueIdentifier>{29766f34-c98b-4a4f-b62d-df0d2c00c625}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Demo\Animation">
+      <UniqueIdentifier>{db475a0e-dbf4-49b5-bfe3-35f7a3fde8cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Demo\ShapeDrawing">
+      <UniqueIdentifier>{d56e2b89-6e5e-4f8e-94a9-9889196c06f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Demo\TextureDrawing">
+      <UniqueIdentifier>{9d088894-563a-400c-809d-935b7540c02f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Demo\TransformParent">
+      <UniqueIdentifier>{c9d4b8f7-fd25-4398-b951-0853817a80fa}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
