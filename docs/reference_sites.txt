@@ -1,0 +1,1 @@
+https://learnopengl.com/Guest-Articles/2022/Compute-Shaders/Introduction

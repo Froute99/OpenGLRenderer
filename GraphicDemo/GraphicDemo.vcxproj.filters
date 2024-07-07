@@ -18,6 +18,9 @@
     <ClCompile Include="TransformParentDemo.cpp">
       <Filter>Demo\TransformParent</Filter>
     </ClCompile>
+    <ClCompile Include="ComputeShaderDemo.cpp">
+      <Filter>Demo\ComputeShader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -36,6 +39,9 @@
     <ClInclude Include="TransformParentDemo.hpp">
       <Filter>Demo\TransformParent</Filter>
     </ClInclude>
+    <ClInclude Include="ComputeShaderDemo.h">
+      <Filter>Demo\ComputeShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Demo">
@@ -52,6 +58,9 @@
     </Filter>
     <Filter Include="Demo\TransformParent">
       <UniqueIdentifier>{c9d4b8f7-fd25-4398-b951-0853817a80fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Demo\ComputeShader">
+      <UniqueIdentifier>{3a69e391-9ea4-4232-afb8-098213001507}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

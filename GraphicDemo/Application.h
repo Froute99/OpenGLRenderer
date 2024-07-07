@@ -21,6 +21,7 @@ class Application : public SimpleEventHandler
 public:
 	enum DEMOINDEX
 	{
+		COMPUTESHADERDEMO,
 		SHAPEDRAWING,
 		TEXTUREDRAWING,
 		ANIMATION,
