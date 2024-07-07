@@ -70,20 +70,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>..\lib\GraphicDemo\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>..\temp\GraphicDemo\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>..\build\bin\GraphicDemo\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>..\build\temp\GraphicDemo\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>..\lib\GraphicDemo\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>..\temp\GraphicDemo\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>..\build\bin\GraphicDemo\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>..\build\temp\GraphicDemo\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>..\lib\GraphicDemo\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>..\temp\GraphicDemo\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>..\build\bin\GraphicDemo\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>..\build\temp\GraphicDemo\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>..\lib\GraphicDemo\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>..\temp\GraphicDemo\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>..\build\bin\GraphicDemo\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>..\build\temp\GraphicDemo\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -98,7 +98,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)external\glfw3\lib\$(Platform)\;$(SolutionDir)external\glew\lib\$(Platform)\;$(SolutionDir)lib\Graphics\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)external\glfw3\lib\$(Platform)\;$(SolutionDir)external\glew\lib\$(Platform)\;$(SolutionDir)build\lib\Graphics\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;Graphics.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
@@ -116,7 +116,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)external\glfw3\lib\$(Platform)\;$(SolutionDir)external\glew\lib\$(Platform)\;$(SolutionDir)lib\Graphics\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)external\glfw3\lib\$(Platform)\;$(SolutionDir)external\glew\lib\$(Platform)\;$(SolutionDir)build\lib\Graphics\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;Graphics.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
@@ -138,7 +138,7 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)external\glfw3\lib\$(Platform)\;$(SolutionDir)external\glew\lib\$(Platform)\;$(SolutionDir)lib\Graphics\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)external\glfw3\lib\$(Platform)\;$(SolutionDir)external\glew\lib\$(Platform)\;$(SolutionDir)build\lib\Graphics\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;Graphics.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
@@ -160,7 +160,7 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)external\glfw3\lib\$(Platform)\;$(SolutionDir)external\glew\lib\$(Platform)\;$(SolutionDir)lib\Graphics\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)external\glfw3\lib\$(Platform)\;$(SolutionDir)external\glew\lib\$(Platform)\;$(SolutionDir)build\lib\Graphics\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;Graphics.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>

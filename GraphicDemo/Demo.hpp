@@ -23,7 +23,9 @@ public:
 	virtual void Update(float dt) = 0;
 
 	virtual void ResetCamera() = 0;
-	
+
+	virtual ~Demo() {}
+
 	void HandleResizeEvent(const int& width, const int& height) override;
 	void HandleScrollEvent(float scroll_amount) override;
 	void HandleFocusEvent(bool focused) override;
