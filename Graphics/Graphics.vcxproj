@@ -170,6 +170,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\BitmapFont.hpp" />
+    <ClInclude Include="Graphics\ComputeShader.h" />
     <ClInclude Include="Graphics\Draw.hpp" />
     <ClInclude Include="Graphics\Animation.hpp" />
     <ClInclude Include="Graphics\Camera.hpp" />
@@ -196,6 +197,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\BitmapFont.cpp" />
+    <ClCompile Include="Graphics\ComputeShader.cpp" />
     <ClCompile Include="Graphics\Draw.cpp" />
     <ClCompile Include="Graphics\Animation.cpp" />
     <ClCompile Include="Graphics\Camera.cpp" />

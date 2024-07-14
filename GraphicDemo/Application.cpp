@@ -15,7 +15,7 @@
 #include "TextureDrawingDemo.hpp"
 #include "AnimationDemo.hpp"
 #include "TransformParentDemo.hpp"
-#include "ComputeShaderDemo.h""
+#include "ComputeShaderDemo.h"
 
 bool Application::IsRunning() const
 {
@@ -35,7 +35,7 @@ void Application::Initialize()
 	}
 	isRunning = true;
 
-	demo[COMPUTESHADERDEMO] = std::make_unique<
+	demo[COMPUTESHADERDEMO] = std::make_unique<ComputeShaderDemo>(window);
 
 	//demo[SHAPEDRAWING] = std::make_unique<ShapeDrawingDemo>(window);
 	//demo[TEXTUREDRAWING] = std::make_unique<TextureDrawingDemo>(window);

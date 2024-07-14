@@ -1,1 +1,6 @@
+compute shader basis
 https://learnopengl.com/Guest-Articles/2022/Compute-Shaders/Introduction
+https://medium.com/@daniel.coady/compute-shaders-in-opengl-4-3-d1c741998c03
+
+interesting stuff
+https://antongerdelan.net/opengl/compute.html
