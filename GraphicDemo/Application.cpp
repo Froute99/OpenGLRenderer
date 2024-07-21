@@ -33,6 +33,7 @@ void Application::Initialize()
 	{
 		return;
 	}
+	window.ToggleVSync(false);
 	isRunning = true;
 
 	demo[COMPUTESHADERDEMO] = std::make_unique<ComputeShaderDemo>(window);

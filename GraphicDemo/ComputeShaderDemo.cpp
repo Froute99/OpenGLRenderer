@@ -7,55 +7,34 @@
 
 void ComputeShaderDemo::Initialize()
 {
-	const std::filesystem::path computeShaderPath = "../assets/compute.glsl";
-	computeShader.LoadShader(computeShaderPath);
-	textureShader.LoadShaderFrom(PATH::texture_vert, PATH::texture_frag);
-
-	const Mesh& rectangle = MESH::create_rectangle({ 0.0f }, { 1.0f }, { 0.0f });
-	computeShaderVertices.InitializeWithMeshAndLayout(rectangle, layout);
-
-	texture.CreateTexture(10, workSize.y);
+	workSize = { 10, 1 };
+	computeShader.Initialize(workSize.x, workSize.y);
 
 	data = { 0,1,2,3,4,5,6,7,8,9 };
-	computeShader.Use();
+	computeShader.Use();		// why?
 	SetValues(data.data());
+
+
+	//textureShader.LoadShaderFrom(PATH::texture_vert, PATH::texture_frag);
+	//const Mesh& rectangle = MESH::create_rectangle({ 0.0f }, { 1.0f }, { 0.0f });
+	//computeShaderVertices.InitializeWithMeshAndLayout(rectangle, layout);
+	//texture.CreateTexture(workSize.x, workSize.y);
 
 }
 
 void ComputeShaderDemo::Update(float /*dt*/)
 {
-	//Draw::StartDrawing();
+	computeShader.Run();
+	PrintValues();
 
-	//Shader::UseShader(textureShader);
-	//textureShader.SendUniformVariable("tex", 0);
-	//glActiveTexture(GL_TEXTURE0);
-	//glBindTexture(GL_TEXTURE_2D, texture.GetTexturehandle());
-	//Vertices::SelectVAO(computeShaderVertices);
-	//glDrawArrays(computeShaderVertices.GetPattern(), 0, computeShaderVertices.GetVerticesCount());
 
-	//std::vector<float> values{ 0,1,2,3,4,5,6,7,8,9 };
+	//computeShader.Use();
+	//computeShader.BindTexture();
+	//computeShader.Dispatch(workSize.x, workSize.y, 1);
 
-	computeShader.Use();
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture.GetTexturehandle());
-	glDispatchCompute(workSize.x, workSize.y, 1);
-
-	// don't know how this works, but it ensure image writing finished before read.
-	glMemoryBarrier(GL_ALL_BARRIER_BITS);
-	//glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
-
-	auto computeResult = GetValues();
-	for (auto element : computeResult)
-	{
-		std::cout << element << " ";
-	}
-	std::cout << std::endl;
-
-	//Draw::FinishDrawing();
-}
-
-void ComputeShaderDemo::ResetCamera()
-{
+	//// don't know how this works, but it ensure image writing finished before read.
+	//computeShader.Wait();
+	////glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
 }
 
 void ComputeShaderDemo::HandleResizeEvent(const int& new_width, const int& new_height)
@@ -79,4 +58,14 @@ std::vector<float> ComputeShaderDemo::GetValues()
 	std::vector<float> computeResult(dataSize);
 	glGetTexImage(GL_TEXTURE_2D, 0, GL_RED, GL_FLOAT, computeResult.data());
 	return computeResult;
+}
+
+void ComputeShaderDemo::PrintValues()
+{
+	auto computeResult = GetValues();
+	for (auto element : computeResult)
+	{
+		std::cout << element << " ";
+	}
+	std::cout << std::endl;
 }

@@ -13,7 +13,7 @@ public:
 	void Initialize() override final;
 	void Update(float dt) override final;
 
-	void ResetCamera() override final;
+	void ResetCamera() override final {}
 
 	void HandleResizeEvent(const int& new_width, const int& new_height) override final;
 	//void HandleKeyPress(KeyboardButton button) override final;
@@ -23,17 +23,19 @@ public:
 
 	void SetValues(float* values);
 	std::vector<float> GetValues();
-private:
-	VerticesDescription layout{ VerticesDescription::Type::Point, VerticesDescription::Type::TextureCoordinate };
+	void PrintValues();
 
-	Texture texture;
+private:
 	ComputeShader computeShader;
 
-	Shader textureShader;
-	Vertices computeShaderVertices;
-
-	vec2<unsigned int> workSize{ 10, 1 };
+	vec2<unsigned int> workSize;
 	std::vector<float> data;
+
+
+	//VerticesDescription layout{ VerticesDescription::Type::Point, VerticesDescription::Type::TextureCoordinate };
+	//Texture texture;
+	//Shader textureShader;
+	//Vertices computeShaderVertices;
 
 };
 

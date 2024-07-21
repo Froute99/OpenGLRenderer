@@ -1,9 +1,9 @@
 /*
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *	File_name: Shader.cpp
- *	
+ *
  *	Shader class for loading shader
- *	
+ *
  *	Fall 2019
  *	Sep.25 2019
  */
@@ -14,20 +14,38 @@
 #include "GL\glew.h"
 #include "Shader.h"
 
-std::string ReadSourceFrom(const std::filesystem::path& path)
+namespace ShaderHelper
 {
-	std::ifstream in(path, std::ios::in | std::ios::binary);
-	if (in)
+	std::string ReadSourceFrom(const std::filesystem::path& path)
 	{
-		std::string contents;
-		in.seekg(0, std::ios::end);
-		contents.resize(unsigned(in.tellg()));
-		in.seekg(0, std::ios::beg);
-		in.read(&contents[0], contents.size());
-		in.close();
-		return contents;
+		std::ifstream in(path, std::ios::in | std::ios::binary);
+		if (in)
+		{
+			std::string contents;
+			in.seekg(0, std::ios::end);
+			contents.resize(unsigned(in.tellg()));
+			in.seekg(0, std::ios::beg);
+			in.read(&contents[0], contents.size());
+			in.close();
+			return contents;
+		}
+		return {};
 	}
-	return {};
+
+	bool CheckCompileErrors(unsigned int shaderObject, const std::string& errorMsg)
+	{
+		GLint isCompiled;
+		glGetShaderiv(shaderObject, GL_COMPILE_STATUS, &isCompiled);
+		if (isCompiled != GL_TRUE)
+		{
+			GLsizei length = 0;
+			char message[1024];
+			glGetShaderInfoLog(shaderObject, 1024, &length, message);
+			std::cout << errorMsg << ": " << message << std::endl;
+			return false;
+		}
+		return true;
+	}
 }
 
 Shader::Shader(const std::filesystem::path& vertex_source,
@@ -42,37 +60,19 @@ bool Shader::LoadShaderFrom(const std::filesystem::path& vertex_source,
 	const GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	const GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
-	const std::string vert = ReadSourceFrom(vertex_source);
-	const std::string frag = ReadSourceFrom(fragment_source);
-	
+	const std::string vert = ShaderHelper::ReadSourceFrom(vertex_source);
+	const std::string frag = ShaderHelper::ReadSourceFrom(fragment_source);
+
 	const char* vertexSource = vert.c_str();
 	const char* fragmentSource = frag.c_str();
 
 	glShaderSource(vertexShader, 1, &vertexSource, NULL);
 	glCompileShader(vertexShader);
-	GLint isVertexCompiled;
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &isVertexCompiled);
-	if (isVertexCompiled != GL_TRUE)
-	{
-		GLsizei length = 0;
-		GLchar message[1024];
-		glGetShaderInfoLog(vertexShader, 1024, &length, message);
-		std::cout << "Vertex shader compile failure" << std::endl;
-		std::cout << message << std::endl;
-	}
+	ShaderHelper::CheckCompileErrors(vertexShader, "Vertex Shader");
 
 	glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
 	glCompileShader(fragmentShader);
-	GLint isFragmentCompiled;
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &isFragmentCompiled);
-	if (isFragmentCompiled != GL_TRUE)
-	{
-		GLsizei length = 0;
-		GLchar message[1024];
-		glGetShaderInfoLog(fragmentShader, 1024, &length, message);
-		std::cout << "Fragment shader compile failure" << std::endl;
-		std::cout << message << std::endl;
-	}
+	ShaderHelper::CheckCompileErrors(fragmentShader, "Fragment Shader");
 
 	GLuint program = glCreateProgram();
 	glAttachShader(program, vertexShader);
@@ -96,7 +96,7 @@ bool Shader::LoadShaderFrom(const std::filesystem::path& vertex_source,
 		glDeleteProgram(handleToShader);
 	}
 	handleToShader = program;
-	
+
 	return true;
 }
 
