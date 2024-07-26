@@ -15,6 +15,7 @@
 #include "TextureDrawingDemo.hpp"
 #include "AnimationDemo.hpp"
 #include "TransformParentDemo.hpp"
+#include "ComputeShaderDemo.h"
 
 bool Application::IsRunning() const
 {
@@ -32,12 +33,15 @@ void Application::Initialize()
 	{
 		return;
 	}
+	window.ToggleVSync(false);
 	isRunning = true;
 
-	demo[SHAPEDRAWING] = std::make_unique<ShapeDrawingDemo>(window);
-	demo[TEXTUREDRAWING] = std::make_unique<TextureDrawingDemo>(window);
-	demo[ANIMATION] = std::make_unique<AnimationDemo>(window);
-	demo[TRANSFORMPARENTDEMO] = std::make_unique<TransformParentDemo>(window);
+	demo[COMPUTESHADERDEMO] = std::make_unique<ComputeShaderDemo>(window);
+
+	//demo[SHAPEDRAWING] = std::make_unique<ShapeDrawingDemo>(window);
+	//demo[TEXTUREDRAWING] = std::make_unique<TextureDrawingDemo>(window);
+	//demo[ANIMATION] = std::make_unique<AnimationDemo>(window);
+	//demo[TRANSFORMPARENTDEMO] = std::make_unique<TransformParentDemo>(window);
 }
 
 void Application::Update(float dt)

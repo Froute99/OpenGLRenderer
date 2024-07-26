@@ -25,4 +25,5 @@ namespace PATH
 	const std::filesystem::path icon_image = "../assets/icon.png";
 
 	const std::filesystem::path bitmapfont_fnt = "../assets/bitmapfont.fnt";
+	const std::filesystem::path computeShader = "../assets/compute.glsl";
 }

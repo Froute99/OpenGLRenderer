@@ -12,6 +12,12 @@
 #include <filesystem>
 #include "mat3.hpp"
 
+namespace ShaderHelper
+{
+	std::string ReadSourceFrom(const std::filesystem::path& path);
+	bool CheckCompileErrors(unsigned int shaderObject, const std::string& errorMsg);
+}
+
 class [[nodiscard]] Shader
 {
 public:

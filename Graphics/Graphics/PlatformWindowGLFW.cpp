@@ -229,7 +229,7 @@ void window_focus_callback(GLFWwindow*, int focus)
 bool PlatformWindow::CanCreateWindow(int width, int height, EventHandler* event_handler, const char* title) noexcept
 {
 	eventHandler = event_handler;
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
 	if (!glfwInit())

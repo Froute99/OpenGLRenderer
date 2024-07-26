@@ -102,6 +102,9 @@
     <ClInclude Include="Graphics\Animation.hpp">
       <Filter>Graphics\Animation</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\ComputeShader.h">
+      <Filter>Graphics\Drawing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\Camera.cpp">
@@ -154,6 +157,9 @@
     </ClCompile>
     <ClCompile Include="Graphics\Animation.cpp">
       <Filter>Graphics\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\ComputeShader.cpp">
+      <Filter>Graphics\Drawing</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
