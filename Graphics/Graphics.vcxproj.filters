@@ -105,6 +105,12 @@
     <ClInclude Include="Graphics\ComputeShader.h">
       <Filter>Graphics\Drawing</Filter>
     </ClInclude>
+    <ClInclude Include="Math\mat4.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\vec4.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\Camera.cpp">

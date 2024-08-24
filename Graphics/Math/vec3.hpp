@@ -2,7 +2,7 @@
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *	File_name: vec3.hpp
  *	
- *	Custom math library for vec3
+ *	Custom math library for vector has 3 element
  *	
  *	Fall 2019
  *	Sep.20 2019
@@ -115,47 +115,50 @@ constexpr bool operator!=(const vec3<T>& v1, const vec3<T>& v2) noexcept
 	return true;
 }
 
-template <typename T>
-constexpr T dot_product(const vec3<T>& v1, const vec3<T>& v2) noexcept
+namespace Vector3
 {
-	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
-}
+	template <typename T>
+	constexpr T dot_product(const vec3<T>& v1, const vec3<T>& v2) noexcept
+	{
+		return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+	}
 
-template <typename T>
-constexpr vec3<T> cross_product(const vec3<T>& v1, const vec3<T>& v2) noexcept
-{
-	return vec3<T>{ v1.y* v2.z - v1.z * v2.y, v1.z* v2.x - v1.x * v2.z, v1.x* v2.y - v1.y * v2.x };
-}
+	template <typename T>
+	constexpr vec3<T> cross_product(const vec3<T>& v1, const vec3<T>& v2) noexcept
+	{
+		return vec3<T>{ v1.y* v2.z - v1.z * v2.y, v1.z* v2.x - v1.x * v2.z, v1.x* v2.y - v1.y * v2.x };
+	}
 
-template <typename T>
-constexpr T magnitude_squared(const vec3<T>& v) noexcept
-{
-	return dot_product(v, v);
-}
+	template <typename T>
+	constexpr T magnitude_squared(const vec3<T>& v) noexcept
+	{
+		return dot_product(v, v);
+	}
 
-template <typename T>
-constexpr T magnitude(const vec3<T>& v) noexcept
-{
-	return sqrt(magnitude_squared(v));
-}
+	template <typename T>
+	constexpr T magnitude(const vec3<T>& v) noexcept
+	{
+		return sqrt(magnitude_squared(v));
+	}
 
-template <typename T>
-constexpr T distance_between(const vec3<T>& v1, const vec3<T>& v2) noexcept
-{
-	return sqrt(magnitude_squared(v1 - v2));
-}
+	template <typename T>
+	constexpr T distance_between(const vec3<T>& v1, const vec3<T>& v2) noexcept
+	{
+		return sqrt(magnitude_squared(v1 - v2));
+	}
 
-template <typename T>
-constexpr T angle_between(const vec3<T>& v1, const vec3<T>& v2) noexcept
-{
-	assert(magnitude(v1) != 0.f && magnitude(v2) != 0.f);
-	return acos(dot_product(v1, v2) / (magnitude(v1) * magnitude(v2)));
-}
+	template <typename T>
+	constexpr T angle_between(const vec3<T>& v1, const vec3<T>& v2) noexcept
+	{
+		assert(magnitude(v1) != 0.f && magnitude(v2) != 0.f);
+		return acos(dot_product(v1, v2) / (magnitude(v1) * magnitude(v2)));
+	}
 
-template <typename T>
-constexpr vec3<T> normalize(const vec3<T>& v) noexcept
-{
-	T m = magnitude(v);
-	assert(m != 0);
-	return v / m;
+	template <typename T>
+	constexpr vec3<T> normalize(const vec3<T>& v) noexcept
+	{
+		T m = magnitude(v);
+		assert(m != 0);
+		return v / m;
+	}
 }

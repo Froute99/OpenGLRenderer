@@ -192,8 +192,10 @@
     <ClInclude Include="Graphics\VerticesDescription.h" />
     <ClInclude Include="Math\Angle.hpp" />
     <ClInclude Include="Math\mat3.hpp" />
+    <ClInclude Include="Math\mat4.hpp" />
     <ClInclude Include="Math\vec2.hpp" />
     <ClInclude Include="Math\vec3.hpp" />
+    <ClInclude Include="Math\vec4.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\BitmapFont.cpp" />
