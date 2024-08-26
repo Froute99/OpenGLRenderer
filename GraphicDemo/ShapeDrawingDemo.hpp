@@ -17,6 +17,8 @@
 #include "Texture.hpp"
 #include "Transform.hpp"
 
+class GameObject;
+
 class ShapeDrawingDemo : public Demo
 {
 public:
@@ -43,30 +45,39 @@ private:
 	mat3<float> triangleNDC;
 	mat3<float> circleNDC;
 	
-	VerticesDescription layout{ VerticesDescription::Type::Point, VerticesDescription::Type::Color };
+	VerticesDescription layout;
 	Shader shader;
 
-	Mesh rectangle;
-	Vertices rectangleVertices;
-	Transform rectangleTransform;
-	
-	Mesh line;
-	Vertices lineVertices;
-	Transform lineTransform;
 
-	Mesh quad;
-	Vertices quadVertices;
-	Transform quadTransform;
+	GameObject* rectangle;
+	GameObject* line;
+	GameObject* quad;
+	GameObject* triangle;
+	GameObject* circle;
+	GameObject* ellipse;
 
-	Mesh triangle;
-	Vertices triangleVertices;
-	Transform triangleTransform;
 
-	Mesh circle;
-	Vertices circleVertices;
-	Transform circleTransform;
+	//Mesh rectangle;
+	//Vertices rectangleVertices;
+	//Transform rectangleTransform;
 
-	Mesh ellipse;
-	Vertices ellipseVertices;
-	Transform ellipseTransform;
+	//Mesh line;
+	//Vertices lineVertices;
+	//Transform lineTransform;
+
+	//Mesh quad;
+	//Vertices quadVertices;
+	//Transform quadTransform;
+
+	//Mesh triangle;
+	//Vertices triangleVertices;
+	//Transform triangleTransform;
+
+	//Mesh circle;
+	//Vertices circleVertices;
+	//Transform circleTransform;
+
+	//Mesh ellipse;
+	//Vertices ellipseVertices;
+	//Transform ellipseTransform;
 };

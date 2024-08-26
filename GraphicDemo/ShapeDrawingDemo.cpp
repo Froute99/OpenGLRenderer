@@ -14,30 +14,45 @@
 #include "Draw.hpp"
 #include "PATH.hpp"
 #include "Screenshot.hpp"
+#include "GameObject.h"
 
 void ShapeDrawingDemo::Initialize()
 {
 	shader.LoadShaderFrom(PATH::shape_vert, PATH::shape_frag);
+	layout = { VerticesDescription::Type::Point, VerticesDescription::Type::Color };
+
 	const Color4f color{ .8f, .8f, .0f, 1.0f };
 
 	vec2<float> size{ 50.0f };
-	rectangle = MESH::create_rectangle({ 0.0f }, size, color);
-	rectangleVertices.InitializeWithMeshAndLayout(rectangle, layout);
+	const Mesh rectangleMesh = MESH::create_rectangle({ 0.0f }, size, color);
+	rectangle = new GameObject(rectangleMesh, layout);
+	rectangle->SetShader(&shader);
+	//rectangleVertices.InitializeWithMeshAndLayout(rectangle, layout);
 
-	line = MESH::create_line({ 100.0f, 0.0f }, { 50.0f, 50.0f }, { -50.0f, -50.0f }, color);
-	lineVertices.InitializeWithMeshAndLayout(line, layout);
+	const Mesh lineMesh = MESH::create_line({ 100.0f, 0.0f }, { 50.0f, 50.0f }, { -50.0f, -50.0f }, color);
+	line = new GameObject(lineMesh, layout);
+	line->SetShader(&shader);
+	//lineVertices.InitializeWithMeshAndLayout(line, layout);
 
-	quad = MESH::create_quad({ 0.0f, 100.0f }, { -20.f, 25.f }, { -50.f, -25.f }, { 50.f, -25.f }, { 20.f, 25.f }, color);
-	quadVertices.InitializeWithMeshAndLayout(quad, layout);
+	const Mesh quadMesh = MESH::create_quad({ 0.0f, 100.0f }, { -20.f, 25.f }, { -50.f, -25.f }, { 50.f, -25.f }, { 20.f, 25.f }, color);
+	quad = new GameObject(quadMesh, layout);
+	quad->SetShader(&shader);
+	//quadVertices.InitializeWithMeshAndLayout(quad, layout);
 
-	triangle = MESH::create_triangle({ 100.0f }, { 0.0f, 50.0f }, { -30.f, 0.0f }, { 30.f, 0.0f }, color);
-	triangleVertices.InitializeWithMeshAndLayout(triangle, layout);
+	const Mesh triangleMesh = MESH::create_triangle({ 100.0f }, { 0.0f, 50.0f }, { -30.f, 0.0f }, { 30.f, 0.0f }, color);
+	triangle = new GameObject(triangleMesh, layout);
+	triangle->SetShader(&shader);
+	//triangleVertices.InitializeWithMeshAndLayout(triangle, layout);
 
-	circle = MESH::create_ellipse({ 200.0f, 25.0f }, size, 30, color);
-	circleVertices.InitializeWithMeshAndLayout(circle, layout);
+	const Mesh circleMesh = MESH::create_ellipse({ 200.0f, 25.0f }, size, 30, color);
+	circle = new GameObject(circleMesh, layout);
+	circle->SetShader(&shader);
+	//circleVertices.InitializeWithMeshAndLayout(circle, layout);
 
-	ellipse = MESH::create_ellipse({ -200.0f, 25.0f }, { 50.0f, 30.f }, 30, color);
-	ellipseVertices.InitializeWithMeshAndLayout(ellipse, layout);
+	const Mesh ellipseMesh = MESH::create_ellipse({ -200.0f, 25.0f }, { 50.0f, 30.f }, 30, color);
+	ellipse = new GameObject(ellipseMesh, layout);
+	ellipse->SetShader(&shader);
+	//ellipseVertices.InitializeWithMeshAndLayout(ellipse, layout);
 
 	view.SetViewSize(width, height);
 	std::cout << "\t====================================\n";
@@ -48,12 +63,19 @@ void ShapeDrawingDemo::Initialize()
 
 	const mat3<float> cameraToNDC = view.GetCameraToNDCTransform() * camera.WorldToCamera();
 
-	ndc = cameraToNDC * rectangleTransform.GetModelToWorld();
-	lineNDC = cameraToNDC * lineTransform.GetModelToWorld();
-	quadNDC = cameraToNDC * quadTransform.GetModelToWorld();
-	ellipseNDC = cameraToNDC * ellipseTransform.GetModelToWorld();
-	triangleNDC = cameraToNDC * triangleTransform.GetModelToWorld();
-	circleNDC = cameraToNDC * circleTransform.GetModelToWorld();
+	rectangle->SetNDC(cameraToNDC);
+	line->SetNDC(cameraToNDC);
+	quad->SetNDC(cameraToNDC);
+	triangle->SetNDC(cameraToNDC);
+	circle->SetNDC(cameraToNDC);
+	ellipse->SetNDC(cameraToNDC);
+
+	//ndc = cameraToNDC * rectangle->GetTransform()->GetModelToWorld();
+	//lineNDC = cameraToNDC * line->GetTransform()->GetModelToWorld();
+	//quadNDC = cameraToNDC * quad->GetTransform()->GetModelToWorld();
+	//ellipseNDC = cameraToNDC * ellipse->GetTransform()->GetModelToWorld();
+	//triangleNDC = cameraToNDC * triangle->GetTransform()->GetModelToWorld();
+	//circleNDC = cameraToNDC * circle->GetTransform()->GetModelToWorld();
 }
 
 void ShapeDrawingDemo::Update(float dt)
@@ -72,13 +94,20 @@ void ShapeDrawingDemo::Update(float dt)
 	
 	Draw::StartDrawing();
 
-	Draw::DrawShape({ shader, rectangleVertices, ndc });
-	Draw::DrawShape({ shader, lineVertices, lineNDC });
-	Draw::DrawShape({ shader, quadVertices, quadNDC });
-	Draw::DrawShape({ shader, triangleVertices, ellipseNDC });
-	Draw::DrawShape({ shader, circleVertices, triangleNDC });
-	Draw::DrawShape({ shader, ellipseVertices, circleNDC });
-	
+	Draw::DrawShape(*rectangle->GetMaterial());
+	Draw::DrawShape(*line->GetMaterial());
+	Draw::DrawShape(*quad->GetMaterial());
+	Draw::DrawShape(*triangle->GetMaterial());
+	Draw::DrawShape(*circle->GetMaterial());
+	Draw::DrawShape(*ellipse->GetMaterial());
+
+	//Draw::DrawGameObject(DrawType::Shape, rectangle->GetMaterial());
+	//Draw::DrawGameObject(DrawType::Shape, line->GetMaterial());
+	//Draw::DrawGameObject(DrawType::Shape, quad->GetMaterial());
+	//Draw::DrawGameObject(DrawType::Shape, triangle->GetMaterial());
+	//Draw::DrawGameObject(DrawType::Shape, circle->GetMaterial());
+	//Draw::DrawGameObject(DrawType::Shape, ellipse->GetMaterial());
+
 	Draw::FinishDrawing();
 }
 

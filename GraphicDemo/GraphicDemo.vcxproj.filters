@@ -21,6 +21,7 @@
     <ClCompile Include="ComputeShaderDemo.cpp">
       <Filter>Demo\ComputeShader</Filter>
     </ClCompile>
+    <ClCompile Include="GameObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -42,6 +43,7 @@
     <ClInclude Include="ComputeShaderDemo.h">
       <Filter>Demo\ComputeShader</Filter>
     </ClInclude>
+    <ClInclude Include="GameObject.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Demo">

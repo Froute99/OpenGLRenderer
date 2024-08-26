@@ -1,9 +1,9 @@
 /*
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *	File_name: vec2.hpp
- *	
+ *
  *	Custom math library for vec2
- *	
+ *
  *	Fall 2019
  *	Sep.20 2019
  */
@@ -28,95 +28,95 @@ public:
 	T x, y;
 };
 
-namespace Vector2
+template <typename T>
+constexpr void operator+=(vec2<T>& v, const vec2<T>& adding_vector) noexcept
 {
-	template <typename T>
-	constexpr void operator+=(vec2<T>& v, const vec2<T>& adding_vector) noexcept
-	{
-		v.x += adding_vector.x;
-		v.y += adding_vector.y;
-	}
+	v.x += adding_vector.x;
+	v.y += adding_vector.y;
+}
 
-	template <typename T>
-	constexpr void operator-=(vec2<T>& v, const vec2<T>& subtracting_vector) noexcept
-	{
-		v.x -= subtracting_vector.x;
-		v.y -= subtracting_vector.y;
-	}
+template <typename T>
+constexpr void operator-=(vec2<T>& v, const vec2<T>& subtracting_vector) noexcept
+{
+	v.x -= subtracting_vector.x;
+	v.y -= subtracting_vector.y;
+}
 
-	template <typename T>
-	constexpr void operator*=(vec2<T>& v, const T& scale) noexcept
-	{
-		v.x *= scale;
-		v.y *= scale;
-	}
+template <typename T>
+constexpr void operator*=(vec2<T>& v, const T& scale) noexcept
+{
+	v.x *= scale;
+	v.y *= scale;
+}
 
-	template <typename T>
-	constexpr void operator/=(vec2<T>& v, const T& divisor) noexcept
-	{
-		assert(divisor != 0.f);
-		v.x /= divisor;
-		v.y /= divisor;
-	}
+template <typename T>
+constexpr void operator/=(vec2<T>& v, const T& divisor) noexcept
+{
+	assert(divisor != 0.f);
+	v.x /= divisor;
+	v.y /= divisor;
+}
 
-	template <typename T>
-	constexpr vec2<T> operator-(const vec2<T>& v) noexcept
-	{
-		return vec2<T>{ -v.x, -v.y };
-	}
+template <typename T>
+constexpr vec2<T> operator-(const vec2<T>& v) noexcept
+{
+	return vec2<T>{ -v.x, -v.y };
+}
 
-	template <typename T>
-	constexpr vec2<T> operator+(const vec2<T>& v1, const vec2<T>& v2) noexcept
-	{
-		return vec2<T>{ v1.x + v2.x, v1.y + v2.y };
-	}
+template <typename T>
+constexpr vec2<T> operator+(const vec2<T>& v1, const vec2<T>& v2) noexcept
+{
+	return vec2<T>{ v1.x + v2.x, v1.y + v2.y };
+}
 
-	template <typename T>
-	constexpr vec2<T> operator-(const vec2<T>& v1, const vec2<T>& v2) noexcept
-	{
-		return vec2<T>{ v1.x - v2.x, v1.y - v2.y };
-	}
+template <typename T>
+constexpr vec2<T> operator-(const vec2<T>& v1, const vec2<T>& v2) noexcept
+{
+	return vec2<T>{ v1.x - v2.x, v1.y - v2.y };
+}
 
-	template <typename T>
-	constexpr vec2<T> operator*(const vec2<T>& v, const T& scale) noexcept
-	{
-		return vec2<T>{ v.x* scale, v.y* scale };
-	}
+template <typename T>
+constexpr vec2<T> operator*(const vec2<T>& v, const T& scale) noexcept
+{
+	return vec2<T>{ v.x* scale, v.y* scale };
+}
 
-	template <typename T>
-	constexpr vec2<T> operator*(const T& scale, const vec2<T>& v) noexcept
-	{
-		return v * scale;
-	}
+template <typename T>
+constexpr vec2<T> operator*(const T& scale, const vec2<T>& v) noexcept
+{
+	return v * scale;
+}
 
-	template <typename T>
-	constexpr vec2<T> operator/(const vec2<T>& v, const T& divisor) noexcept
-	{
-		assert(divisor != 0);
-		return vec2<T>{ v.x / divisor, v.y / divisor };
-	}
+template <typename T>
+constexpr vec2<T> operator/(const vec2<T>& v, const T& divisor) noexcept
+{
+	assert(divisor != 0);
+	return vec2<T>{ v.x / divisor, v.y / divisor };
+}
 
-	template <typename T>
-	constexpr bool operator==(const vec2<T>& v1, const vec2<T>& v2) noexcept
+template <typename T>
+constexpr bool operator==(const vec2<T>& v1, const vec2<T>& v2) noexcept
+{
+	const vec2<T>& v = v1 - v2;
+	if (abs(v.x) <= std::numeric_limits<T>::epsilon() && abs(v.y) <= std::numeric_limits<T>::epsilon())
 	{
-		const vec2<T>& v = v1 - v2;
-		if (abs(v.x) <= std::numeric_limits<T>::epsilon() && abs(v.y) <= std::numeric_limits<T>::epsilon())
-		{
-			return true;
-		}
-		return false;
-	}
-
-	template <typename T>
-	constexpr bool operator!=(const vec2<T>& v1, const vec2<T>& v2) noexcept
-	{
-		if (v1 == v2)
-		{
-			return false;
-		}
 		return true;
 	}
+	return false;
+}
 
+template <typename T>
+constexpr bool operator!=(const vec2<T>& v1, const vec2<T>& v2) noexcept
+{
+	if (v1 == v2)
+	{
+		return false;
+	}
+	return true;
+}
+
+namespace Vector2
+{
 	template <typename T>
 	constexpr T dot_product(const vec2<T>& v1, const vec2<T>& v2) noexcept
 	{

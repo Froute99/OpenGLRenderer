@@ -14,12 +14,25 @@
 #include "Texture.hpp"
 #include "Text.hpp"
 
+class GameObject;
+
 struct Material
 {
-	Shader shader;
+	Material() = default;
+	Material(Shader* shader, Vertices vertices, mat3<float> ndc, Texture texture)
+		: shader(shader), vertices(vertices), ndc(ndc), texture(texture) {}
+
+	Shader* shader;
 	Vertices vertices;
 	mat3<float> ndc;
 	Texture texture;
+};
+
+enum struct DrawType
+{
+	Shape,
+	Sprite,
+	Text
 };
 
 class Draw
@@ -28,8 +41,9 @@ public:
 	static void StartDrawing();
 	static void StartDrawing(const Color4f& background_color);
 	static void FinishDrawing();
-	static void draw(const Material& material);
+	static void DrawSprite(const Material& material);
 	static void DrawShape(const Material& material);
+	static void DrawGameObject(DrawType type, Material* target);
 	static void DrawText(const Shader& shader, const mat3<float>& ndc, const Text& text);
 private:
 };

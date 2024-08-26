@@ -22,7 +22,12 @@ enum class ShapePattern
 	Quads
 };
 
-class [[nodiscard]]Mesh
+enum class ShapeType
+{
+	
+};
+
+class [[nodiscard]] Mesh
 {
 public:
 	void AddPoint(vec2<float> point);

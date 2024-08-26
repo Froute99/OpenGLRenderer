@@ -45,6 +45,8 @@ private:
 
 	float fireDistance = 300.0f;
 
+	//GameObject* dragon;
+
 	Material dragon;
 	Transform dragonTransform;
 

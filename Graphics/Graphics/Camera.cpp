@@ -20,12 +20,12 @@ void Camera::ResetUp(vec2<float> camera_up) noexcept
 
 void Camera::MoveUp(float distance) noexcept
 {
-	center += normalize(up) * distance;
+	center += Vector2::normalize(up) * distance;
 }
 
 void Camera::MoveRight(float distance) noexcept
 {
-	center += normalize(right) * distance;
+	center += Vector2::normalize(right) * distance;
 }
 
 void Camera::Rotate(float angle_radians) noexcept
@@ -36,22 +36,17 @@ void Camera::Rotate(float angle_radians) noexcept
 
 mat3<float> Camera::CameraToWorld() const noexcept
 {
-	//return build_translation(center.x, center.y) * transpose(mat3<float>{
-	//	right.x, up.x, 0.f,
-	//	right.y, up.y, 0.f,
-	//	0.f, 0.f, 1.f });
-	mat3<float> inverseTransformMatrix = { up.y,  -right.y, (right.y * dot_product(-up, center) - dot_product(-right, center) * up.y),
+	using namespace Vector2;
+	mat3<float> inverseTransformMatrix = {
+		up.y,  -right.y, (right.y * dot_product(-up, center) - dot_product(-right, center) * up.y),
 		-up.x, right.x,  (dot_product(-right, center) * up.x - right.x * dot_product(-up, center)),
-		0.0f,  0.0f,     1.0f };
-	return transpose(inverseTransformMatrix);
+		0.0f,  0.0f, 1.0f };
+	return Matrix3::transpose(inverseTransformMatrix);
 }
 
 mat3<float> Camera::WorldToCamera() const noexcept
 {
-	//return transpose(mat3<float>{
-	//	right.x, right.y, 0.f,
-	//	up.x, up.y, 0.f,
-	//	0.f, 0.f, 1.f }) * build_translation(-center.x, -center.y);
+	using namespace Vector2;
 	mat3<float> transformMatrix = {
 		right.x, up.x, 0.0f,
 		right.y, up.y, 0.0f,
