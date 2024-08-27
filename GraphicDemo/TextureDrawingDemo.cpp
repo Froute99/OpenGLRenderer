@@ -12,14 +12,20 @@
 #include "glfw3.h"
 #include "TextureDrawingDemo.hpp"
 #include "PATH.hpp"
+#include "GameObject.h"
 
 void TextureDrawingDemo::Initialize()
 {
 	shader.LoadShaderFrom(PATH::texture_vert, PATH::texture_frag);
+	layout = { VerticesDescription::Type::Point, VerticesDescription::Type::TextureCoordinate };
+
+	view.SetViewSize(width, height);
+	cameraToNDC = view.GetCameraToNDCTransform() * camera.WorldToCamera();
+
 
 	//const Mesh& rectangle = MESH::create_rectangle({ 0.0f }, { 1.0f }, { 0.0f });
 
-	//dragon.shader = shader;
+	//dragon.shader = &shader;
 	//dragon.vertices.InitializeWithMeshAndLayout(rectangle, layout);
 	//dragon.texture.LoadFromPath(dragon_png);
 	//dragonTransform.SetScale(500.0f);
@@ -31,13 +37,20 @@ void TextureDrawingDemo::Initialize()
 
 	//blueFireAnimation.Initialize({ 10, 6, 25.0f }, blueFire.shader);
 
-	font.LoadFromFile(PATH::bitmapfont_fnt);
-	text.SetFont(font);
-	text.SetString(L"Blue Fire Dragon");
-	textTransform.SetTranslation({ -500.0f, 300.0f });
+	const Mesh rectangle = MESH::create_rectangle({ 0.0f }, { 1.0f }, { 0.0f });
+	dragon = new GameObject(rectangle, layout);
+	dragon->SetShader(&shader);
+	dragon->LoadTexture(dragon_png);
 
-	view.SetViewSize(width, height);
-	cameraToNDC = view.GetCameraToNDCTransform() * camera.WorldToCamera();
+	mat3<float> ndc = cameraToNDC * dragon->GetTransform()->GetModelToWorld();
+	dragon->GetTransform()->SetScale(500.0f);
+	dragon->SetNDC(ndc);
+
+	//font.LoadFromFile(PATH::bitmapfont_fnt);
+	//text.SetFont(font);
+	//text.SetString(L"Blue Fire Dragon");
+	//textTransform.SetTranslation({ -500.0f, 300.0f });
+
 	timePassed = 0.0f;
 	std::cout << "\t====================================\n";
 	std::cout << "\tPress R key to animate from start\n";
@@ -55,8 +68,12 @@ void TextureDrawingDemo::Update(float dt)
 	timePassed += dt;
 	Draw::StartDrawing();
 
-	const mat3<float> ndc = cameraToNDC * textTransform.GetModelToWorld();
-	Draw::DrawText(shader, ndc, text);
+	//const mat3<float> ndc = cameraToNDC * textTransform.GetModelToWorld();
+	//Draw::DrawText(shader, ndc, text);
+
+	//dragon.ndc = cameraToNDC * dragonTransform.GetModelToWorld();
+	//Draw::DrawSprite(dragon);
+	Draw::DrawGameObject(DrawType::Sprite, dragon->GetMaterial());
 
 	//if (timePassed >= 1.0f)
 	//{
@@ -98,7 +115,7 @@ void TextureDrawingDemo::Update(float dt)
 	//	blueFireAnimation.Animate(dt);
 	//	Draw::draw(blueFire);
 	//}
-	
+
 	Draw::FinishDrawing();
 }
 

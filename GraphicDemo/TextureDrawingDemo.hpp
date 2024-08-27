@@ -40,21 +40,21 @@ private:
 private:
 	float timePassed;
 	mat3<float> cameraToNDC;
-	VerticesDescription layout{ VerticesDescription::Type::Point, VerticesDescription::Type::TextureCoordinate };
+	VerticesDescription layout;
 	Shader shader;
 
 	float fireDistance = 300.0f;
 
-	//GameObject* dragon;
+	GameObject* dragon;
 
-	Material dragon;
-	Transform dragonTransform;
+	//Material dragon;
+	//Transform dragonTransform;
 
-	Material blueFire;
-	Animation blueFireAnimation;
-	Transform blueFireTransform;
+	//Material blueFire;
+	//Animation blueFireAnimation;
+	//Transform blueFireTransform;
 
-	BitmapFont font;
-	Text text;
-	Transform textTransform;
+	//BitmapFont font;
+	//Text text;
+	//Transform textTransform;
 };

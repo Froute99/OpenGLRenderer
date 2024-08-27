@@ -19,6 +19,7 @@ public:
 	void SetShader(Shader* newShader) noexcept { material.shader = newShader; }
 	void SetNDC(mat3<float> ndc) noexcept { material.ndc = ndc * transform.GetModelToWorld(); }
 	void SetTexture(const Texture& texture) noexcept { material.texture = texture; }
+	void LoadTexture(const std::filesystem::path& path) noexcept;
 
 private:
 	float yaw;

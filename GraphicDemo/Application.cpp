@@ -37,11 +37,10 @@ void Application::Initialize()
 	isRunning = true;
 
 	demo[SHAPEDRAWING] = std::make_unique<ShapeDrawingDemo>(window);
-	//demo[COMPUTESHADERDEMO] = std::make_unique<ComputeShaderDemo>(window);
-
-	//demo[TEXTUREDRAWING] = std::make_unique<TextureDrawingDemo>(window);
+	demo[TEXTUREDRAWING] = std::make_unique<TextureDrawingDemo>(window);
 	//demo[ANIMATION] = std::make_unique<AnimationDemo>(window);
 	//demo[TRANSFORMPARENTDEMO] = std::make_unique<TransformParentDemo>(window);
+	//demo[COMPUTESHADERDEMO] = std::make_unique<ComputeShaderDemo>(window);
 }
 
 void Application::Update(float dt)
