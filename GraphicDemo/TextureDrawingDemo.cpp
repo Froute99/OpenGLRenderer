@@ -42,7 +42,7 @@ void TextureDrawingDemo::Initialize()
 	dragon->SetShader(&shader);
 	dragon->LoadTexture(dragon_png);
 
-	mat3<float> ndc = cameraToNDC * dragon->GetTransform()->GetModelToWorld();
+	mat4<float> ndc = cameraToNDC * dragon->GetTransform()->GetModelToWorld();
 	dragon->GetTransform()->SetScale(500.0f);
 	dragon->SetNDC(ndc);
 

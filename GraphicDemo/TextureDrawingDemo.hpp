@@ -39,7 +39,7 @@ private:
 	const std::filesystem::path& blue_fire_sprite_sheet = "../assets/blue_fire.png";
 private:
 	float timePassed;
-	mat3<float> cameraToNDC;
+	mat4<float> cameraToNDC;
 	VerticesDescription layout;
 	Shader shader;
 
