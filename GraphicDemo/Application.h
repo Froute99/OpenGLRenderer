@@ -22,7 +22,7 @@ public:
 	enum DEMOINDEX
 	{
 		SHAPEDRAWING,
-		TEXTUREDRAWING,
+		//TEXTUREDRAWING,
 		//ANIMATION,
 		//TRANSFORMPARENTDEMO,
 		//COMPUTESHADERDEMO,
@@ -50,8 +50,8 @@ protected:
 	OpenGLWindow window;
 	Camera camera;
 	CameraView view;
-	const int width = 1280;
-	const int height = 720;
+	const int width = 1200;
+	const int height = 1200;
 
 	int demoIndex = 0;
 	std::array<std::unique_ptr<Demo>, DEMOSIZE> demo;

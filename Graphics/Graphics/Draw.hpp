@@ -13,18 +13,19 @@
 #include "Vertices.h"
 #include "Texture.hpp"
 #include "Text.hpp"
+#include <mat4.hpp>
 
 class GameObject;
 
 struct Material
 {
 	Material() = default;
-	Material(Shader* shader, Vertices vertices, mat3<float> ndc, Texture texture)
+	Material(Shader* shader, Vertices vertices, mat4<float> ndc, Texture texture)
 		: shader(shader), vertices(vertices), ndc(ndc), texture(texture) {}
 
 	Shader* shader;
 	Vertices vertices;
-	mat3<float> ndc;
+	mat4<float> ndc;
 	Texture texture;
 };
 
@@ -44,7 +45,7 @@ public:
 	static void DrawSprite(const Material& material);
 	static void DrawShape(const Material& material);
 	static void DrawGameObject(DrawType type, Material* target);
-	static void DrawText(const Shader& shader, const mat3<float>& ndc, const Text& text);
+	static void DrawText(const Shader& shader, const mat4<float>& ndc, const Text& text);
 private:
 };
 

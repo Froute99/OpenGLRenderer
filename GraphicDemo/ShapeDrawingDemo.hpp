@@ -37,25 +37,41 @@ public:
 private:
 	vec2<float> moveSpeed{ 0.f };
 	float rotationSpeed = 0;
-
-	mat3<float> ndc;
-	mat3<float> lineNDC;
-	mat3<float> quadNDC;
-	mat3<float> ellipseNDC;
-	mat3<float> triangleNDC;
-	mat3<float> circleNDC;
 	
 	VerticesDescription layout;
 	Shader shader;
 
+	//GameObject* rectangle;
+	//GameObject* line;
+	//GameObject* quad;
+	//GameObject* triangle;
+	//GameObject* circle;
+	//GameObject* ellipse;
 
-	GameObject* rectangle;
-	GameObject* line;
-	GameObject* quad;
-	GameObject* triangle;
-	GameObject* circle;
-	GameObject* ellipse;
+	GLuint VBO;
+	GLuint IBO;
 
+	unsigned int Indices[36] = {
+		0, 1, 2,
+		1, 3, 4,
+		5, 6, 3,
+		7, 3, 6,
+		2, 4, 7,
+		0, 7, 6,
+		0, 5, 1,
+		1, 5, 3,
+		5, 0, 6,
+		7, 4, 3,
+		2, 1, 4,
+		0, 2, 7
+	};
+
+	void CreateVertexBuffer();
+	void CreateIndexBuffer();
+
+	GLuint uniformNDClocation;
+
+	float angle = 0;
 
 	//Mesh rectangle;
 	//Vertices rectangleVertices;

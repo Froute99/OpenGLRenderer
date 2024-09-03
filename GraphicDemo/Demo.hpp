@@ -31,7 +31,6 @@ public:
 	void HandleFocusEvent(bool focused) override;
 protected:
 	Camera camera;
-	CameraView view;
 	int width;
 	int height;
 	bool isFocused = true;

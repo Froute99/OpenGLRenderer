@@ -50,8 +50,8 @@ void TransformParentDemo::Initialize()
 	//slash2Transform.SetRotation(ANGLE::pi / 4.0f);
 	//slash2Transform.SetTranslation({ -10.0f, 20.0f });
 	
-	view.SetViewSize(width, height);
-	cameraToNDC = view.GetCameraToNDCTransform() * camera.WorldToCamera();
+	//view.SetViewSize(width, height);
+	//cameraToNDC = view.GetCameraToNDCTransform() * camera.WorldToCamera();
 	std::cout << "\t====================================\n";
 	std::cout << "\tPress Q, E to rotate the sword\n";
 	std::cout << "\tClick left mouse button to slash\n";
@@ -90,7 +90,7 @@ void TransformParentDemo::Update(float dt)
 
 void TransformParentDemo::ResetCamera()
 {
-	camera.ResetUp();
+	//camera.ResetUp();
 }
 
 void TransformParentDemo::HandleKeyPress(KeyboardButton button)

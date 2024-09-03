@@ -8,6 +8,7 @@
  */
 
 #pragma once
+#include <vec3.hpp>
 
 template <typename T>
 class vec4
@@ -21,6 +22,10 @@ public:
 
 	constexpr vec4(T repeatedValue) noexcept
 		: x(repeatedValue), y(repeatedValue), z(repeatedValue), w(repeatedValue) {}
+
+	constexpr vec4(vec3<T> v, T w) noexcept
+		: x(v.x), y(v.y), z(v.z), w(w) {}
+
 	T x, y, z, w;
 };
 
@@ -133,9 +138,9 @@ namespace Vector4
 	template <typename T>
 	constexpr T cross_product(const vec4<T>& v1, const vec4<T>& v2) noexcept
 	{
-		return vec4<T>{ v1.y* v2.z - v2.y * v1.z,
-			v1.z* v2.x - v2.z * v1.x,
-			v1.x* v2.y - v2.x * v1.y,
+		return vec4<T>{ v1.y * v2.z - v2.y * v1.z,
+			v1.z * v2.x - v2.z * v1.x,
+			v1.x * v2.y - v2.x * v1.y,
 			0.0f };
 	}
 
@@ -171,4 +176,4 @@ namespace Vector4
 		assert(m != 0);
 		return v / m;
 	}
-}
+} // namespace Vector4

@@ -1,14 +1,14 @@
 #version 330
-layout (location = 0) in vec2 position;
-layout (location = 1) in vec4 color;
+
+layout (location = 0) in vec3 position;
+layout (location = 1) in vec3 color;
+
+uniform mat4 gWorld;
 
 out vec4 outColor;
 
-uniform mat3 ndc;
-
 void main()
 {
-    vec3 ndc_position = ndc * vec3(position, 1.0);
-    gl_Position = vec4(ndc_position.xy, 0.0, 1.0);
-    outColor = color;
+    gl_Position = gWorld * vec4(position, 1.0);
+    outColor = vec4(color, 1.0);
 }

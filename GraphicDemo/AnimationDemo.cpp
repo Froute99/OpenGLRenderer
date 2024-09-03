@@ -64,7 +64,7 @@ void AnimationDemo::Update(float dt)
 
 void AnimationDemo::ResetCamera()
 {
-	camera.ResetUp();
+	//camera.ResetUp();
 }
 
 void AnimationDemo::HandleResizeEvent(const int& new_width, const int& new_height)

@@ -242,6 +242,9 @@ bool PlatformWindow::CanCreateWindow(int width, int height, EventHandler* event_
 	glfwWindowHint(GLFW_RED_BITS, 8);
 	glfwWindowHint(GLFW_GREEN_BITS, 8);
 	glfwWindowHint(GLFW_BLUE_BITS, 8);
+	glfwWindowHint(GLFW_DEPTH_BITS, GL_TRUE);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 
 	GLFWmonitor* monitor = nullptr;
 	GLFWwindow* shareWindow = nullptr;

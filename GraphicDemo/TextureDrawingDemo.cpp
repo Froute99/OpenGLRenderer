@@ -19,8 +19,8 @@ void TextureDrawingDemo::Initialize()
 	shader.LoadShaderFrom(PATH::texture_vert, PATH::texture_frag);
 	layout = { VerticesDescription::Type::Point, VerticesDescription::Type::TextureCoordinate };
 
-	view.SetViewSize(width, height);
-	cameraToNDC = view.GetCameraToNDCTransform() * camera.WorldToCamera();
+	//view.SetViewSize(width, height);
+	//cameraToNDC = view.GetCameraToNDCTransform() * camera.WorldToCamera();
 
 
 	//const Mesh& rectangle = MESH::create_rectangle({ 0.0f }, { 1.0f }, { 0.0f });
@@ -42,9 +42,9 @@ void TextureDrawingDemo::Initialize()
 	dragon->SetShader(&shader);
 	dragon->LoadTexture(dragon_png);
 
-	mat4<float> ndc = cameraToNDC * dragon->GetTransform()->GetModelToWorld();
-	dragon->GetTransform()->SetScale(500.0f);
-	dragon->SetNDC(ndc);
+	//mat4<float> ndc = cameraToNDC * dragon->GetTransform()->GetModelToWorld();
+	//dragon->GetTransform()->SetScale(500.0f);
+	//dragon->SetNDC(ndc);
 
 	//font.LoadFromFile(PATH::bitmapfont_fnt);
 	//text.SetFont(font);
@@ -121,7 +121,7 @@ void TextureDrawingDemo::Update(float dt)
 
 void TextureDrawingDemo::ResetCamera()
 {
-	camera.ResetUp();
+	//camera.ResetUp();
 }
 
 void TextureDrawingDemo::HandleKeyPress(KeyboardButton button)

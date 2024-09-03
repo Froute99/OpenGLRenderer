@@ -9,6 +9,9 @@
  */
 
 #pragma once
+#include <limits>
+#include <cassert>
+#include <cmath>
 
 template <typename T>
 class vec3
