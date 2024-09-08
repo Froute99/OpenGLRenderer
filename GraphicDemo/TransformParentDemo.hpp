@@ -36,7 +36,7 @@ private:
 	float rotation;
 	float rotationSpeed = 0.0f;
 	mat3<float> cameraToNDC;
-	VerticesDescription layout{ VerticesDescription::Type::Point, VerticesDescription::Type::TextureCoordinate };
+	VerticesDescription layout{ VerticesDescription::Type::Position, VerticesDescription::Type::TextureCoordinate };
 	Shader shader;
 
 	vec2<float> mousePosition;

@@ -10,37 +10,15 @@
 
 #include "Camera.hpp"
 #include "Transform.hpp"
+#include <Angle.hpp>
 
 Camera::Camera(vec3<float> newPos) noexcept
 {
 	eye = newPos;
 }
 
-//void Camera::ResetUp(vec3<float> camera_up) noexcept
-//{
-//	up.x = camera_up.x;
-//	up.y = camera_up.y;
-//	right = { up.y, -up.x };
-//}
-
-//void Camera::MoveUp(float distance) noexcept
-//{
-//	center += Vector2::normalize(up) * distance;
-//}
-
-//void Camera::MoveRight(float distance) noexcept
-//{
-//	center += Vector2::normalize(right) * distance;
-//}
-
-//void Camera::Rotate(float angle_radians) noexcept
-//{
-//	up = rotate_by(angle_radians, up);
-//	right = rotate_by(angle_radians, right);
-//}
-
 // eye space, camera space, view space
-mat4<float> Camera::LookAt() const noexcept
+mat4<float> Camera::BuildViewMatrix() const noexcept
 {
 	vec3<float> f = Vector3::normalize(target - eye);
 	vec3<float> r = Vector3::normalize(Vector3::cross_product(up, f));

@@ -31,7 +31,7 @@ public:
 	void HandleFocusEvent(bool focused) override;
 private:
 	mat3<float> cameraToNDC;
-	VerticesDescription layout{ VerticesDescription::Type::Point, VerticesDescription::Type::TextureCoordinate };
+	VerticesDescription layout{ VerticesDescription::Type::Position, VerticesDescription::Type::TextureCoordinate };
 	Shader shader;
 
 	Material fire;

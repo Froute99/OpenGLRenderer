@@ -24,8 +24,6 @@ public:
 	vec3<float> GetUp() const noexcept { return up; }
 	vec3<float> GetRight() const noexcept { return right; }
 	
-	void SetFOV(float newFOV) noexcept { fov = newFOV; }
-	void SetNear(float newNear) noexcept { near = newNear; }
 
 	//void ResetUp(vec2<float> camera_up = { 0, 1 }) noexcept;
 
@@ -43,10 +41,7 @@ public:
 	//	return vec3<float>{ cos_value * v.x - sin_value * v.y, sin_value * v.x + cos_value * v.y };
 	//}
 
-
-	float GetAspectRatio() const noexcept { return aspectRatio; }
-
-	mat4<float> LookAt() const noexcept;
+	mat4<float> BuildViewMatrix() const noexcept;
 
 private:
 	vec3<float> eye{ 0.0f, 0.0f, 0.0f };				// camera position
@@ -55,11 +50,6 @@ private:
 	vec3<float> up{ 0.0f, 1.0f, 0.0f };
 	vec3<float> right{ 1.0f, 0.0f, 0.0f };
 
-	float zoom = 1.0f;
-
-	float aspectRatio = 1.0f;
-	float fov = 90.0f;
-	float near = 0.1f;
 
 	//vec3<float> up{ 0.f, 0.f, 1.f };
 	//vec3<float> right{ 1.f, 0.f };

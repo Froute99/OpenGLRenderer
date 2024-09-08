@@ -34,7 +34,7 @@ void Draw::DrawSprite(const Material& material)
 	glBindTexture(GL_TEXTURE_2D, material.texture.GetTexturehandle());
 	Shader::UseShader(*material.shader);
 	//material.shader->SendUniformVariable("ndc", material.ndc);
-	Vertices::SelectVAO(material.vertices);
+	VertexObject::SelectVAO(material.vertices);
 	glDrawArrays(material.vertices.GetPattern(), 0, material.vertices.GetVerticesCount());
 }
 
@@ -42,7 +42,7 @@ void Draw::DrawShape(const Material& material)
 {
 	Shader::UseShader(*material.shader);
 	//material.shader->SendUniformVariable("ndc", material.ndc);
-	Vertices::SelectVAO(material.vertices);
+	VertexObject::SelectVAO(material.vertices);
 	glDrawArrays(material.vertices.GetPattern(), 0, material.vertices.GetVerticesCount());
 }
 
@@ -68,7 +68,7 @@ void Draw::DrawGameObject(DrawType type, Material* target)
 //{
 //	for (const auto& vertices_texture : text.GetPairOfVerticesAndTextures())
 //	{
-//		const Vertices& textVertices = *vertices_texture.first;
+//		const VertexObject& textVertices = *vertices_texture.first;
 //		const Texture*  textTexture  = vertices_texture.second;
 //		DrawSprite({ shader, textVertices, ndc, *textTexture });
 //	}

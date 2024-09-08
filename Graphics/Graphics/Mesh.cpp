@@ -36,7 +36,6 @@ void Mesh::AddTextureCoordinate(float u, float v)
 	textureCoordinates.push_back({ u, v });
 }
 
-
 void Mesh::SetShapePattern(ShapePattern new_pattern) noexcept
 {
 	pattern = new_pattern;

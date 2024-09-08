@@ -11,7 +11,7 @@
 #pragma once
 #include <algorithm>
 
-class [[nodiscard]]Color4f
+class [[nodiscard]] Color4f
 {
 public:
 	Color4f()

@@ -16,7 +16,8 @@ class [[nodiscard]] VerticesDescription
 public:
 	enum class Type
 	{
-		Point,
+		Position,
+		Normal,
 		Color,
 		TextureCoordinate
 	};

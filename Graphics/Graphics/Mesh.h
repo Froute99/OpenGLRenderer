@@ -22,11 +22,6 @@ enum class ShapePattern
 	Quads
 };
 
-enum class ShapeType
-{
-	
-};
-
 class [[nodiscard]] Mesh
 {
 public:

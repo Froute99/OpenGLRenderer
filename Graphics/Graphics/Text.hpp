@@ -23,7 +23,7 @@ public:
 	Text() = default;
 	Text(std::wstring text_string, const BitmapFont & text_font) noexcept;
 
-	std::vector<std::pair<const Vertices*, const Texture*>> GetPairOfVerticesAndTextures() const noexcept;
+	std::vector<std::pair<const VertexObject*, const Texture*>> GetPairOfVerticesAndTextures() const noexcept;
 
 	void SetString(const std::wstring & text_string) noexcept;
 	void SetFont(const BitmapFont & text_font) noexcept;
@@ -37,5 +37,5 @@ private:
 	mutable bool needNewMeshes = true;
 	std::wstring string;
 	const BitmapFont* font = nullptr;
-	mutable std::unordered_map<int, Vertices> vertices;
+	mutable std::unordered_map<int, VertexObject> vertices;
 };

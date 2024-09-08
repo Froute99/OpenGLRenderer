@@ -4,35 +4,39 @@
 #include "Mesh.h"
 #include "Draw.hpp"
 
+enum class ObjectType
+{
+	JustMesh,
+	HasTexture
+};
+
 class GameObject
 {
 public:
 	GameObject() = default;
-	GameObject(Mesh newMesh, const VerticesDescription& layout);
-	~GameObject() {}
+	GameObject(const vec3<float>& location,
+		const vec3<float>&		  rotation, float scale);
+	~GameObject();
 
-	//void Initialize(Mesh newMesh, Vertices* newVertices);
+	// void Initialize(Mesh newMesh, VertexObject* newVertices);
 
-	inline Material* GetMaterial() noexcept { return &material; }
+	// inline Material* GetMaterial() noexcept { return &material; }
 	inline Transform* GetTransform() noexcept { return &transform; }
 
-	void SetShader(Shader* newShader) noexcept { material.shader = newShader; }
-	void SetNDC(mat4<float> ndc) noexcept { material.ndc = ndc * transform.GetModelToWorld(); }
-	void SetTexture(const Texture& texture) noexcept { material.texture = texture; }
+	// void SetShader(Shader* newShader) noexcept { material.shader = newShader; }
+	// void SetNDC(mat4<float> ndc) noexcept { material.ndc = ndc * transform.GetModelToWorld(); }
+	void SetTexture(const Texture& newTexture) noexcept { texture = newTexture; }
 	void LoadTexture(const std::filesystem::path& path) noexcept;
 
+	GameObject* CreateCube(const vec3<float>& location,
+		const vec3<float>& rotation, float size, Color4f color);
+
 private:
-	float yaw;
-	float pitch;
-	float roll;
-
-	// already included in Transform class
-	//float x;
-	//float y;
-	//float z;
-
-	Material material;
-	Mesh mesh;
+	Mesh3D	  mesh;
+	VertexObject vertices;
 	Transform transform;
+	Texture	  texture;
 
+	ObjectType objectType;
+	// Material material;
 };

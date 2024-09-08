@@ -111,6 +111,9 @@
     <ClInclude Include="Math\vec4.hpp">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Mesh3D.h">
+      <Filter>Graphics\Drawing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\Camera.cpp">
@@ -165,6 +168,9 @@
       <Filter>Graphics\Animation</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\ComputeShader.cpp">
+      <Filter>Graphics\Drawing</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Mesh3D.cpp">
       <Filter>Graphics\Drawing</Filter>
     </ClCompile>
   </ItemGroup>

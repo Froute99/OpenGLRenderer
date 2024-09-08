@@ -1,8 +1,8 @@
 /*
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
- *	File_name: Vertices.cpp
+ *	File_name: VertexObject.cpp
  *	
- *	Vertices class that manage vertices
+ *	VertexObject class that manage vertices
  *	
  *	Fall 2019
  *	Oct.31 2019
@@ -11,13 +11,14 @@
 #include "GL/glew.h"
 #include "Vertices.h"
 #include "Mesh.h"
+#include "Mesh3D.h"
 
-Vertices::Vertices(const Mesh& mesh, const VerticesDescription& vertex_layout) noexcept
+VertexObject::VertexObject(const Mesh3D& mesh, const VerticesDescription& vertex_layout) noexcept
 {
 	InitializeWithMeshAndLayout(mesh, vertex_layout);
 }
 
-void Vertices::InitializeWithMeshAndLayout(const Mesh& mesh, const VerticesDescription& vertex_layout) noexcept
+void VertexObject::InitializeWithMeshAndLayout(const Mesh3D& mesh, const VerticesDescription& vertex_layout) noexcept
 {
 	switch (mesh.GetShapePattern())
 	{
@@ -48,47 +49,87 @@ void Vertices::InitializeWithMeshAndLayout(const Mesh& mesh, const VerticesDescr
 	glBufferData(GL_ARRAY_BUFFER, bufferVertexCapacity, NULL, GL_STATIC_DRAW);
 
 	layout.EnableAttributes();
-	WriteMeshDataToVertexBuffer(mesh);
+	WriteMeshDataToVertexBuffer3D(mesh);
 }
 
-void Vertices::UpdateVeticesFromMesh(const Mesh& mesh)
+void VertexObject::UpdateVeticesFromMesh(const Mesh& mesh)
 {
 	if (static_cast<int>(mesh.GetPointsCount()) > bufferVertexCapacity)
 	{
 		DeleteVerticesOnGPU();
-		InitializeWithMeshAndLayout(mesh, layout);
+		//InitializeWithMeshAndLayout(mesh, layout);
 	}
 }
 
-void Vertices::SelectVAO(const Vertices& vertices) noexcept
+void VertexObject::SelectVAO(const VertexObject& vertices) noexcept
 {
 	glBindVertexArray(vertices.VAO);
 }
 
-void Vertices::SelectNothing()
+void VertexObject::SelectNothing()
 {
 	glBindVertexArray(0);
 }
 
-unsigned Vertices::GetPattern() const noexcept
+unsigned VertexObject::GetPattern() const noexcept
 {
 	return pattern;
 }
 
-int Vertices::GetVerticesCount() const noexcept
+int VertexObject::GetVerticesCount() const noexcept
 {
 	return verticesCount;
 }
 
-void Vertices::WriteMeshDataToVertexBuffer(const Mesh& mesh) const noexcept
+void VertexObject::WriteMeshDataToVertexBuffer(const Mesh& mesh) const noexcept
+{
+	mesh;
+	//char* buffer = reinterpret_cast<char*>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	//unsigned offset = 0;
+
+	//vec2<float> point;
+	//Color4f color;
+	//vec2<float> texture;
+
+	//for (int i = 0; i < static_cast<int>(verticesCount); ++i)
+	//{
+	//	for (VerticesDescription::Type element : layout.GetTypes())
+	//	{
+	//		switch (element)
+	//		{
+	//		case VerticesDescription::Type::Position:
+	//			point = mesh.GetPoint(i);
+	//			memcpy(buffer + offset, &point, sizeof(point));
+	//			offset += sizeof(vec2<float>);
+	//			break;
+	//		case VerticesDescription::Type::Color:
+	//			color = mesh.GetColor(i);
+	//			memcpy(buffer + offset, &color, sizeof(color));
+	//			offset += sizeof(Color4f);
+	//			break;
+	//		case VerticesDescription::Type::TextureCoordinate:
+	//			texture = mesh.GetTextureCoordinate(i);
+	//			memcpy(buffer + offset, &texture, sizeof(texture));
+	//			offset += sizeof(vec2<float>);
+	//			break;
+	//		}
+	//	}
+	//}
+	//glUnmapBuffer(GL_ARRAY_BUFFER);
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+	//SelectNothing();
+}
+
+void VertexObject::WriteMeshDataToVertexBuffer3D(const Mesh3D& mesh) const noexcept
 {
 	char* buffer = reinterpret_cast<char*>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	unsigned offset = 0;
 
-	vec2<float> point;
-	Color4f color;
-	vec2<float> texture;
+	vec3<float> point;
+	vec3<float> normal;
+	Color4f		color;
 
 	for (int i = 0; i < static_cast<int>(verticesCount); ++i)
 	{
@@ -96,21 +137,26 @@ void Vertices::WriteMeshDataToVertexBuffer(const Mesh& mesh) const noexcept
 		{
 			switch (element)
 			{
-			case VerticesDescription::Type::Point:
-				point = mesh.GetPoint(i);
-				memcpy(buffer + offset, &point, sizeof(point));
-				offset += sizeof(vec2<float>);
-				break;
-			case VerticesDescription::Type::Color:
-				color = mesh.GetColor(i);
-				memcpy(buffer + offset, &color, sizeof(color));
-				offset += sizeof(Color4f);
-				break;
-			case VerticesDescription::Type::TextureCoordinate:
-				texture = mesh.GetTextureCoordinate(i);
-				memcpy(buffer + offset, &texture, sizeof(texture));
-				offset += sizeof(vec2<float>);
-				break;
+				case VerticesDescription::Type::Position:
+					point = mesh.GetPoint(i);
+					memcpy(buffer + offset, &point, sizeof(point));
+					offset += sizeof(point);
+					break;
+				case VerticesDescription::Type::Normal:
+					normal = mesh.GetNormal(i);
+					memcpy(buffer + offset, &normal, sizeof(normal));
+					offset += sizeof(normal);
+					break;
+				case VerticesDescription::Type::Color:
+					color = mesh.GetColor(i);
+					memcpy(buffer + offset, &color, sizeof(color));
+					offset += sizeof(Color4f);
+					break;
+				case VerticesDescription::Type::TextureCoordinate:
+					//texture = mesh.GetTextureCoordinate(i);
+					//memcpy(buffer + offset, &texture, sizeof(texture));
+					//offset += sizeof(vec2<float>);
+					break;
 			}
 		}
 	}
@@ -119,7 +165,7 @@ void Vertices::WriteMeshDataToVertexBuffer(const Mesh& mesh) const noexcept
 	SelectNothing();
 }
 
-void Vertices::DeleteVerticesOnGPU() const
+void VertexObject::DeleteVerticesOnGPU() const
 {
 	glDeleteBuffers(1, &VBO);
 	glDeleteVertexArrays(1, &VAO);

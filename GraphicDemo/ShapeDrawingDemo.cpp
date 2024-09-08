@@ -18,73 +18,41 @@
 #include "GameObject.h"
 #include <Angle.hpp>
 #include <vec3.hpp>
-
-//#define GLM_ENABLE_EXPERIMENTAL
-//#include "glm.hpp"
-//#include "detail/type_mat4x4.hpp"
-//#include "gtx/projection.hpp"
-//#include "gtx/matrix_operation.hpp"
-//#include "gtc/matrix_transform.hpp"
-
-struct Vertex
-{
-	vec3<float> pos;
-	vec3<float> color;
-
-	Vertex() {}
-
-	Vertex(float x, float y, float z)
-	{
-		pos = vec3<float>(x, y, z);
-
-		float red = (float)rand() / (float)RAND_MAX;
-		float green = (float)rand() / (float)RAND_MAX;
-		float blue = (float)rand() / (float)RAND_MAX;
-		color = vec3<float>(red, green, blue);
-	}
-};
-
-void ShapeDrawingDemo::CreateVertexBuffer()
-{
-	Vertex vertices[8];
-
-	vertices[0] = { 0.5f, 0.5f, 0.5f };
-	vertices[1] = { -0.5f, 0.5f, -0.5f };
-	vertices[2] = { -0.5f, 0.5f, 0.5f };
-	vertices[3] = { 0.5f, -0.5f, -0.5f };
-	vertices[4] = { -0.5f, -0.5f, -0.5f };
-	vertices[5] = { 0.5f, 0.5f, -0.5f };
-	vertices[6] = { 0.5f, -0.5f, 0.5f };
-	vertices[7] = { -0.5f, -0.5f, 0.5f };
-
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-}
-
-void ShapeDrawingDemo::CreateIndexBuffer()
-{
-	glGenBuffers(1, &IBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 36 * sizeof(float), Indices, GL_STATIC_DRAW);
-}
+#include "Mesh3D.h"
 
 void ShapeDrawingDemo::Initialize()
 {
 	shader.LoadShaderFrom(PATH::shape_vert, PATH::shape_frag);
-	glUseProgram(shader.GetHandleToShader());
-	layout = { VerticesDescription::Type::Point, VerticesDescription::Type::Color };
-
-	const Color4f color{ .8f, .8f, .0f, 1.0f };
+	lightCubeShader.LoadShaderFrom(PATH::lightCubeVS, PATH::lightCubeFS);
+	layout = { VerticesDescription::Type::Position, VerticesDescription::Type::Normal };
 
 	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CW);
+	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 
-	CreateVertexBuffer();
-	CreateIndexBuffer();
+	Shader::UseShader(shader);
+	objectColor = { 1.0f, 0.5f, 0.31f };
+	const Mesh3D cube = MESH::BuildCube({ 0.f, 0.f, 0.f }, 0.5f, objectColor);
+	vertices.InitializeWithMeshAndLayout(cube, layout);
 
-	uniformNDClocation = glGetUniformLocation(shader.GetHandleToShader(), "toNDC");
+	Shader::UseShader(lightCubeShader);
+	lightPos = { 0.7f, 0.4f, 0.8f };
+	lightColor = { 1.0f, 1.0f, 1.0f };
+	const Mesh3D lightCube = MESH::BuildCube({ 0.f, 0.f, 0.f }, 0.2f, lightColor);
+	lightCubeVertices.InitializeWithMeshAndLayout(lightCube, layout);
+
+	uniformModelLocation = glGetUniformLocation(shader.GetHandleToShader(), "model");
+	uniformViewLocation = glGetUniformLocation(shader.GetHandleToShader(), "view");
+	uniformProjectionLocation = glGetUniformLocation(shader.GetHandleToShader(), "projection");
+
+	uniformObjectColorLocation = glGetUniformLocation(shader.GetHandleToShader(), "objectColor");
+	uniformLightPosLocation = glGetUniformLocation(shader.GetHandleToShader(), "lightPos");
+	uniformLightColorLocation = glGetUniformLocation(shader.GetHandleToShader(), "lightColor");
+
+	uniformLightCubeModel = glGetUniformLocation(lightCubeShader.GetHandleToShader(), "model");
+	uniformLightCubeView = glGetUniformLocation(lightCubeShader.GetHandleToShader(), "view");
+	uniformLightCubeProjection = glGetUniformLocation(lightCubeShader.GetHandleToShader(), "projection");
+
 
 	// vec2<float> size{ 50.0f };
 	// const Mesh rectangleMesh = MESH::create_rectangle({ 0.0f }, size, color);
@@ -156,96 +124,53 @@ void ShapeDrawingDemo::Update(float dt)
 	std::cout << "\r"
 			  << "angle - " << angle;
 
+	mat4<float> Model;
 
-	 mat4<float> Model;
-
-	 mat4<float> Translation(
+	mat4<float> Translation(
 		1.0f, 0.0f, 0.0f, 0.0f,
 		0.0f, 1.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 2.5f, 1.0f);
+		0.0f, 0.0f, 3.0f, 1.0f);
 
-	 mat4<float> Rotation(
-		 cosf(angle), 0.0f, -sinf(angle), 0.0f,
-		 0.0f, 1.0f, 0.0f, 0.0f,
-		 sinf(angle), 0.0f, cosf(angle), 0.0f,
-		 0.0f, 0.0f, 0.0f, 1.0f);
+	mat4<float> Rotation(
+		cosf(angle), 0.0f, -sinf(angle), 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		sinf(angle), 0.0f, cosf(angle), 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f);
 
-	 Model = Translation * Rotation;
+	Model = Translation * Rotation;
 
-	 float FOV = 90.0f;
-	 float tanHalfFOV = tanf(ANGLE::DegreeToRadian(FOV / 2.0f));
-	 float near = 0.1f;
+	mat4<float> View = camera.BuildViewMatrix();
 
-	 //mat4<float> View = Matrix4::build_identity<float>();
-	 mat4<float> View = camera.LookAt();
+	mat4<float> Projection = view.BuildProjectionMatrix();
+	// column-major operations should be ordered like v2 = PVM * v1;
 
-	 mat4<float> Projection(
-		1.0f / tanHalfFOV, 0.0f, 0.0f, 0.0f,
-		0.0f, 1.0f / tanHalfFOV, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 1.0f,
-		0.0f, 0.0f, -2.f * near, 0.0f);
+	Shader::UseShader(shader);
+	glUniformMatrix4fv(uniformModelLocation, 1, GL_FALSE, &Model.elements[0][0]);
+	glUniformMatrix4fv(uniformViewLocation, 1, GL_FALSE, &View.elements[0][0]);
+	glUniformMatrix4fv(uniformProjectionLocation, 1, GL_FALSE, &Projection.elements[0][0]);
 
+	glUniform3fv(uniformObjectColorLocation, 1, &objectColor.x);
+	glUniform3fv(uniformLightPosLocation, 1, &lightPos.x);
+	glUniform3fv(uniformLightColorLocation, 1, &lightColor.x);
 
-	// mat4<float> FinalMatrix = Rotation * Translation * Projection;		// this means row-major matrix multiplication
-	//  column-major operations should be ordered like v2 = PVM * v1;
-	 mat4<float> FinalMatrix = (Projection) * (View) * (Translation) * (Rotation);
+	VertexObject::SelectVAO(vertices);
+	glDrawArrays(vertices.GetPattern(), 0, vertices.GetVerticesCount());
 
-	//glm::mat4 Translation(1);
-	//glm::mat4 Rotation(1);
+	Model = mat4<float>(
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		lightPos.x, lightPos.y, lightPos.z, 1.0f);
 
-	//// translate
-	//Translation = glm::translate(Translation, glm::vec3(0.f, 0.f, 5.f));
+	Shader::UseShader(lightCubeShader);
+	glUniformMatrix4fv(uniformLightCubeModel, 1, GL_FALSE, &Model.elements[0][0]);
+	glUniformMatrix4fv(uniformLightCubeView, 1, GL_FALSE, &View.elements[0][0]);
+	glUniformMatrix4fv(uniformLightCubeProjection, 1, GL_FALSE, &Projection.elements[0][0]);
 
-	//// rotate
-	//Rotation = glm::rotate(Rotation, angle, glm::vec3(0.f, 1.f, 0.f));
+	VertexObject::SelectVAO(lightCubeVertices);
+	glDrawArrays(lightCubeVertices.GetPattern(), 0, lightCubeVertices.GetVerticesCount());
 
-	//glm::vec3 eye = { 0.f, 0.f, 0.f };
-	//glm::vec3 center = { 0.f, 0.f, 1.f };
-	//glm::vec3 up = { 0.f, 1.f, 0.f };
-
-	//glm::mat4 View = glm::lookAtLH(eye, center, up);
-
-	//glm::mat4 Projection = glm::infinitePerspectiveLH_NO(glm::radians(90.0f), 1.0f, 0.1f);
-
-	//glm::mat4 FinalMatrix = Projection * View * Translation * Rotation;
-	GLuint	  uniformHandle = glGetUniformLocation(shader.GetHandleToShader(), "gWorld");
-	glUniformMatrix4fv(uniformHandle, 1, GL_FALSE, &FinalMatrix.elements[0][0]);
-	if (uniformHandle == -1)
-	{
-		printf("Error getting uniform location of 'gWorld'\n");
-		exit(1);
-	}
-
-	glUseProgram(shader.GetHandleToShader());
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
-
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-
-	// Draw::DrawShape(*rectangle->GetMaterial());
-	// Draw::DrawShape(*line->GetMaterial());
-	// Draw::DrawShape(*quad->GetMaterial());
-	// Draw::DrawShape(*triangle->GetMaterial());
-	// Draw::DrawShape(*circle->GetMaterial());
-	// Draw::DrawShape(*ellipse->GetMaterial());
-
-	// Draw::DrawGameObject(DrawType::Shape, rectangle->GetMaterial());
-	// Draw::DrawGameObject(DrawType::Shape, line->GetMaterial());
-	// Draw::DrawGameObject(DrawType::Shape, quad->GetMaterial());
-	// Draw::DrawGameObject(DrawType::Shape, triangle->GetMaterial());
-	// Draw::DrawGameObject(DrawType::Shape, circle->GetMaterial());
-	// Draw::DrawGameObject(DrawType::Shape, ellipse->GetMaterial());
 
 	Draw::FinishDrawing();
 }

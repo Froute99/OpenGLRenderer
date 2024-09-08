@@ -16,8 +16,7 @@ class [[nodiscard]] Transform
 {
 public:
 	Transform() noexcept = default;
-	mat4<float> GetModelToWorld() noexcept;
-	mat4<float> GetWorldToModel() noexcept;
+	//mat4<float> GetWorldToModel() noexcept;
 
 	float CalculateWorldDepth() const noexcept;
 
@@ -42,10 +41,12 @@ public:
 	const Transform* GetParent() const noexcept { return parent; }
 	void SetParent(Transform * transform_parent) noexcept { parent = transform_parent; }
 
+	mat4<float> BuildModelMatrix() const noexcept;
+
 private:
 	vec3<float> translation{ 0.0f };
-	vec3<float> scale{ 1.0f };
 	vec3<float> rotation{ 0.0f, 0.0f, 0.0f };	// yaw pitch roll	axis standard: Z Y X
+	vec3<float> scale{ 1.0f };
 
 	float depth = 0.0f;
 	Transform* parent = nullptr;

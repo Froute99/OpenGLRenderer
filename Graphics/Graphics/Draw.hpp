@@ -20,11 +20,11 @@ class GameObject;
 struct Material
 {
 	Material() = default;
-	Material(Shader* shader, Vertices vertices, mat4<float> ndc, Texture texture)
+	Material(Shader* shader, VertexObject vertices, mat4<float> ndc, Texture texture)
 		: shader(shader), vertices(vertices), ndc(ndc), texture(texture) {}
 
 	Shader* shader;
-	Vertices vertices;
+	VertexObject vertices;
 	mat4<float> ndc;
 	Texture texture;
 };

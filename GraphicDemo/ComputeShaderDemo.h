@@ -35,7 +35,7 @@ private:
 	//VerticesDescription layout{ VerticesDescription::Type::Point, VerticesDescription::Type::TextureCoordinate };
 	//Texture texture;
 	//Shader textureShader;
-	//Vertices computeShaderVertices;
+	//VertexObject computeShaderVertices;
 
 };
 

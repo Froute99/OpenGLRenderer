@@ -11,65 +11,32 @@
 #include "CameraView.hpp"
 #include <Angle.hpp>
 
-//mat3<float> BuildToNDC(CameraView* camera, vec2<float> windowSize)
-//{
-//	switch (camera->GetFrameOfReference())
-//	{
-//	case FrameOfReference::RightHanded_OriginCenter:
-//		return mat3<float>{
-//			camera->GetZoom() * (2.0f / windowSize.x), 0.0f, 0.0f,
-//			0.0f, camera->GetZoom() * (2.0f / windowSize.y), 0.0f,
-//			0.0f, 0.0f, 1.0f };
-//	case FrameOfReference::RightHanded_OriginBottomLeft:
-//		return mat3<float>{
-//			camera->GetZoom() * (2.0f / windowSize.x), 0.0f, 0.0f,
-//			0.0f, camera->GetZoom() * (2.0f / windowSize.y), 0.0f,
-//			-1.0f, -1.0f, 1.0f };
-//	case FrameOfReference::LeftHanded_OriginTopLeft:
-//		return mat3<float>{
-//			camera->GetZoom() * (2.0f / windowSize.x), 0.0f, 0.0f,
-//			0.0f, camera->GetZoom() * -(2.0f / windowSize.y), 0.0f,
-//			-1.0f, 1.0f, 1.0f };
-//	default:
-//	return mat3<float>{
-//		1.0f, 0.0f, 0.0f,
-//		0.0f, 1.0f, 0.0f,
-//		0.0f, 0.0f, 1.0f };
-//	}
-//}
-
-void CameraView::SetViewSize(vec2<float> size) noexcept
+CameraView::CameraView(float newFOV, float newNear)
+	: fov(newFOV), near(newNear)
 {
-	displaySize = size;
-	aspectRatio = displaySize.y / displaySize.x;
-	cameraToNDC = Matrix4::InfiniteProjectionMatrix(fov, aspectRatio, near);
-	//cameraToNDC = BuildToNDC(this, displaySize);
 }
 
-void CameraView::SetViewSize(int pixel_width, int pixel_height) noexcept
+void CameraView::SetViewSize(int width, int height) noexcept
 {
-	displaySize.x = static_cast<float>(pixel_width);
-	displaySize.y = static_cast<float>(pixel_height);
-	aspectRatio = displaySize.y / displaySize.x;
-	cameraToNDC = Matrix4::InfiniteProjectionMatrix(fov, aspectRatio, near);
-	// cameraToNDC = BuildToNDC(this, displaySize);
+	aspectRatio = (float)height / (float)width;
+	projectionMatrix = BuildProjectionMatrix();
 }
 
-void CameraView::SetZoom(float new_zoom) noexcept
+void CameraView::SetZoom(float newZoom) noexcept
 {
-	zoom = new_zoom;
-	aspectRatio = displaySize.y / displaySize.x;
-	cameraToNDC = Matrix4::InfiniteProjectionMatrix(fov, aspectRatio, near);
-	// cameraToNDC = BuildToNDC(this, displaySize);
+	zoom = newZoom;
+	projectionMatrix = BuildProjectionMatrix();
 }
 
-//void CameraView::SetFrameOfReference(FrameOfReference frame_of_reference) noexcept
-//{
-//	frameOfReference = frame_of_reference;
-//	cameraToNDC = BuildToNDC(this, displaySize);
-//}
-
-CameraView::CameraView(float fov, float near)
-	: fov(fov), near(near), aspectRatio(0.0f)
+mat4<float> CameraView::BuildProjectionMatrix() const noexcept
 {
+	float tangent = tanf(ANGLE::DegreeToRadian(fov / 2.0f));
+
+	mat4<float> projection(
+		1.0f / tangent, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f / tangent, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 1.0f,
+		0.0f, 0.0f, -2.f * near, 0.0f);
+
+	return projection;
 }

@@ -17,7 +17,7 @@
 void TextureDrawingDemo::Initialize()
 {
 	shader.LoadShaderFrom(PATH::texture_vert, PATH::texture_frag);
-	layout = { VerticesDescription::Type::Point, VerticesDescription::Type::TextureCoordinate };
+	layout = { VerticesDescription::Type::Position, VerticesDescription::Type::TextureCoordinate };
 
 	//view.SetViewSize(width, height);
 	//cameraToNDC = view.GetCameraToNDCTransform() * camera.WorldToCamera();
@@ -37,10 +37,10 @@ void TextureDrawingDemo::Initialize()
 
 	//blueFireAnimation.Initialize({ 10, 6, 25.0f }, blueFire.shader);
 
-	const Mesh rectangle = MESH::create_rectangle({ 0.0f }, { 1.0f }, { 0.0f });
-	dragon = new GameObject(rectangle, layout);
-	dragon->SetShader(&shader);
-	dragon->LoadTexture(dragon_png);
+	//const Mesh rectangle = MESH::create_rectangle({ 0.0f }, { 1.0f }, { 0.0f });
+	//dragon = new GameObject(rectangle, layout);
+	//dragon->SetShader(&shader);
+	//dragon->LoadTexture(dragon_png);
 
 	//mat4<float> ndc = cameraToNDC * dragon->GetTransform()->GetModelToWorld();
 	//dragon->GetTransform()->SetScale(500.0f);
@@ -73,7 +73,7 @@ void TextureDrawingDemo::Update(float dt)
 
 	//dragon.ndc = cameraToNDC * dragonTransform.GetModelToWorld();
 	//Draw::DrawSprite(dragon);
-	Draw::DrawGameObject(DrawType::Sprite, dragon->GetMaterial());
+	//Draw::DrawGameObject(DrawType::Sprite, dragon->GetMaterial());
 
 	//if (timePassed >= 1.0f)
 	//{
