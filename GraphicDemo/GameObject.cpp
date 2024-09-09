@@ -2,6 +2,7 @@
 #include "Vertices.h"
 #include "Draw.hpp"
 #include "Mesh3D.h"
+#include "GL/glew.h"
 
 GameObject::GameObject(const vec3<float>& location, const vec3<float>& rotation, float scale)
 {
@@ -24,10 +25,15 @@ GameObject* GameObject::CreateCube(const vec3<float>& location, const vec3<float
 {
 	GameObject* object = new GameObject(location, rotation, size);
 
-	mesh = MESH::BuildCube(transform.GetTranslation(), size, color);
+	object->mesh = MESH::BuildCube(size, color);
 	VerticesDescription layout = { VerticesDescription::Type::Position, VerticesDescription::Type::Normal };
-	vertices.InitializeWithMeshAndLayout(mesh, layout);
+	object->vertexObject.InitializeWithMeshAndLayout(object->mesh, layout);
 
 	return object;
 }
 
+void GameObject::Draw()
+{
+	VertexObject::SelectVAO(vertexObject);
+	glDrawArrays(vertexObject.GetPattern(), 0, vertexObject.GetVerticesCount());
+}

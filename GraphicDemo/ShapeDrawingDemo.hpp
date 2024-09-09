@@ -37,33 +37,30 @@ public:
 	void HandleFocusEvent(bool focused) override final;
 
 private:
-	vec2<float> moveSpeed{ 0.f };
+	vec3<float> moveSpeed;
 	float		rotationSpeed = 0;
 
-	Shader				shader;
-	VertexObject			vertices;
-	VerticesDescription layout;
+	GameObject* simpleCube;
+	GameObject* lightCube;
 
-	Shader	 lightCubeShader;
-	VertexObject lightCubeVertices;
+	Shader shader;
+	Shader lightCubeShader;
 
 	GLuint uniformModelLocation;
 	GLuint uniformViewLocation;
 	GLuint uniformProjectionLocation;
-	
+
 	GLuint uniformObjectColorLocation;
 	GLuint uniformLightPosLocation;
 	GLuint uniformLightColorLocation;
-	
+
 	GLuint uniformLightCubeModel;
 	GLuint uniformLightCubeView;
 	GLuint uniformLightCubeProjection;
-
 
 	vec3<float> objectColor;
 	vec3<float> lightPos;
 	vec3<float> lightColor;
 
 	float angle = 0;
-
 };

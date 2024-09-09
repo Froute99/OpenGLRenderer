@@ -1,17 +1,19 @@
 #include "Mesh3D.h"
 
-Mesh3D MESH::BuildCube(vec3<float> center, float size, vec3<float> color)
+Mesh3D MESH::BuildCube(float size, vec3<float> color)
 {
-	return BuildCube(center, size, Color4f(color.x, color.y, color.z, 1.f));
+	return BuildCube(size, Color4f(color.x, color.y, color.z, 1.f));
 }
 
-Mesh3D MESH::BuildCube(vec3<float> center, float size, Color4f color)
+Mesh3D MESH::BuildCube(float size, Color4f color)
 {
 	// counter-clockwise, thumb direction is the forward
 	// this cube supposed as the front face(near plane of the cube in your thinking!)
 	// is configured with four vertices. Left upper one is v0, counter clockwise v1, v2, v3
 	// parrelel to the +z direction, v4, v5, v6, v7
 	// with 4 vertices, one plane of the cube is consists, i need 24 vertices for total.
+
+	vec3<float> center;
 
 	Mesh3D cube;
 	cube.SetShapePattern(ShapePattern::Quads);

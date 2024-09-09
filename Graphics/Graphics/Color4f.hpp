@@ -10,6 +10,7 @@
 
 #pragma once
 #include <algorithm>
+#include <vec3.hpp>
 
 class [[nodiscard]] Color4f
 {
@@ -29,6 +30,13 @@ public:
 		r = std::clamp(red, 0.0f, 1.0f);
 		g = std::clamp(green, 0.0f, 1.0f);
 		b = std::clamp(blue, 0.0f, 1.0f);
+		a = std::clamp(alpha, 0.0f, 1.0f);
+	}
+	Color4f(vec3<float> c, float alpha)
+	{
+		r = std::clamp(c.x, 0.0f, 1.0f);
+		g = std::clamp(c.y, 0.0f, 1.0f);
+		b = std::clamp(c.z, 0.0f, 1.0f);
 		a = std::clamp(alpha, 0.0f, 1.0f);
 	}
 

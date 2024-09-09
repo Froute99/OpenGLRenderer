@@ -31,6 +31,6 @@ private:
 
 namespace MESH
 {
-	Mesh3D BuildCube(vec3<float> center, float size, vec3<float> color = vec3<float>(0.5f));
-	Mesh3D BuildCube(vec3<float> center, float size, Color4f color = { 0.5f });
+	Mesh3D BuildCube(float size, vec3<float> color = vec3<float>(0.5f));
+	Mesh3D BuildCube(float size, Color4f color = { 0.5f });
 }
