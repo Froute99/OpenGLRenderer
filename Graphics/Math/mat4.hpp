@@ -194,9 +194,21 @@ namespace Matrix4
 	template <typename T>
 	mat4<T> build_rotation_euler(T yaw, T pitch, T roll) noexcept
 	{
-		mat3<T> Z = Matrix3::build_rotation(yaw);
-		mat3<T> Y = Matrix3::build_rotation(pitch);
-		mat3<T> X = Matrix3::build_rotation(roll);
+		mat3<T> Z(
+			cosf(yaw), -sinf(yaw), 0.f,
+			sinf(yaw), cosf(yaw), 0.f,
+			0.f, 0.f, 1.f);
+
+		mat3<T> Y(
+			cosf(pitch), 0.f, sinf(pitch),
+			0.f, 1.f, 0.f,
+			-sinf(pitch), 0.f, cosf(pitch));
+		
+		mat3<T> X(
+			1.f, 0.f, 0.f,
+			0.f, cosf(roll), -sinf(roll),
+			0.f, sinf(roll), cosf(roll));
+
 
 		mat3<T> tmp = Z * Y * X;
 		mat4<T> result = {
@@ -211,9 +223,20 @@ namespace Matrix4
 	template <typename T>
 	mat4<T> build_rotation_euler(const vec3<T>& t) noexcept
 	{
-		mat3<T> Z = Matrix3::build_rotation(t.x);
-		mat3<T> Y = Matrix3::build_rotation(t.y);
-		mat3<T> X = Matrix3::build_rotation(t.z);
+		mat3<T> Z(
+			cosf(t.x), -sinf(t.x), 0.f,
+			sinf(t.x), cosf(t.x), 0.f,
+			0.f, 0.f, 1.f);
+
+		mat3<T> Y(
+			cosf(t.y), 0.f, sinf(t.y),
+			0.f, 1.f, 0.f,
+			-sinf(t.y), 0.f, cosf(t.y));
+
+		mat3<T> X(
+			1.f, 0.f, 0.f,
+			0.f, cosf(t.z), -sinf(t.z),
+			0.f, sinf(t.z), cosf(t.z));
 
 		mat3<T> tmp = Z * Y * X;
 
