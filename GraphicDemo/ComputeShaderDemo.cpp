@@ -2,8 +2,8 @@
 #include "Mesh.h"
 #include "Draw.hpp"
 #include "PATH.hpp"
-#include "gl/glew.h"
 #include <iostream>
+#include <glew.h>
 
 void ComputeShaderDemo::Initialize()
 {

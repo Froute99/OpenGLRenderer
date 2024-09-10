@@ -2,7 +2,7 @@
 #include "Vertices.h"
 #include "Draw.hpp"
 #include "Mesh3D.h"
-#include "GL/glew.h"
+#include <glew.h>
 
 GameObject::GameObject(const vec3<float>& location, const vec3<float>& rotation, float scale)
 {

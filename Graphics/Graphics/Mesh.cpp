@@ -9,7 +9,7 @@
  */
 
 #include "Mesh.h"
-#include "Math/Angle.hpp"
+#include <Angle.hpp>
 
 void Mesh::AddPoint(vec2<float> point)
 {

@@ -8,10 +8,10 @@
  *	Oct.31 2019
  */
 
-#include "GL/glew.h"
 #include "Vertices.h"
 #include "Mesh.h"
 #include "Mesh3D.h"
+#include <glew.h>
 
 VertexObject::VertexObject(const Mesh3D& mesh, const VerticesDescription& vertex_layout) noexcept
 {

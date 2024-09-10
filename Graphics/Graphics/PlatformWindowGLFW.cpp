@@ -8,12 +8,13 @@
  *	Sep.21 2019
  */
 
-#include <iostream>
-#include "GL/glew.h"
 #include "PlatformWindowGLFW.hpp"
 #include "PATH.hpp"
 #include "EventHandler.hpp"
 #include <stb_image.h>
+#include <iostream>
+#include <glew.h>
+#include <glfw3.h>
 
 EventHandler* eventHandler;
 

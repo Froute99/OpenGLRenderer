@@ -8,17 +8,20 @@
  *	Nov.25 2019
  *******************************************************/
 
-#include <iostream>
-#include "GL/glew.h"
-#include "glfw3.h"
+#include <glew.h>
+#include <glfw3.h>
 #include "ShapeDrawingDemo.hpp"
 #include "Draw.hpp"
 #include "PATH.hpp"
 #include "Screenshot.hpp"
 #include "GameObject.h"
+#include "Mesh3D.h" 
 #include <Angle.hpp>
 #include <vec3.hpp>
-#include "Mesh3D.h"
+#include <iostream>
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 void ShapeDrawingDemo::Initialize()
 {
@@ -28,6 +31,13 @@ void ShapeDrawingDemo::Initialize()
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
+
+	Assimp::Importer importer;
+
+	const std::string& filename = "../assets/phong_cube.fbx";
+	unsigned int flag = aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices;
+
+	testCube = importer.ReadFile(filename, flag);
 
 	vec3<float> cubePos(0.0f, 0.0f, 3.0f);
 	objectColor = { 1.0f, 0.5f, 0.31f };
@@ -55,13 +65,20 @@ void ShapeDrawingDemo::Initialize()
 
 void ShapeDrawingDemo::Update(float dt)
 {
-	 std::cout << "\r" << dt;
+	//if (!isFocused)
+	//{
+	//	Draw::StartDrawing();
+	//	return;
+	//}
 
-	if (!isFocused)
-	{
-		Draw::StartDrawing();
-		return;
-	}
+	//std::cout << "\r" << dt;
+
+	//if (testCube->HasMeshes())
+	//{
+	//	std::cout << testCube->mMeshes[0][0].mVertices[0].x;
+	//	std::cout << testCube->mMeshes[0][0].mVertices[0].y;
+	//	std::cout << testCube->mMeshes[0][0].mVertices[0].z << std::endl;
+	//}
 
 	// camera.Rotate(rotationSpeed);
 	// camera.MoveRight(moveSpeed.x);

@@ -9,7 +9,7 @@
  */
 
 #include "Screenshot.hpp"
-#include <GL/glew.h>
+#include <glew.h>
 
 Image ScreenShot(int pixels_width, int pixels_height, int left_x, int bottom_y) noexcept
 {

@@ -8,10 +8,10 @@
  *	Oct.07 2019
  */
 
-#include "GL/glew.h"
-#include "Image.hpp"
 #include "Texture.hpp"
+#include "Image.hpp"
 #include "PATH.hpp"
+#include <glew.h>
 
 Texture::Texture(Image& image)
 {

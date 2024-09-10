@@ -11,13 +11,9 @@
 #pragma once
 #include "Demo.hpp"
 #include "Shader.h"
-#include "Mesh.h"
-#include "Vertices.h"
-#include "VerticesDescription.h"
-#include "Texture.hpp"
-#include "Transform.hpp"
 
 class GameObject;
+struct aiScene;
 
 class ShapeDrawingDemo : public Demo
 {
@@ -42,6 +38,8 @@ private:
 
 	GameObject* simpleCube;
 	GameObject* lightCube;
+
+	const aiScene* testCube;
 
 	Shader shader;
 	Shader lightCubeShader;

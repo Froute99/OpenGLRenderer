@@ -12,8 +12,8 @@
 #include <fstream>
 #include <sstream>
 #include <cassert>
-#include <Graphics/BitmapFont.hpp>
-#include <Graphics/Texture.hpp>
+#include "BitmapFont.hpp"
+#include "Texture.hpp"
 
 bool BitmapFont::LoadFromFile(const std::filesystem::path& filename) noexcept
 {
