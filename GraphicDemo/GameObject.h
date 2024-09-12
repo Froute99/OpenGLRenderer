@@ -15,7 +15,7 @@ class GameObject
 public:
 	GameObject() = default;
 	GameObject(const vec3<float>& location,
-		const vec3<float>&		  rotation, float scale);
+		const vec3<float>& rotation, float scale);
 	~GameObject();
 
 	// void Initialize(Mesh newMesh, VertexObject* newVertices);
@@ -28,24 +28,26 @@ public:
 
 	// void SetShader(Shader* newShader) noexcept { material.shader = newShader; }
 	// void SetNDC(mat4<float> ndc) noexcept { material.ndc = ndc * transform.GetModelToWorld(); }
-	void SetMesh(const Mesh3D& newMesh) noexcept { mesh = newMesh; }
+	void SetMesh(Mesh3D* const newMesh) noexcept { meshes = newMesh; }
 	void SetTexture(const Texture& newTexture) noexcept { texture = newTexture; }
 	void LoadTexture(const std::filesystem::path& path) noexcept;
-
-	static GameObject* CreateCube(const vec3<float>& location,
-		const vec3<float>& rotation, float size, Color4f color);
 
 	mat4<float> GetModelToWorld() { return transform.BuildModelMatrix(); }
 
 	void Draw();
 
+	static GameObject* CreateCube(const vec3<float>& location,
+		const vec3<float>& rotation, float size, Color4f color);
+
+	static GameObject* LoadMeshFromFBX(const std::string& filePath);
+
 private:
-	Mesh3D	  mesh;
+	Mesh3D*		 meshes;
+	size_t		 numMeshes;
 	VertexObject vertexObject;
-	Transform transform;
-	Texture	  texture;
+	Transform	 transform;
+	Texture		 texture;
 
 	ObjectType objectType;
 	// Material material;
 };
-

@@ -18,7 +18,7 @@ class [[nodiscard]] VertexObject
 {
 public:
 	VertexObject() = default;
-	VertexObject(const Mesh3D& mesh, const VerticesDescription& vertex_layout) noexcept;
+	VertexObject(const Mesh3D* mesh, const VerticesDescription& vertex_layout) noexcept;
 
 	void InitializeWithMeshAndLayout(const Mesh3D& mesh, const VerticesDescription& vertex_layout) noexcept;
 	void UpdateVeticesFromMesh(const Mesh& mesh);
@@ -29,7 +29,6 @@ public:
 	unsigned int GetPattern() const noexcept;
 	int GetVerticesCount() const noexcept;
 	
-	void WriteMeshDataToVertexBuffer(const Mesh& mesh) const noexcept;
 	void WriteMeshDataToVertexBuffer3D(const Mesh3D& mesh) const noexcept;
 	void DeleteVerticesOnGPU() const;
 

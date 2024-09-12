@@ -13,9 +13,9 @@
 #include "Mesh3D.h"
 #include <glew.h>
 
-VertexObject::VertexObject(const Mesh3D& mesh, const VerticesDescription& vertex_layout) noexcept
+VertexObject::VertexObject(const Mesh3D* mesh, const VerticesDescription& vertex_layout) noexcept
 {
-	InitializeWithMeshAndLayout(mesh, vertex_layout);
+	InitializeWithMeshAndLayout(*mesh, vertex_layout);
 }
 
 void VertexObject::InitializeWithMeshAndLayout(const Mesh3D& mesh, const VerticesDescription& vertex_layout) noexcept
@@ -81,46 +81,6 @@ int VertexObject::GetVerticesCount() const noexcept
 	return verticesCount;
 }
 
-void VertexObject::WriteMeshDataToVertexBuffer(const Mesh& mesh) const noexcept
-{
-	mesh;
-	//char* buffer = reinterpret_cast<char*>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
-	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	//unsigned offset = 0;
-
-	//vec2<float> point;
-	//Color4f color;
-	//vec2<float> texture;
-
-	//for (int i = 0; i < static_cast<int>(verticesCount); ++i)
-	//{
-	//	for (VerticesDescription::Type element : layout.GetTypes())
-	//	{
-	//		switch (element)
-	//		{
-	//		case VerticesDescription::Type::Position:
-	//			point = mesh.GetPoint(i);
-	//			memcpy(buffer + offset, &point, sizeof(point));
-	//			offset += sizeof(vec2<float>);
-	//			break;
-	//		case VerticesDescription::Type::Color:
-	//			color = mesh.GetColor(i);
-	//			memcpy(buffer + offset, &color, sizeof(color));
-	//			offset += sizeof(Color4f);
-	//			break;
-	//		case VerticesDescription::Type::TextureCoordinate:
-	//			texture = mesh.GetTextureCoordinate(i);
-	//			memcpy(buffer + offset, &texture, sizeof(texture));
-	//			offset += sizeof(vec2<float>);
-	//			break;
-	//		}
-	//	}
-	//}
-	//glUnmapBuffer(GL_ARRAY_BUFFER);
-	//glBindBuffer(GL_ARRAY_BUFFER, 0);
-	//SelectNothing();
-}
-
 void VertexObject::WriteMeshDataToVertexBuffer3D(const Mesh3D& mesh) const noexcept
 {
 	char* buffer = reinterpret_cast<char*>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
@@ -129,6 +89,7 @@ void VertexObject::WriteMeshDataToVertexBuffer3D(const Mesh3D& mesh) const noexc
 
 	vec3<float> point;
 	vec3<float> normal;
+	vec2<float> texCoord;
 	Color4f		color;
 
 	for (int i = 0; i < static_cast<int>(verticesCount); ++i)
@@ -153,9 +114,9 @@ void VertexObject::WriteMeshDataToVertexBuffer3D(const Mesh3D& mesh) const noexc
 					offset += sizeof(Color4f);
 					break;
 				case VerticesDescription::Type::TextureCoordinate:
-					//texture = mesh.GetTextureCoordinate(i);
-					//memcpy(buffer + offset, &texture, sizeof(texture));
-					//offset += sizeof(vec2<float>);
+					texCoord = mesh.GetTextureCoordinate(i);
+					memcpy(buffer + offset, &texCoord, sizeof(texCoord));
+					offset += sizeof(vec2<float>);
 					break;
 			}
 		}

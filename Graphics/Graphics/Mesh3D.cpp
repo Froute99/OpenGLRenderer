@@ -1,11 +1,45 @@
 #include "Mesh3D.h"
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>
+#include <iostream>
 
-Mesh3D MESH::BuildCube(float size, vec3<float> color)
+Mesh3D MESH::LoadFromFBX(const std::string& filePath)
+{
+	unsigned int flag = aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices;
+
+	Assimp::Importer importer;
+
+	const aiScene* scene = importer.ReadFile(filePath, flag);
+	const unsigned int isFailedToLoad = scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE;
+	if (isFailedToLoad)
+	{
+		const char* errMsg = importer.GetErrorString();
+		std::cout << "Error-Assimp: " << errMsg << std::endl;
+		return Mesh3D();
+	}
+
+	for (unsigned int i = 0; i < scene->mNumMeshes; ++i)
+	{
+		aiMesh* aiMesh = scene->mMeshes[i];
+		for (unsigned int j = 0; j < aiMesh->mNumVertices; ++j)
+		{
+			std::cout << j << ": "
+					  << aiMesh->mVertices[j].x << " "
+					  << aiMesh->mVertices[j].y << " "
+					  << aiMesh->mVertices[j].z << std::endl;
+		}
+	}
+
+	return Mesh3D();
+}
+
+Mesh3D* MESH::BuildCube(float size, vec3<float> color)
 {
 	return BuildCube(size, Color4f(color.x, color.y, color.z, 1.f));
 }
 
-Mesh3D MESH::BuildCube(float size, Color4f color)
+Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 {
 	// counter-clockwise, thumb direction is the forward
 	// this cube supposed as the front face(near plane of the cube in your thinking!)
@@ -15,8 +49,8 @@ Mesh3D MESH::BuildCube(float size, Color4f color)
 
 	vec3<float> center;
 
-	Mesh3D cube;
-	cube.SetShapePattern(ShapePattern::Quads);
+	Mesh3D* cube = new Mesh3D();
+	cube->SetShapePattern(ShapePattern::Quads);
 
 	float halfLength = size / 2.f;
 	float r = center.x + halfLength; // right
@@ -37,76 +71,70 @@ Mesh3D MESH::BuildCube(float size, Color4f color)
 	vec3<float> v7 = { r, b, p };
 
 	// front face
-	cube.AddPoint(v0);
-	cube.AddPoint(v1);
-	cube.AddPoint(v2);
-	cube.AddPoint(v3);
+	cube->AddPoint(v0);
+	cube->AddPoint(v1);
+	cube->AddPoint(v2);
+	cube->AddPoint(v3);
 
-	cube.AddNormal({0.f, 0.f, -1.f});
-	cube.AddNormal({0.f, 0.f, -1.f});
-	cube.AddNormal({0.f, 0.f, -1.f});
-	cube.AddNormal({0.f, 0.f, -1.f});
+	cube->AddNormal({0.f, 0.f, -1.f});
+	cube->AddNormal({0.f, 0.f, -1.f});
+	cube->AddNormal({0.f, 0.f, -1.f});
+	cube->AddNormal({0.f, 0.f, -1.f});
 
 	// right face
-	cube.AddPoint(v4);
-	cube.AddPoint(v0);
-	cube.AddPoint(v3);
-	cube.AddPoint(v7);
+	cube->AddPoint(v4);
+	cube->AddPoint(v0);
+	cube->AddPoint(v3);
+	cube->AddPoint(v7);
 
-	cube.AddNormal({ 1.f, 0.f, 0.f });
-	cube.AddNormal({ 1.f, 0.f, 0.f });
-	cube.AddNormal({ 1.f, 0.f, 0.f });
-	cube.AddNormal({ 1.f, 0.f, 0.f });
+	cube->AddNormal({ 1.f, 0.f, 0.f });
+	cube->AddNormal({ 1.f, 0.f, 0.f });
+	cube->AddNormal({ 1.f, 0.f, 0.f });
+	cube->AddNormal({ 1.f, 0.f, 0.f });
 
 	// up face
-	cube.AddPoint(v0);
-	cube.AddPoint(v4);
-	cube.AddPoint(v5);
-	cube.AddPoint(v1);
+	cube->AddPoint(v0);
+	cube->AddPoint(v4);
+	cube->AddPoint(v5);
+	cube->AddPoint(v1);
 
-	cube.AddNormal({ 0.f, 1.f, 0.f });
-	cube.AddNormal({ 0.f, 1.f, 0.f });
-	cube.AddNormal({ 0.f, 1.f, 0.f });
-	cube.AddNormal({ 0.f, 1.f, 0.f });
+	cube->AddNormal({ 0.f, 1.f, 0.f });
+	cube->AddNormal({ 0.f, 1.f, 0.f });
+	cube->AddNormal({ 0.f, 1.f, 0.f });
+	cube->AddNormal({ 0.f, 1.f, 0.f });
 
 	// left face
-	cube.AddPoint(v1);
-	cube.AddPoint(v5);
-	cube.AddPoint(v6);
-	cube.AddPoint(v2);
+	cube->AddPoint(v1);
+	cube->AddPoint(v5);
+	cube->AddPoint(v6);
+	cube->AddPoint(v2);
 
-	cube.AddNormal({ -1.f, 0.f, 0.f });
-	cube.AddNormal({ -1.f, 0.f, 0.f });
-	cube.AddNormal({ -1.f, 0.f, 0.f });
-	cube.AddNormal({ -1.f, 0.f, 0.f });
+	cube->AddNormal({ -1.f, 0.f, 0.f });
+	cube->AddNormal({ -1.f, 0.f, 0.f });
+	cube->AddNormal({ -1.f, 0.f, 0.f });
+	cube->AddNormal({ -1.f, 0.f, 0.f });
 
 	// bottom face
-	cube.AddPoint(v2);
-	cube.AddPoint(v6);
-	cube.AddPoint(v7);
-	cube.AddPoint(v3);
+	cube->AddPoint(v2);
+	cube->AddPoint(v6);
+	cube->AddPoint(v7);
+	cube->AddPoint(v3);
 
-	cube.AddNormal({ 0.f, -1.f, 0.f });
-	cube.AddNormal({ 0.f, -1.f, 0.f });
-	cube.AddNormal({ 0.f, -1.f, 0.f });
-	cube.AddNormal({ 0.f, -1.f, 0.f });
+	cube->AddNormal({ 0.f, -1.f, 0.f });
+	cube->AddNormal({ 0.f, -1.f, 0.f });
+	cube->AddNormal({ 0.f, -1.f, 0.f });
+	cube->AddNormal({ 0.f, -1.f, 0.f });
 
 	// back face
-	cube.AddPoint(v5);
-	cube.AddPoint(v4);
-	cube.AddPoint(v7);
-	cube.AddPoint(v6);
+	cube->AddPoint(v5);
+	cube->AddPoint(v4);
+	cube->AddPoint(v7);
+	cube->AddPoint(v6);
 
-	cube.AddNormal({ 0.f, 0.f, 1.f });
-	cube.AddNormal({ 0.f, 0.f, 1.f });
-	cube.AddNormal({ 0.f, 0.f, 1.f });
-	cube.AddNormal({ 0.f, 0.f, 1.f });
-
-	//for (int i = 0; i < 24; ++i)
-	//{
-	//	cube.AddColor(color);
-	//}
-	color;
+	cube->AddNormal({ 0.f, 0.f, 1.f });
+	cube->AddNormal({ 0.f, 0.f, 1.f });
+	cube->AddNormal({ 0.f, 0.f, 1.f });
+	cube->AddNormal({ 0.f, 0.f, 1.f });
 
 	return cube;
 }
