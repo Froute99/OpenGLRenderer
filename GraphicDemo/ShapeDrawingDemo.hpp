@@ -38,8 +38,7 @@ private:
 
 	GameObject* simpleCube;
 	GameObject* lightCube;
-
-	const aiScene* testCube;
+	GameObject* fbxCube;
 
 	Shader shader;
 	Shader lightCubeShader;

@@ -3,6 +3,7 @@
 #include "Color4f.hpp"
 #include <vector>
 #include <vec3.hpp>
+#include <string>
 
 class Mesh3D
 {
@@ -14,6 +15,7 @@ public:
 
 	vec3<float> GetPoint(int index) const noexcept { return points.at(index); }
 	vec3<float> GetNormal(int index) const noexcept { return normals.at(index); }
+	vec2<float> GetTextureCoordinate(int index) const noexcept { return textureCoordinates.at(index); }
 	Color4f		GetColor(int index) const noexcept { return colors.at(index); }
 
 	void		 SetShapePattern(ShapePattern newPattern) noexcept { pattern = newPattern; }
@@ -31,6 +33,7 @@ private:
 
 namespace MESH
 {
-	Mesh3D BuildCube(float size, vec3<float> color = vec3<float>(0.5f));
-	Mesh3D BuildCube(float size, Color4f color = { 0.5f });
+	Mesh3D LoadFromFBX(const std::string& path);
+	Mesh3D* BuildCube(float size, vec3<float> color = vec3<float>(0.5f));
+	Mesh3D* BuildCube(float size, Color4f color = { 0.5f });
 }

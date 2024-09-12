@@ -34,10 +34,10 @@ void ShapeDrawingDemo::Initialize()
 
 	Assimp::Importer importer;
 
-	const std::string& filename = "../assets/phong_cube.fbx";
-	unsigned int flag = aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices;
+	const std::string& filename = "../assets/cube_z_up.fbx";
 
-	testCube = importer.ReadFile(filename, flag);
+	fbxCube = GameObject::LoadMeshFromFBX(filename);
+
 
 	vec3<float> cubePos(0.0f, 0.0f, 3.0f);
 	objectColor = { 1.0f, 0.5f, 0.31f };
@@ -73,12 +73,6 @@ void ShapeDrawingDemo::Update(float dt)
 
 	//std::cout << "\r" << dt;
 
-	//if (testCube->HasMeshes())
-	//{
-	//	std::cout << testCube->mMeshes[0][0].mVertices[0].x;
-	//	std::cout << testCube->mMeshes[0][0].mVertices[0].y;
-	//	std::cout << testCube->mMeshes[0][0].mVertices[0].z << std::endl;
-	//}
 
 	// camera.Rotate(rotationSpeed);
 	// camera.MoveRight(moveSpeed.x);
@@ -105,7 +99,8 @@ void ShapeDrawingDemo::Update(float dt)
 	glUniform3fv(uniformLightPosLocation, 1, &lightPos.x);
 	glUniform3fv(uniformLightColorLocation, 1, &lightColor.x);
 
-	simpleCube->Draw();
+	fbxCube->Draw();
+	//simpleCube->Draw();
 
 	//==================================
 	// Light Cube
