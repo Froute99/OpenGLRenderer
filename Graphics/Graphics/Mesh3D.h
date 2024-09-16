@@ -1,8 +1,9 @@
 #pragma once
 #include "Mesh.h"
-#include "Color4f.hpp"
+#include <Graphics/Color4f.hpp>
+#include <Math/vec2.hpp>
+#include <Math/vec3.hpp>
 #include <vector>
-#include <vec3.hpp>
 #include <string>
 
 class Mesh3D

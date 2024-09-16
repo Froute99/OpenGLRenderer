@@ -1,8 +1,9 @@
 #pragma once
-#include "Transform.hpp"
-#include "Texture.hpp"
-#include "Mesh3D.h"
-#include "Draw.hpp"
+#include <Graphics/Transform.hpp>
+#include <Graphics/Texture.hpp>
+#include <Graphics/Mesh3D.h>
+#include <Graphics/Draw.hpp>
+#include <Math/mat4.hpp>
 
 enum class ObjectType
 {
@@ -42,11 +43,11 @@ public:
 	static GameObject* LoadMeshFromFBX(const std::string& filePath);
 
 private:
-	Mesh3D*		 meshes;
-	size_t		 numMeshes;
-	VertexObject vertexObject;
-	Transform	 transform;
-	Texture		 texture;
+	Mesh3D*		  meshes;
+	size_t		  numMeshes;
+	VertexObject* vertexObject;
+	Transform	  transform;
+	Texture		  texture;
 
 	ObjectType objectType;
 	// Material material;

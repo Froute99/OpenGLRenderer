@@ -10,7 +10,7 @@
 
 #pragma once
 #include <algorithm>
-#include <vec3.hpp>
+#include <Math/vec3.hpp>
 
 class [[nodiscard]] Color4f
 {

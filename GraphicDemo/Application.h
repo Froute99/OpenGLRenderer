@@ -9,12 +9,12 @@
  *******************************************************/
 
 #pragma once
-#include <array>
-#include "OpenGLWindow.hpp"
-#include "Camera.hpp"
-#include "CameraView.hpp"
-#include "EventHandler.hpp"
+#include <Graphics/OpenGLWindow.hpp>
+#include <Graphics/Camera.hpp>
+#include <Graphics/CameraView.hpp>
+#include <Graphics/EventHandler.hpp>
 #include "Demo.hpp"
+#include <array>
 
 class Application : public SimpleEventHandler
 {

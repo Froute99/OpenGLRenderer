@@ -16,6 +16,10 @@
 #include <glew.h>
 #include <glfw3.h>
 
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_glfw.h>
+#include <imgui/imgui_impl_opengl3.h>
+
 EventHandler* eventHandler;
 
 void frame_buffer_size_callback(GLFWwindow* /*window*/, int width, int height)
@@ -280,6 +284,20 @@ bool PlatformWindow::CanCreateWindow(int width, int height, EventHandler* event_
 	}
 
 	SetWindowIcon();
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	(void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+
+	const char* glslVersion = "#version 330";
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init(glslVersion);
+
 
 	return true;
 }

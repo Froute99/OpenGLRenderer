@@ -18,7 +18,7 @@ class [[nodiscard]] VertexObject
 {
 public:
 	VertexObject() = default;
-	VertexObject(const Mesh3D* mesh, const VerticesDescription& vertex_layout) noexcept;
+	VertexObject(const Mesh3D& mesh, const VerticesDescription& vertex_layout) noexcept;
 
 	void InitializeWithMeshAndLayout(const Mesh3D& mesh, const VerticesDescription& vertex_layout) noexcept;
 	void UpdateVeticesFromMesh(const Mesh& mesh);

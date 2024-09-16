@@ -8,7 +8,6 @@
  */
 
 #pragma once
-#include <vec3.hpp>
 
 template <typename T>
 class vec4

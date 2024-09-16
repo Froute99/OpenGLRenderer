@@ -1,7 +1,9 @@
 #include "GameObject.h"
-#include "Vertices.h"
-#include "Draw.hpp"
-#include "Mesh3D.h"
+#include <Graphics/Vertices.h>
+#include <Graphics/Draw.hpp>
+#include <Graphics/Mesh3D.h>
+#include <Math/vec3.hpp>
+#include <Math/mat4.hpp>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
@@ -18,7 +20,6 @@ GameObject::GameObject(const vec3<float>& location, const vec3<float>& rotation,
 
 GameObject::~GameObject()
 {
-	
 }
 
 void GameObject::LoadTexture(const std::filesystem::path& path) noexcept
@@ -32,14 +33,15 @@ GameObject* GameObject::CreateCube(const vec3<float>& location, const vec3<float
 
 	object->meshes = MESH::BuildCube(size, color);
 	VerticesDescription layout = { VerticesDescription::Type::Position, VerticesDescription::Type::Normal };
-	object->vertexObject.InitializeWithMeshAndLayout(object->meshes[0], layout);
+	object->vertexObject = new VertexObject[0];
+	object->vertexObject[0].InitializeWithMeshAndLayout(object->meshes[0], layout);
 
 	return object;
 }
 
 GameObject* GameObject::LoadMeshFromFBX(const std::string& filePath)
 {
-	unsigned int flag = aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices;
+	unsigned int	 flag = aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices;
 	Assimp::Importer importer;
 
 	const aiScene*	   scene = importer.ReadFile(filePath, flag);
@@ -52,41 +54,11 @@ GameObject* GameObject::LoadMeshFromFBX(const std::string& filePath)
 
 	GameObject* object = new GameObject();
 	object->numMeshes = scene->mNumMeshes;
-	//object->meshes = new Mesh3D[object->numMeshes];
-	object->meshes = new Mesh3D;
+	object->meshes = new Mesh3D[object->numMeshes];
+	object->vertexObject = new VertexObject();
 
-	//for (unsigned int i = 0; i < scene->mMetaData->mNumProperties; ++i)
-	//{
-	//	std::string s = scene->mMetaData->mKeys[i].C_Str();
-	//	std::cout << s << std::endl;
-	//}
-
-	//aiString		key = scene->mMetaData->mKeys[0];
-	//aiMetadataEntry entry = scene->mMetaData->mValues[0];
-	//std::cout << key.C_Str() << std::endl;
-	//std::cout << *(int*)entry.mData << std::endl << std::endl;
-
-	//key = scene->mMetaData->mKeys[2];
-	//entry = scene->mMetaData->mValues[2];
-	//std::cout << key.C_Str() << std::endl;
-	//std::cout << *(int*)entry.mData << std::endl;
-
-	//key = scene->mMetaData->mKeys[4];
-	//entry = scene->mMetaData->mValues[4];
-	//std::cout << key.C_Str() << std::endl;
-	//std::cout << *(int*)entry.mData << std::endl;
-
-
-	aiString		key = scene->mMetaData->mKeys[8];
-	aiMetadataEntry entry = scene->mMetaData->mValues[8];
-	std::cout << key.C_Str() << std::endl;
-	std::cout << entry.mType << std::endl;
-	aiVector3D v = *(aiVector3D*)(entry.mData);
-	std::cout << v.x << ", " << v.y << ", " << v.z << std::endl;
-	//std::cout << *(int*)entry.mData << std::endl << std::endl;
-
-
-	for (unsigned int i = 0; i < scene->mNumMeshes; ++i)
+	VerticesDescription layout = { VerticesDescription::Type::Position, VerticesDescription::Type::Normal };
+	for (unsigned int i = 0; i < object->numMeshes; ++i)
 	{
 		aiMesh* aiMesh = scene->mMeshes[i];
 		for (unsigned int j = 0; j < aiMesh->mNumVertices; ++j)
@@ -112,22 +84,26 @@ GameObject* GameObject::LoadMeshFromFBX(const std::string& filePath)
 					break;
 			}
 		}
+		object->vertexObject->InitializeWithMeshAndLayout(object->meshes[i], layout);
+		//object->vertexObject.InitializeWithMeshAndLayout(object->meshes[i], layout);
 	}
 
-	VerticesDescription layout = { VerticesDescription::Type::Position, VerticesDescription::Type::Normal };
-	object->vertexObject.InitializeWithMeshAndLayout(*object->meshes, layout);
-
 	// aiPrimitiveType::aiPrimitiveType_POINT
-	//aiPrimitiveType::aiPrimitiveType_POINT = 0x1,
-	//aiPrimitiveType_LINE = 0x2,
-	//aiPrimitiveType_TRIANGLE = 0x4,
-	//aiPrimitiveType_POLYGON = 0x8,
+	// aiPrimitiveType::aiPrimitiveType_POINT = 0x1,
+	// aiPrimitiveType_LINE = 0x2,
+	// aiPrimitiveType_TRIANGLE = 0x4,
+	// aiPrimitiveType_POLYGON = 0x8,
 
 	return object;
 }
 
 void GameObject::Draw()
 {
-	VertexObject::SelectVAO(vertexObject);
-	glDrawArrays(vertexObject.GetPattern(), 0, vertexObject.GetVerticesCount());
+	//VertexObject::SelectVAO(*vertexObject);
+	//glDrawArrays(vertexObject->GetPattern(), 0, vertexObject->GetVerticesCount());
+	for (size_t i = 0; i < numMeshes; ++i)
+	{
+		VertexObject::SelectVAO(*vertexObject);
+		glDrawArrays(vertexObject->GetPattern(), 0, vertexObject->GetVerticesCount());
+	}
 }

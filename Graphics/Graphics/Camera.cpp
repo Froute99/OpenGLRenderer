@@ -10,7 +10,7 @@
 
 #include "Camera.hpp"
 #include "Transform.hpp"
-#include <Angle.hpp>
+#include <Math/Angle.hpp>
 
 Camera::Camera(vec3<float> newPos) noexcept
 {

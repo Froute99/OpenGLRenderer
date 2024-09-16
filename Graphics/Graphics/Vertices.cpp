@@ -13,9 +13,9 @@
 #include "Mesh3D.h"
 #include <glew.h>
 
-VertexObject::VertexObject(const Mesh3D* mesh, const VerticesDescription& vertex_layout) noexcept
+VertexObject::VertexObject(const Mesh3D& mesh, const VerticesDescription& vertex_layout) noexcept
 {
-	InitializeWithMeshAndLayout(*mesh, vertex_layout);
+	InitializeWithMeshAndLayout(mesh, vertex_layout);
 }
 
 void VertexObject::InitializeWithMeshAndLayout(const Mesh3D& mesh, const VerticesDescription& vertex_layout) noexcept

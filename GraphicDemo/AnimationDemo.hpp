@@ -10,13 +10,13 @@
 
 #pragma once
 #include "Demo.hpp"
-#include "Animation.hpp"
-#include "Mesh.h"
-#include "Vertices.h"
-#include "VerticesDescription.h"
-#include "Texture.hpp"
-#include "Transform.hpp"
-#include "Draw.hpp"
+#include <Graphics/Animation.hpp>
+#include <Graphics/Mesh.h>
+#include <Graphics/Vertices.h>
+#include <Graphics/VerticesDescription.h>
+#include <Graphics/Texture.hpp>
+#include <Graphics/Transform.hpp>
+#include <Graphics/Draw.hpp>
 
 class AnimationDemo : public Demo
 {

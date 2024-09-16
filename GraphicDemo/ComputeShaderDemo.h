@@ -1,9 +1,9 @@
 #pragma once
 #include "Demo.hpp"
-#include "Shader.h"
-#include "Texture.hpp"
-#include "Vertices.h"
-#include "ComputeShader.h"
+#include <Graphics/Shader.h>
+#include <Graphics/Texture.hpp>
+#include <Graphics/Vertices.h>
+#include <Graphics/ComputeShader.h>
 
 class ComputeShaderDemo : public Demo
 {

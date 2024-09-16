@@ -13,7 +13,7 @@
 #include "Vertices.h"
 #include "Texture.hpp"
 #include "Text.hpp"
-#include <mat4.hpp>
+#include <Math/mat4.hpp>
 
 class GameObject;
 

@@ -9,10 +9,7 @@
  */
 
 #pragma once
-#include "mat3.hpp"
-#include <vec2.hpp>
-#include <vec3.hpp>
-#include <mat4.hpp>
+#include <Math/mat4.hpp>
 
 enum FrameOfReference
 {

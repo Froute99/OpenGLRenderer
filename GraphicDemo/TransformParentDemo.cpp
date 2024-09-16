@@ -8,11 +8,11 @@
  *	Dec.07 2019
  *******************************************************/
 
-#include <iostream>
 #include "TransformParentDemo.hpp"
-#include "Draw.hpp"
-#include "PATH.hpp"
-#include <Angle.hpp>
+#include <Graphics/Draw.hpp>
+#include <Graphics/PATH.hpp>
+#include <Math/Angle.hpp>
+#include <iostream>
 
 namespace
 {

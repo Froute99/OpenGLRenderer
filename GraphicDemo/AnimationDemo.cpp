@@ -8,10 +8,10 @@
  *	Dec.03 2019
  *******************************************************/
 
-#include <iostream>
 #include "AnimationDemo.hpp"
-#include "Draw.hpp"
-#include "PATH.hpp"
+#include <Graphics/Draw.hpp>
+#include <Graphics/PATH.hpp>
+#include <iostream>
 
 const std::filesystem::path& fire_png = "../assets/fire.png";
 const std::filesystem::path& blue_fire_png = "../assets/blue_fire.png";
