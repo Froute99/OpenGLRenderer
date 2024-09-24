@@ -1,12 +1,14 @@
-#version 330
+#version 330 core
 out vec4 FragColor;
 
 in vec3 vertexNormal;
 in vec3 fragPos;
+in vec2 TexCoords;
 
 uniform vec3 objectColor;
 uniform vec3 lightPos;
 uniform vec3 lightColor;
+uniform sampler2D textureDiffuse1;
 
 void main()
 {
@@ -18,7 +20,8 @@ void main()
 
 	float diff = max(dot(norm, lightDir), 0.0);
 	vec3 diffuse = diff * lightColor;
+	vec3 textureColor = vec3(texture(textureDiffuse1, TexCoords));
 
-	vec3 result = (ambient + diffuse) * objectColor;
+	vec3 result = (ambient + diffuse) * textureColor;
 	FragColor = vec4(result, 1.0);
 }

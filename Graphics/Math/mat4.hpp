@@ -11,9 +11,9 @@
 #pragma once
 #include <complex> // cos, sin
 #include <cassert> // assert
-#include <vec3.hpp>
-#include <vec4.hpp>
-#include <mat3.hpp>
+#include "vec3.hpp"
+#include "vec4.hpp"
+#include "mat3.hpp"
 
 template <typename T>
 class mat4

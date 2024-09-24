@@ -10,16 +10,16 @@
 
 #pragma once
 #include "Demo.hpp"
-#include "Shader.h"
-#include "Mesh.h"
-#include "Vertices.h"
-#include "VerticesDescription.h"
-#include "Texture.hpp"
-#include "Transform.hpp"
-#include "Animation.hpp"
-#include "BitmapFont.hpp"
-#include "Text.hpp"
-#include "Draw.hpp"
+#include <Graphics/Shader.h>
+#include <Graphics/Mesh.h>
+#include <Graphics/Vertices.h>
+#include <Graphics/VerticesDescription.h>
+#include <Graphics/Texture.hpp>
+#include <Graphics/Transform.hpp>
+#include <Graphics/Animation.hpp>
+#include <Graphics/BitmapFont.hpp>
+#include <Graphics/Text.hpp>
+#include <Graphics/Draw.hpp>
 
 class TextureDrawingDemo : public Demo
 {
