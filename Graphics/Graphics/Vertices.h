@@ -20,8 +20,10 @@ public:
 	VertexObject() = default;
 	VertexObject(const Mesh3D& mesh, const VerticesDescription& vertex_layout) noexcept;
 
-	void InitializeWithMeshAndLayout(const Mesh3D& mesh, const VerticesDescription& vertex_layout) noexcept;
+	void InitializeWithMeshAndLayout(const Mesh3D& mesh, const VerticesDescription& vertex_layout, unsigned int indicesCount, const void* indicesData) noexcept;
 	void UpdateVeticesFromMesh(const Mesh& mesh);
+
+	void SetLayout(const VerticesDescription& newLayout) noexcept { layout = newLayout; }
 
 	static void SelectVAO(const VertexObject& vertices) noexcept;
 	static void SelectNothing();
@@ -32,8 +34,12 @@ public:
 	void WriteMeshDataToVertexBuffer3D(const Mesh3D& mesh) const noexcept;
 	void DeleteVerticesOnGPU() const;
 
+	void SetupMesh(int numVertices, int numIndices, const void* verticesData, const void* indicesData, unsigned int vertexSize); // test version of using indices
+
 	unsigned int VBO = 0;
 	unsigned int VAO = 0;
+	unsigned int EBO = 0;
+
 private:
 
 	unsigned int pattern = 0;

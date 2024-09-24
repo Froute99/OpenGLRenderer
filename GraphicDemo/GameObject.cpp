@@ -10,6 +10,7 @@
 #include <assimp/mesh.h>
 #include <iostream>
 #include <glew.h>
+#include <vector>
 
 GameObject::GameObject(const vec3<float>& location, const vec3<float>& rotation, float scale)
 {
@@ -24,17 +25,20 @@ GameObject::~GameObject()
 
 void GameObject::LoadTexture(const std::filesystem::path& path) noexcept
 {
+	Texture texture;
 	texture.LoadFromPath(path);
+	textures.push_back(texture);
 }
 
-GameObject* GameObject::CreateCube(const vec3<float>& location, const vec3<float>& rotation, float size, Color4f color)
+GameObject* GameObject::CreateCube(const vec3<float>& location, const vec3<float>& rotation, float size, Color4f /*color*/)
 {
 	GameObject* object = new GameObject(location, rotation, size);
 
-	object->meshes = MESH::BuildCube(size, color);
-	VerticesDescription layout = { VerticesDescription::Type::Position, VerticesDescription::Type::Normal };
-	object->vertexObject = new VertexObject[0];
-	object->vertexObject[0].InitializeWithMeshAndLayout(object->meshes[0], layout);
+	// object->meshes.push_back(MESH::BuildCube(size, color));
+	// VerticesDescription layout = { VerticesDescription::Type::Position, VerticesDescription::Type::Normal };
+	// VertexObject*		vobj = new VertexObject;
+	// vobj->InitializeWithMeshAndLayout(*object->meshes[0], layout);
+	// object->vertexObject.push_back(vobj);
 
 	return object;
 }
@@ -52,58 +56,142 @@ GameObject* GameObject::LoadMeshFromFBX(const std::string& filePath)
 		std::cout << "Error-Assimp: " << errMsg << std::endl;
 	}
 
+	// for (int i = 0; i < 6; ++i)
+	//{
+	//	std::cout << scene->mMetaData->mKeys[i].C_Str() << " - "
+	//			  << *(int*)scene->mMetaData->mValues[i].mData << std::endl;
+	// }
+	// std::cout << "\n\n";
+
 	GameObject* object = new GameObject();
 	object->numMeshes = scene->mNumMeshes;
-	object->meshes = new Mesh3D[object->numMeshes];
-	object->vertexObject = new VertexObject();
+	object->meshes.reserve(object->numMeshes);
+	object->vertexObject.reserve(object->numMeshes);
 
-	VerticesDescription layout = { VerticesDescription::Type::Position, VerticesDescription::Type::Normal };
-	for (unsigned int i = 0; i < object->numMeshes; ++i)
+	object->ProcessNode(scene->mRootNode, scene);
+
+	for (auto& path : object->texturePaths)
 	{
-		aiMesh* aiMesh = scene->mMeshes[i];
-		for (unsigned int j = 0; j < aiMesh->mNumVertices; ++j)
-		{
-			vec3<float> position{ aiMesh->mVertices[j].x, aiMesh->mVertices[j].z, aiMesh->mVertices[j].y };
-			vec3<float> normal{ aiMesh->mNormals[j].x, aiMesh->mNormals[j].z, aiMesh->mNormals[j].y };
-			object->meshes[i].AddPoint(position);
-			object->meshes[i].AddNormal(normal);
-
-			switch (aiMesh->mPrimitiveTypes)
-			{
-				case aiPrimitiveType::aiPrimitiveType_LINE:
-					object->meshes[i].SetShapePattern(ShapePattern::Line);
-					break;
-				case aiPrimitiveType::aiPrimitiveType_TRIANGLE:
-					object->meshes[i].SetShapePattern(ShapePattern::Triangles);
-					break;
-				case aiPrimitiveType::aiPrimitiveType_POLYGON:
-					object->meshes[i].SetShapePattern(ShapePattern::Quads);
-					break;
-				default:
-					object->meshes[i].SetShapePattern(ShapePattern::Quads);
-					break;
-			}
-		}
-		object->vertexObject->InitializeWithMeshAndLayout(object->meshes[i], layout);
-		//object->vertexObject.InitializeWithMeshAndLayout(object->meshes[i], layout);
+		std::cout << path << std::endl;
+		object->LoadTexture(path);
 	}
-
-	// aiPrimitiveType::aiPrimitiveType_POINT
-	// aiPrimitiveType::aiPrimitiveType_POINT = 0x1,
-	// aiPrimitiveType_LINE = 0x2,
-	// aiPrimitiveType_TRIANGLE = 0x4,
-	// aiPrimitiveType_POLYGON = 0x8,
 
 	return object;
 }
 
+void GameObject::ProcessNode(aiNode* node, const aiScene* scene)
+{
+	// node->mTransformation.
+	//  process all the node's meshes (if any)
+	for (unsigned int i = 0; i < node->mNumMeshes; ++i)
+	{
+		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+		meshes.push_back(ProcessMesh(mesh, scene));
+	}
+	// then do the same for each of its children
+	for (unsigned int i = 0; i < node->mNumChildren; ++i)
+	{
+		ProcessNode(node->mChildren[i], scene);
+	}
+}
+
+Mesh3D* GameObject::ProcessMesh(aiMesh* mesh, const aiScene* scene)
+{
+	Mesh3D* result = new Mesh3D();
+
+	for (unsigned int i = 0; i < mesh->mNumVertices; ++i)
+	{
+		result->AddPoint({ mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z });
+
+		if (mesh->HasNormals())
+		{
+			result->AddNormal({ mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z });
+		}
+
+		if (mesh->mTextureCoords[0])
+		{
+			result->AddTexCoord({ mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y });
+		}
+		else
+		{
+			result->AddTexCoord({ 0.0f, 0.0f });
+		}
+
+		switch (mesh->mPrimitiveTypes)
+		{
+			case aiPrimitiveType::aiPrimitiveType_LINE:
+				result->SetShapePattern(ShapePattern::Line);
+				break;
+			case aiPrimitiveType::aiPrimitiveType_TRIANGLE:
+				result->SetShapePattern(ShapePattern::Triangles);
+				break;
+			case aiPrimitiveType::aiPrimitiveType_POLYGON:
+				result->SetShapePattern(ShapePattern::Quads);
+				break;
+			default:
+				result->SetShapePattern(ShapePattern::Triangles);
+				break;
+		}
+	}
+
+	for (unsigned int i = 0; i < mesh->mNumFaces; ++i)
+	{
+		aiFace face = mesh->mFaces[i];
+		for (unsigned int j = 0; j < face.mNumIndices; ++j)
+		{
+			result->AddIndices(face.mIndices[j]);
+		}
+	}
+
+	VerticesDescription layout = { VerticesDescription::Type::Position, VerticesDescription::Type::Normal, VerticesDescription::Type::TextureCoordinate };
+	VertexObject*		v = new VertexObject;
+	v->InitializeWithMeshAndLayout(*result, layout, result->GetIndicesSize(), &result->indices[0]);
+	vertexObject.push_back(v);
+
+	std::string baseRoot = "../assets/backpack/";
+	if (mesh->mMaterialIndex >= 0)
+	{
+		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+
+		for (unsigned int i = 0; i < material->GetTextureCount(aiTextureType_DIFFUSE); ++i)
+		{
+			aiString s;
+			material->GetTexture(aiTextureType_DIFFUSE, i, &s);
+			std::string texturePath = baseRoot + s.C_Str();
+			texturePaths.insert(texturePath);
+		}
+
+		// for (unsigned int i = 0; i < material->GetTextureCount(aiTextureType_SPECULAR); ++i)
+		//{
+		//	aiString s;
+		//	material->GetTexture(aiTextureType_SPECULAR, i, &s);
+		//	std::string texturePath = baseRoot + s.C_Str();
+		//	texturePaths.insert(texturePath);
+		// }
+		//// 3. normal maps
+		// std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
+		// textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+		//// 4. height maps
+		// std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
+		// textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
+	}
+
+	return result;
+}
+
 void GameObject::Draw()
 {
-	//VertexObject::SelectVAO(*vertexObject);
-	//glDrawArrays(vertexObject->GetPattern(), 0, vertexObject->GetVerticesCount());
-	for (size_t i = 0; i < numMeshes; ++i)
+	for (unsigned int i = 0; i < numMeshes; ++i)
 	{
-		VertexObject::SelectVAO(*vertexObject);
-		glDrawArrays(vertexObject->GetPattern(), 0, vertexObject->GetVerticesCount());
+		glBindVertexArray(vertexObject[i]->VAO);
+		glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(meshes[i]->indices.size()), GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
 	}
+	//for (unsigned int i = 0; i < numMeshes; ++i)
+	//{
+	//	unsigned int index = numMeshes - i - 1;
+	//	glBindVertexArray(vertexObject[index]->VAO);
+	//	glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(meshes[index]->indices.size()), GL_UNSIGNED_INT, 0);
+	//	glBindVertexArray(0);
+	//}
 }

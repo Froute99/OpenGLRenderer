@@ -61,10 +61,7 @@ private:
 	vec3<float> lightPos;
 	vec3<float> lightColor;
 
+	vec3<float> cubeTranslation;
+
 	float angle = 0;
-
-
-
-	bool showDemoWindow = true;
-	bool showAnotherWindow = false;	
 };

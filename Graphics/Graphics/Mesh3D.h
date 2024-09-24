@@ -13,6 +13,7 @@ public:
 	void AddNormal(vec3<float> normal) noexcept { normals.push_back(normal); }
 	void AddColor(Color4f color) noexcept { colors.push_back(color); }
 	void AddTexCoord(vec2<float> texCoord) noexcept { textureCoordinates.push_back(texCoord); }
+	void AddIndices(unsigned int index) noexcept { indices.push_back(index); }
 
 	vec3<float> GetPoint(int index) const noexcept { return points.at(index); }
 	vec3<float> GetNormal(int index) const noexcept { return normals.at(index); }
@@ -23,7 +24,9 @@ public:
 	ShapePattern GetShapePattern() const noexcept { return pattern; }
 
 	int GetPointsCount() const noexcept { return static_cast<int>(points.size()); }
+	int GetIndicesSize() const noexcept { return static_cast<int>(indices.size()); }
 
+	std::vector<unsigned int> indices;
 private:
 	std::vector<vec3<float>> points;
 	std::vector<vec3<float>> normals;

@@ -1,10 +1,10 @@
 /********************************************************
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
- *	
+ *
  *	File_name: Application.h
- *	
+ *
  *	Graphic demo main file
- *	
+ *
  *	Nov.29 2019
  *******************************************************/
 
@@ -22,10 +22,10 @@ public:
 	enum DEMOINDEX
 	{
 		SHAPEDRAWING,
-		//TEXTUREDRAWING,
-		//ANIMATION,
-		//TRANSFORMPARENTDEMO,
-		//COMPUTESHADERDEMO,
+		// TEXTUREDRAWING,
+		// ANIMATION,
+		// TRANSFORMPARENTDEMO,
+		// COMPUTESHADERDEMO,
 		DEMOSIZE
 	};
 
@@ -44,15 +44,17 @@ public:
 	void HandleResizeEvent(const int& width, const int& height) override;
 	void HandleWindowClose() override;
 	void HandleFocusEvent(bool focused) override;
+
 private:
 	bool isRunning = false;
+
 protected:
 	OpenGLWindow window;
-	Camera camera;
-	CameraView view;
-	const int width = 1200;
-	const int height = 1200;
+	Camera		 camera;
+	CameraView	 view;
+	const int	 width = 800;
+	const int	 height = 800;
 
-	int demoIndex = 0;
+	int											demoIndex = 0;
 	std::array<std::unique_ptr<Demo>, DEMOSIZE> demo;
 };

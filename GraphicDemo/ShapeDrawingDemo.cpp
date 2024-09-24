@@ -35,23 +35,25 @@ void ShapeDrawingDemo::Initialize()
 	lightCubeShader.LoadShaderFrom(PATH::lightCubeVS, PATH::lightCubeFS);
 
 	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CCW);
+	glFrontFace(GL_CW);
 	glCullFace(GL_BACK);
 
 	Assimp::Importer importer;
 
-	const std::string& filename = "../assets/cube_z_up.fbx";
+	//const std::string& filename = "../assets/sphere.fbx";	
+	const std::string& filename = "../assets/backpack/backpack.obj";
 
 	fbxCube = GameObject::LoadMeshFromFBX(filename);
+	//std::cout << filename << " has loaded\n";
+	//std::cout << fbxCube->GetMeshesCount() << " meshes\n";
 
 	vec3<float> cubePos(0.0f, 0.0f, 5.0f);
+	cubeTranslation = cubePos;
 	fbxCube->Move(cubePos);
 	objectColor = { 1.0f, 0.5f, 0.31f };
-	// simpleCube = GameObject::CreateCube(cubePos, { 0.f }, 1.0f, { objectColor, 1.0f });
 
 	lightPos = { 0.7f, 0.4f, 0.8f };
 	lightColor = { 1.0f, 1.0f, 1.0f };
-	// lightCube = GameObject::CreateCube(lightPos, 0.0f, 0.2f, { lightColor, 1.0f });
 
 	// uniform variable location
 	uniformModelLocation = glGetUniformLocation(shader.GetHandleToShader(), "model");
@@ -67,17 +69,6 @@ void ShapeDrawingDemo::Initialize()
 	uniformLightCubeProjection = glGetUniformLocation(lightCubeShader.GetHandleToShader(), "projection");
 
 	angle = 1.f;
-
-	// IMGUI_CHECKVERSION();
-	// ImGui::CreateContext();
-	// ImGuiIO& io = ImGui::GetIO();
-	//(void)io;
-	// io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-
-	//// Setup Dear ImGui style
-	// ImGui::StyleColorsDark();
-
-	//   ImGui_ImplGlfw_InitForOpenGL(window, true);
 }
 
 void ShapeDrawingDemo::Update(float dt)
@@ -118,7 +109,14 @@ void ShapeDrawingDemo::Update(float dt)
 	glUniform3fv(uniformLightPosLocation, 1, &lightPos.x);
 	glUniform3fv(uniformLightColorLocation, 1, &lightColor.x);
 
+	glActiveTexture(GL_TEXTURE0);
+	// now set the sampler to the correct texture unit
+	glUniform1i(glGetUniformLocation(shader.GetHandleToShader(), "textureDiffuse1"), 0);
+	// and finally bind the texture
+	glBindTexture(GL_TEXTURE_2D, fbxCube->GetTextureHandle(0));
+
 	fbxCube->Draw();
+	glActiveTexture(GL_TEXTURE0);
 
 	//==================================
 	// Light Cube
@@ -214,38 +212,19 @@ void ShapeDrawingDemo::ImguiHelper()
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
-	ImGui::ShowDemoWindow();
-
-	// 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
 	{
-		static float f = 0.0f;
-		static int	 counter = 0;
-
-		ImGui::Begin("Hello, world!"); // Create a window called "Hello, world!" and append into it.
+		ImGui::Begin("Global"); // Create a window called "Hello, world!" and append into it.
+		ImGui::SetWindowCollapsed(false);
 
 		ImGui::Text("This is some useful text.");		   // Display some text (you can use a format strings too)
-		ImGui::Checkbox("Demo Window", &showDemoWindow); // Edit bools storing our window open/close state
-		ImGui::Checkbox("Another Window", &showAnotherWindow);
 
-		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);			// Edit 1 float using a slider from 0.0f to 1.0f
-		ImGui::ColorEdit3("clear color", (float*)&objectColor); // Edit 3 floats representing a color
+		ImGui::ColorEdit3("Light color", (float*)&lightColor); // Edit 3 floats representing a color
+		ImGui::ColorEdit3("Cube color", (float*)&objectColor); // Edit 3 floats representing a 
 
-		if (ImGui::Button("Button")) // Buttons return true when clicked (most widgets return true when edited/activated)
-			counter++;
-		ImGui::SameLine();
-		ImGui::Text("counter = %d", counter);
+		ImGui::NewLine();
+		ImGui::DragFloat3("Drag Float3", &cubeTranslation.x, 0.1f);
+		fbxCube->GetTransform()->SetTranslation(cubeTranslation);
 
-		//ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-		ImGui::End();
-	}
-
-	// 3. Show another simple window.
-	if (showAnotherWindow)
-	{
-		ImGui::Begin("Another Window", &showAnotherWindow); // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-		ImGui::Text("Hello from another window!");
-		if (ImGui::Button("Close Me"))
-			showAnotherWindow = false;
 		ImGui::End();
 	}
 

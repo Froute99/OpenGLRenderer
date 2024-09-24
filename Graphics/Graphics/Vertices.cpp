@@ -13,12 +13,12 @@
 #include "Mesh3D.h"
 #include <glew.h>
 
-VertexObject::VertexObject(const Mesh3D& mesh, const VerticesDescription& vertex_layout) noexcept
+VertexObject::VertexObject(const Mesh3D& /*mesh*/, const VerticesDescription& /*vertex_layout*/) noexcept
 {
-	InitializeWithMeshAndLayout(mesh, vertex_layout);
+	//InitializeWithMeshAndLayout(mesh, vertex_layout);
 }
 
-void VertexObject::InitializeWithMeshAndLayout(const Mesh3D& mesh, const VerticesDescription& vertex_layout) noexcept
+void VertexObject::InitializeWithMeshAndLayout(const Mesh3D& mesh, const VerticesDescription& vertex_layout, unsigned int indicesCount, const void* indicesData) noexcept
 {
 	switch (mesh.GetShapePattern())
 	{
@@ -44,12 +44,17 @@ void VertexObject::InitializeWithMeshAndLayout(const Mesh3D& mesh, const Vertice
 
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
 	SelectVAO(*this);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, bufferVertexCapacity, NULL, GL_STATIC_DRAW);
 
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesCount * sizeof(unsigned int), indicesData, GL_STATIC_DRAW);
+
 	layout.EnableAttributes();
 	WriteMeshDataToVertexBuffer3D(mesh);
+	SelectNothing();
 }
 
 void VertexObject::UpdateVeticesFromMesh(const Mesh& mesh)
@@ -108,15 +113,15 @@ void VertexObject::WriteMeshDataToVertexBuffer3D(const Mesh3D& mesh) const noexc
 					memcpy(buffer + offset, &normal, sizeof(normal));
 					offset += sizeof(normal);
 					break;
+				case VerticesDescription::Type::TextureCoordinate:
+					texCoord = mesh.GetTextureCoordinate(i);
+					memcpy(buffer + offset, &texCoord, sizeof(texCoord));
+					offset += sizeof(texCoord);
+					break;
 				case VerticesDescription::Type::Color:
 					color = mesh.GetColor(i);
 					memcpy(buffer + offset, &color, sizeof(color));
 					offset += sizeof(Color4f);
-					break;
-				case VerticesDescription::Type::TextureCoordinate:
-					texCoord = mesh.GetTextureCoordinate(i);
-					memcpy(buffer + offset, &texCoord, sizeof(texCoord));
-					offset += sizeof(vec2<float>);
 					break;
 			}
 		}
@@ -130,4 +135,57 @@ void VertexObject::DeleteVerticesOnGPU() const
 {
 	glDeleteBuffers(1, &VBO);
 	glDeleteVertexArrays(1, &VAO);
+}
+
+void VertexObject::SetupMesh(int /*numVertices*/, int numIndices, const void* verticesData, const void* indicesData, unsigned int vertexSize)
+{
+	// create buffers/arrays
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+
+	glBindVertexArray(VAO);
+	// load data into vertex buffers
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	// A great thing about structs is that their memory layout is sequential for all its items.
+	// The effect is that we can simply pass a pointer to the struct and it translates perfectly to a glm::vec3/2 array which
+	// again translates to 3/2 floats which translates to a byte array.
+	//unsigned int vertexSize = layout.GetVertexSize();
+	glBufferData(GL_ARRAY_BUFFER, vertexSize, verticesData, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices * sizeof(unsigned int), indicesData, GL_STATIC_DRAW);
+
+	unsigned int offset = 0;
+	// set the vertex attribute pointers
+	// vertex Positions
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexSize, (void*)0);
+	offset += sizeof(vec3<float>);
+	// vertex normals
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, vertexSize, (void*)offset);
+	offset += sizeof(vec3<float>);
+
+	//// vertex texture coords
+	//glEnableVertexAttribArray(2);
+	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vertexSize, (void*)offsetof(Vertex, TexCoords));
+
+	//// vertex tangent
+	//glEnableVertexAttribArray(3);
+	//glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
+
+	//// vertex bitangent
+	//glEnableVertexAttribArray(4);
+	//glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
+
+	//// ids
+	//glEnableVertexAttribArray(5);
+	//glVertexAttribIPointer(5, 4, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, m_BoneIDs));
+
+	//// weights
+	//glEnableVertexAttribArray(6);
+	//glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, m_Weights));
+
+	glBindVertexArray(0);
 }
