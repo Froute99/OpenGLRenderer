@@ -10,14 +10,10 @@
 
 #pragma once
 #include "Demo.hpp"
-#include "Shader.h"
-#include "Mesh.h"
-#include "Vertices.h"
-#include "VerticesDescription.h"
-#include "Texture.hpp"
-#include "Transform.hpp"
+#include <Graphics/Shader.h>
 
 class GameObject;
+struct aiScene;
 
 class ShapeDrawingDemo : public Demo
 {
@@ -36,12 +32,15 @@ public:
 	void HandleScrollEvent(float scroll_amount) override final;
 	void HandleFocusEvent(bool focused) override final;
 
+	void ImguiHelper();
+
 private:
 	vec3<float> moveSpeed;
 	float		rotationSpeed = 0;
 
-	GameObject* simpleCube;
+	//GameObject* simpleCube;
 	GameObject* lightCube;
+	GameObject* fbxCube;
 
 	Shader shader;
 	Shader lightCubeShader;
@@ -61,6 +60,8 @@ private:
 	vec3<float> objectColor;
 	vec3<float> lightPos;
 	vec3<float> lightColor;
+
+	vec3<float> cubeTranslation;
 
 	float angle = 0;
 };

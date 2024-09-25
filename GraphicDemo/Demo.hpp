@@ -9,10 +9,10 @@
  *******************************************************/
 
 #pragma once
-#include "OpenGLWindow.hpp"
-#include "Camera.hpp"
-#include "CameraView.hpp"
-#include "EventHandler.hpp"
+#include <Graphics/OpenGLWindow.hpp>
+#include <Graphics/Camera.hpp>
+#include <Graphics/CameraView.hpp>
+#include <Graphics/EventHandler.hpp>
 
 class Demo : public SimpleEventHandler
 {

@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
 #include <filesystem>
-#include "Texture.hpp"
-#include "vec2.hpp"
+#include <Math/vec2.hpp>
+#include <Graphics/Texture.hpp>
 
 class ComputeShader
 {

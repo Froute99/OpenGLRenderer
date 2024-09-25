@@ -8,12 +8,17 @@
  *	Sep.21 2019
  */
 
-#include <iostream>
-#include "GL/glew.h"
 #include "PlatformWindowGLFW.hpp"
 #include "PATH.hpp"
 #include "EventHandler.hpp"
 #include <stb_image.h>
+#include <iostream>
+#include <glew.h>
+#include <glfw3.h>
+
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_glfw.h>
+#include <imgui/imgui_impl_opengl3.h>
 
 EventHandler* eventHandler;
 
@@ -229,7 +234,7 @@ void window_focus_callback(GLFWwindow*, int focus)
 bool PlatformWindow::CanCreateWindow(int width, int height, EventHandler* event_handler, const char* title) noexcept
 {
 	eventHandler = event_handler;
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
 	if (!glfwInit())
@@ -243,9 +248,6 @@ bool PlatformWindow::CanCreateWindow(int width, int height, EventHandler* event_
 	glfwWindowHint(GLFW_GREEN_BITS, 8);
 	glfwWindowHint(GLFW_BLUE_BITS, 8);
 	glfwWindowHint(GLFW_DEPTH_BITS, GL_TRUE);
-	//glEnable(GL_DEPTH_TEST);
-	//glDepthFunc(GL_LESS);
-
 	GLFWmonitor* monitor = nullptr;
 	GLFWwindow* shareWindow = nullptr;
 
@@ -270,7 +272,6 @@ bool PlatformWindow::CanCreateWindow(int width, int height, EventHandler* event_
 	glfwSetCursorPosCallback(window, cursor_position_callback);
 	glfwSetMouseButtonCallback(window, mouse_button_callback);
 	glfwSetWindowFocusCallback(window, window_focus_callback);
-
 	GLenum err = glewInit();
 	if (err != GLEW_OK)
 	{
@@ -278,7 +279,24 @@ bool PlatformWindow::CanCreateWindow(int width, int height, EventHandler* event_
 		return false;
 	}
 
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
+	glDepthMask(GL_TRUE);
+
 	SetWindowIcon();
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	(void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+
+	const char* glslVersion = "#version 330";
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init(glslVersion);
 
 	return true;
 }

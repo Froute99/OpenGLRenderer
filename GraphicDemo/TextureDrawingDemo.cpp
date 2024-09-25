@@ -8,11 +8,11 @@
  *	Nov.29 2019
  *******************************************************/
 
-#include <iostream>
-#include "glfw3.h"
 #include "TextureDrawingDemo.hpp"
-#include "PATH.hpp"
+#include <Graphics/PATH.hpp>
 #include "GameObject.h"
+#include <glfw3.h>
+#include <iostream>
 
 void TextureDrawingDemo::Initialize()
 {

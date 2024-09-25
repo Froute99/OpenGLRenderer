@@ -8,8 +8,8 @@
  *	Nov.02 2019
  */
 
-#include <GL/glew.h>
 #include "Draw.hpp"
+#include <glew.h>
 
 void Draw::StartDrawing()
 {

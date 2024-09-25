@@ -9,8 +9,8 @@
  */
 
 #pragma once
-#include "vec2.hpp"
-#include <mat4.hpp>
+#include <Math/vec2.hpp>
+#include <Math/mat4.hpp>
 
 class [[nodiscard]] Transform
 {

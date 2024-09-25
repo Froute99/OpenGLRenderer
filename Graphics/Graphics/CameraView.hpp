@@ -9,10 +9,7 @@
  */
 
 #pragma once
-#include "mat3.hpp"
-#include <vec2.hpp>
-#include <vec3.hpp>
-#include <mat4.hpp>
+#include <Math/mat4.hpp>
 
 enum FrameOfReference
 {
@@ -40,7 +37,7 @@ private:
 
 	float aspectRatio = 1.0f;
 	float fov = 90.0f;
-	float near = 0.0f;
+	float near = 0.1f;
 
 	float zoom = 1.0f;
 };

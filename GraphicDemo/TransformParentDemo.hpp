@@ -10,11 +10,11 @@
 
 #pragma once
 #include "Demo.hpp"
-#include "Shader.h"
-#include "Mesh.h"
-#include "VerticesDescription.h"
-#include "Transform.hpp"
-#include "Draw.hpp"
+#include <Graphics/Shader.h>
+#include <Graphics/Mesh.h>
+#include <Graphics/VerticesDescription.h>
+#include <Graphics/Transform.hpp>
+#include <Graphics/Draw.hpp>
 
 class TransformParentDemo : public Demo
 {

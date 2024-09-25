@@ -10,7 +10,7 @@
 
 #pragma once
 #include <filesystem>
-#include "mat3.hpp"
+#include <Math/mat3.hpp>
 
 namespace ShaderHelper
 {

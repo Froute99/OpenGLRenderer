@@ -8,8 +8,8 @@
  *	Oct.31 2019
  */
 
-#include "GL/glew.h"
 #include "VerticesDescription.h"
+#include <glew.h>
 
 void VerticesDescription::AddType(Type type) noexcept
 {

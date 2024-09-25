@@ -9,7 +9,6 @@
  */
 
 #pragma once
-#include <vec2.hpp>
 #include "Image.hpp"
 
 Image ScreenShot(int pixels_width, int pixels_height, int left_x = 0, int bottom_y = 0) noexcept;

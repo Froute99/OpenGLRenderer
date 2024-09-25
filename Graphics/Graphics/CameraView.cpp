@@ -9,7 +9,7 @@
  */
 
 #include "CameraView.hpp"
-#include <Angle.hpp>
+#include <Math/Angle.hpp>
 
 CameraView::CameraView(float newFOV, float newNear)
 	: fov(newFOV), near(newNear)

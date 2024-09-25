@@ -10,7 +10,8 @@
 
 #pragma once
 #include "OpenGLWindow.hpp"
-#include <glfw3.h>
+
+struct GLFWwindow;
 
 class PlatformWindow
 {

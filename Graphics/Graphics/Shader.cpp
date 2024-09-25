@@ -8,11 +8,11 @@
  *	Sep.25 2019
  */
 
+#include "Shader.h"
 #include <iostream>
 #include <string>
 #include <fstream>
-#include "GL\glew.h"
-#include "Shader.h"
+#include <glew.h>
 
 namespace ShaderHelper
 {
