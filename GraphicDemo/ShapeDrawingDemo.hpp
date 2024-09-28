@@ -38,12 +38,11 @@ private:
 	vec3<float> moveSpeed;
 	float		rotationSpeed = 0;
 
-	//GameObject* simpleCube;
-	GameObject* lightCube;
-	GameObject* fbxCube;
+	GameObject* cube;
+	GameObject* backpack;
 
 	Shader shader;
-	Shader lightCubeShader;
+	Shader skyboxShader;
 
 	GLuint uniformModelLocation;
 	GLuint uniformViewLocation;
@@ -63,5 +62,10 @@ private:
 
 	vec3<float> cubeTranslation;
 
-	float angle = 0;
+	float angle = 1.f;
+
+	std::vector<std::string> cubemapPaths;
+	unsigned int			 cubemapTextureID;
+	unsigned int			 skyboxVAO;
+	unsigned int			 skyboxVBO;
 };

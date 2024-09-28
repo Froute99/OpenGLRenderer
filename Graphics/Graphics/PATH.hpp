@@ -27,6 +27,6 @@ namespace PATH
 	const std::filesystem::path bitmapfont_fnt = "../assets/bitmapfont.fnt";
 	const std::filesystem::path computeShader = "../assets/compute.glsl";
 
-	const std::filesystem::path lightCubeVS = "../assets/light_cube.vert";
-	const std::filesystem::path lightCubeFS = "../assets/light_cube.frag";
+	const std::filesystem::path skyboxVS = "../assets/skybox.vert";
+	const std::filesystem::path skyboxFS = "../assets/skybox.frag";
 }

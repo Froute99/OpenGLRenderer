@@ -30,9 +30,15 @@ void GameObject::LoadTexture(const std::filesystem::path& path) noexcept
 	textures.push_back(texture);
 }
 
-GameObject* GameObject::CreateCube(const vec3<float>& location, const vec3<float>& rotation, float size, Color4f /*color*/)
+GameObject* GameObject::CreateCube(const vec3<float>& location, const vec3<float>& rotation, float size)
 {
-	GameObject* object = new GameObject(location, rotation, size);
+	GameObject* cube = new GameObject(location, rotation, size);
+
+	Mesh3D*				cubeMesh = MESH::BuildCube(1.f);
+	VerticesDescription layout{ VerticesDescription::Type::Position };
+	VertexObject*		vertexObject = new VertexObject(cubeMesh, layout);
+	cube->AddMesh(cubeMesh);
+	cube->vertexObject.push_back(vertexObject);
 
 	// object->meshes.push_back(MESH::BuildCube(size, color));
 	// VerticesDescription layout = { VerticesDescription::Type::Position, VerticesDescription::Type::Normal };
@@ -40,10 +46,10 @@ GameObject* GameObject::CreateCube(const vec3<float>& location, const vec3<float
 	// vobj->InitializeWithMeshAndLayout(*object->meshes[0], layout);
 	// object->vertexObject.push_back(vobj);
 
-	return object;
+	return cube;
 }
 
-GameObject* GameObject::LoadMeshFromFBX(const std::string& filePath)
+GameObject* GameObject::LoadMeshFromFile(const std::string& filePath)
 {
 	unsigned int	 flag = aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices;
 	Assimp::Importer importer;
@@ -56,17 +62,9 @@ GameObject* GameObject::LoadMeshFromFBX(const std::string& filePath)
 		std::cout << "Error-Assimp: " << errMsg << std::endl;
 	}
 
-	// for (int i = 0; i < 6; ++i)
-	//{
-	//	std::cout << scene->mMetaData->mKeys[i].C_Str() << " - "
-	//			  << *(int*)scene->mMetaData->mValues[i].mData << std::endl;
-	// }
-	// std::cout << "\n\n";
-
 	GameObject* object = new GameObject();
-	object->numMeshes = scene->mNumMeshes;
-	object->meshes.reserve(object->numMeshes);
-	object->vertexObject.reserve(object->numMeshes);
+	object->meshes.reserve(scene->mNumMeshes);
+	object->vertexObject.reserve(scene->mNumMeshes);
 
 	object->ProcessNode(scene->mRootNode, scene);
 
@@ -139,13 +137,13 @@ Mesh3D* GameObject::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		aiFace face = mesh->mFaces[i];
 		for (unsigned int j = 0; j < face.mNumIndices; ++j)
 		{
-			result->AddIndices(face.mIndices[j]);
+			result->AddIndex(face.mIndices[j]);
 		}
 	}
 
 	VerticesDescription layout = { VerticesDescription::Type::Position, VerticesDescription::Type::Normal, VerticesDescription::Type::TextureCoordinate };
 	VertexObject*		v = new VertexObject;
-	v->InitializeWithMeshAndLayout(*result, layout, result->GetIndicesSize(), &result->indices[0]);
+	v->InitializeWithMeshAndLayout(*result, layout);
 	vertexObject.push_back(v);
 
 	std::string baseRoot = "../assets/backpack/";
@@ -181,10 +179,11 @@ Mesh3D* GameObject::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 
 void GameObject::Draw()
 {
+	unsigned int numMeshes = GetMeshesCount();
 	for (unsigned int i = 0; i < numMeshes; ++i)
 	{
 		glBindVertexArray(vertexObject[i]->VAO);
-		glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(meshes[i]->indices.size()), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, meshes[i]->GetIndicesCount(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 	}
 	//for (unsigned int i = 0; i < numMeshes; ++i)

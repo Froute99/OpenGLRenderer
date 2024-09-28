@@ -329,4 +329,22 @@ namespace Matrix4
 
 		return result;
 	}
+
+	template <typename T>
+	constexpr mat4<T> CutOffTranslation(const mat4<T>& m)
+	{
+		mat4<T> result = m;
+		result.elements[0][3] = 0;
+		result.elements[1][3] = 0;
+		result.elements[2][3] = 0;
+
+		result.elements[3][0] = 0;
+		result.elements[3][1] = 0;
+		result.elements[3][2] = 0;
+
+		result.elements[3][3] = 1;
+
+		return result;
+	}
+
 } // namespace Matrix4

@@ -20,7 +20,7 @@ public:
 	VertexObject() = default;
 	VertexObject(const Mesh3D* mesh, const VerticesDescription& vertex_layout) noexcept;
 
-	void InitializeWithMeshAndLayout(const Mesh3D& mesh, const VerticesDescription& vertex_layout, unsigned int indicesCount, const void* indicesData) noexcept;
+	void InitializeWithMeshAndLayout(const Mesh3D& mesh, const VerticesDescription& vertex_layout) noexcept;
 	void UpdateVeticesFromMesh(const Mesh& mesh);
 
 	void SetLayout(const VerticesDescription& newLayout) noexcept { layout = newLayout; }
@@ -47,4 +47,3 @@ private:
 	int verticesCount = 0;
 	VerticesDescription layout{};
 };
-

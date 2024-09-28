@@ -13,12 +13,12 @@
 #include "Mesh3D.h"
 #include <glew.h>
 
-VertexObject::VertexObject(const Mesh3D* /*mesh*/, const VerticesDescription& /*vertex_layout*/) noexcept
+VertexObject::VertexObject(const Mesh3D* mesh, const VerticesDescription& vertex_layout) noexcept
 {
-	//InitializeWithMeshAndLayout(mesh, vertex_layout);
+	InitializeWithMeshAndLayout(*mesh, vertex_layout);
 }
 
-void VertexObject::InitializeWithMeshAndLayout(const Mesh3D& mesh, const VerticesDescription& vertex_layout, unsigned int indicesCount, const void* indicesData) noexcept
+void VertexObject::InitializeWithMeshAndLayout(const Mesh3D& mesh, const VerticesDescription& vertex_layout) noexcept
 {
 	switch (mesh.GetShapePattern())
 	{
@@ -50,7 +50,8 @@ void VertexObject::InitializeWithMeshAndLayout(const Mesh3D& mesh, const Vertice
 	glBufferData(GL_ARRAY_BUFFER, bufferVertexCapacity, NULL, GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesCount * sizeof(unsigned int), indicesData, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.GetIndicesCount() * sizeof(unsigned int),
+		mesh.GetIndicesData(), GL_STATIC_DRAW);
 
 	layout.EnableAttributes();
 	WriteMeshDataToVertexBuffer3D(mesh);

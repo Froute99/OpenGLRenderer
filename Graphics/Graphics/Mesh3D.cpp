@@ -50,7 +50,6 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	vec3<float> center;
 
 	Mesh3D* cube = new Mesh3D();
-	cube->SetShapePattern(ShapePattern::Quads);
 
 	float halfLength = size / 2.f;
 	float r = center.x + halfLength; // right
@@ -76,10 +75,14 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	cube->AddPoint(v2);
 	cube->AddPoint(v3);
 
-	cube->AddNormal({0.f, 0.f, -1.f});
-	cube->AddNormal({0.f, 0.f, -1.f});
-	cube->AddNormal({0.f, 0.f, -1.f});
-	cube->AddNormal({0.f, 0.f, -1.f});
+	cube->AddNormal({ 0.f, 0.f, -1.f });
+	cube->AddNormal({ 0.f, 0.f, -1.f });
+	cube->AddNormal({ 0.f, 0.f, -1.f });
+	cube->AddNormal({ 0.f, 0.f, -1.f });
+
+	// indices are also ccw, need to change into cw
+	cube->AddIndices({ 3, 1, 2 });
+	cube->AddIndices({ 3, 0, 1 });
 
 	// right face
 	cube->AddPoint(v4);
@@ -92,6 +95,9 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	cube->AddNormal({ 1.f, 0.f, 0.f });
 	cube->AddNormal({ 1.f, 0.f, 0.f });
 
+	cube->AddIndices({ 4, 5, 6 });
+	cube->AddIndices({ 4, 6, 7 });
+
 	// up face
 	cube->AddPoint(v0);
 	cube->AddPoint(v4);
@@ -102,6 +108,9 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	cube->AddNormal({ 0.f, 1.f, 0.f });
 	cube->AddNormal({ 0.f, 1.f, 0.f });
 	cube->AddNormal({ 0.f, 1.f, 0.f });
+
+	cube->AddIndices({ 8, 9, 10 });
+	cube->AddIndices({ 8, 10, 11 });
 
 	// left face
 	cube->AddPoint(v1);
@@ -114,6 +123,9 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	cube->AddNormal({ -1.f, 0.f, 0.f });
 	cube->AddNormal({ -1.f, 0.f, 0.f });
 
+	cube->AddIndices({ 12, 14, 15 });
+	cube->AddIndices({ 12, 13, 14 });
+
 	// bottom face
 	cube->AddPoint(v2);
 	cube->AddPoint(v6);
@@ -125,6 +137,9 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	cube->AddNormal({ 0.f, -1.f, 0.f });
 	cube->AddNormal({ 0.f, -1.f, 0.f });
 
+	cube->AddIndices({ 16, 19, 17 });
+	cube->AddIndices({ 17, 19, 18 });
+
 	// back face
 	cube->AddPoint(v5);
 	cube->AddPoint(v4);
@@ -135,6 +150,9 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	cube->AddNormal({ 0.f, 0.f, 1.f });
 	cube->AddNormal({ 0.f, 0.f, 1.f });
 	cube->AddNormal({ 0.f, 0.f, 1.f });
+
+	cube->AddIndices({ 20, 21, 23 });
+	cube->AddIndices({ 21, 22, 23 });
 
 	return cube;
 }

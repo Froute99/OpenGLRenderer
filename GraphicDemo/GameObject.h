@@ -49,21 +49,20 @@ public:
 	void Draw();
 
 	static GameObject* CreateCube(const vec3<float>& location,
-		const vec3<float>& rotation, float size, Color4f color);
+		const vec3<float>& rotation, float size);
 
-	static GameObject* LoadMeshFromFBX(const std::string& filePath);
+	static GameObject* LoadMeshFromFile(const std::string& filePath);
 	void			   ProcessNode(aiNode* node, const aiScene* scene);
 	Mesh3D*			   ProcessMesh(aiMesh* mesh, const aiScene* scene);
 
 	// For Debug
-	unsigned int GetMeshesCount() { return numMeshes; }
+	unsigned int GetMeshesCount() { return meshes.size(); }
 	unsigned int GetVAOHandle(int index) { return vertexObject[index]->VAO; }
 
 	unsigned int GetTextureHandle(int index) { return textures[index].GetTexturehandle(); }
 
 private:
 	std::vector<Mesh3D*> meshes;
-	size_t				 numMeshes;
 
 	std::vector<VertexObject*> vertexObject;
 
