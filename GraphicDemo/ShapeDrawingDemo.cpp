@@ -317,7 +317,7 @@ void ShapeDrawingDemo::ImguiHelper()
 		ImGui::Begin("Global"); // Create a window called "Hello, world!" and append into it.
 		ImGui::SetWindowCollapsed(false);
 
-		ImGui::Text("Demo."); // Display some text (you can use a format strings too)
+		ImGui::Text("Phong Shading Model Demo."); // Display some text (you can use a format strings too)
 
 		ImGui::ColorEdit3("Light color", (float*)&lightColor); // Edit 3 floats representing a color
 		ImGui::ColorEdit3("Cube color", (float*)&objectColor); // Edit 3 floats representing a
