@@ -26,8 +26,9 @@ public:
 
 	//void ResetUp(vec2<float> camera_up = { 0, 1 }) noexcept;
 
-	//void MoveUp(float distance) noexcept;
-	//void MoveRight(float distance) noexcept;
+	void MoveX(float distance) noexcept;
+	void MoveY(float distance) noexcept;
+	void MoveZ(float distance) noexcept;
 	//void Rotate(float angle_radians) noexcept;
 
 	//mat4<float> CameraToWorld() const noexcept;

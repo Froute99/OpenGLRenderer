@@ -36,7 +36,6 @@ public:
 
 private:
 	vec3<float> moveSpeed;
-	float		rotationSpeed = 0;
 
 	GameObject* cube;
 	GameObject* backpack;

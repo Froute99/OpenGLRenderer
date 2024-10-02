@@ -136,10 +136,28 @@ void ShapeDrawingDemo::Initialize()
 	//	GL_TEXTURE_CUBE_MAP_POSITIVE_Z Front
 	//	GL_TEXTURE_CUBE_MAP_NEGATIVE_Z Back
 	// ==================================
+
+	//               OpenGL                               Mine
+	//                +Y    -Z			                   +Y    +Z
+	//                 |    /                               |    /
+	//                 |   /                                |   /
+	//                 |  /                                 |  /
+	//                 | /                                  | /
+	//                 |/                                   |/
+	// -X -------------|------------- +X    -X -------------|------------- +X
+	//                /|                                   /|
+	//               / |                                  / |
+	//              /  |                                 /  |
+	//             /   |                                /   |
+	//            /    |                               /    |
+	//          +Z    -Y                              -Z   -Y
+
+	// In the skybox shader, y is negated. Through this the sides iamges are properly works, but
+	// the top and bottom images are also affected. So swap the top and bottom images that they works properly too.
 	cubemapPaths.push_back("../assets/skybox/right.jpg");
 	cubemapPaths.push_back("../assets/skybox/left.jpg");
-	cubemapPaths.push_back("../assets/skybox/top.jpg");
 	cubemapPaths.push_back("../assets/skybox/bottom.jpg");
+	cubemapPaths.push_back("../assets/skybox/top.jpg");
 	cubemapPaths.push_back("../assets/skybox/front.jpg");
 	cubemapPaths.push_back("../assets/skybox/back.jpg");
 
@@ -177,9 +195,9 @@ void ShapeDrawingDemo::Update(float dt)
 	// std::cout << "\r" << dt;
 
 	// camera.Rotate(rotationSpeed);
-	// camera.MoveRight(moveSpeed.x);
-	// camera.MoveUp(moveSpeed.y);
-	// camera.MoveFront(moveSpeed.y);
+	 camera.MoveX(moveSpeed.x);
+	 camera.MoveY(moveSpeed.y);
+	 camera.MoveZ(moveSpeed.z);
 
 	Draw::StartDrawing();
 
@@ -248,23 +266,23 @@ void ShapeDrawingDemo::HandleKeyPress(KeyboardButton button)
 {
 	switch (button)
 	{
-		case KeyboardButton::Arrow_Right:
-			moveSpeed.x = 2.0f;
+		case KeyboardButton::W:
+			moveSpeed.z = 0.1f;
 			break;
-		case KeyboardButton::Arrow_Left:
-			moveSpeed.x = -2.0f;
+		case KeyboardButton::A:
+			moveSpeed.x = -0.1f;
 			break;
-		case KeyboardButton::Arrow_Up:
-			moveSpeed.y = 2.0f;
+		case KeyboardButton::S:
+			moveSpeed.z = -0.1f;
 			break;
-		case KeyboardButton::Arrow_Down:
-			moveSpeed.y = -2.0f;
+		case KeyboardButton::D:
+			moveSpeed.x = 0.1f;
 			break;
-		case KeyboardButton::Z:
-			rotationSpeed = 0.1f;
+		case KeyboardButton::Q:
+			moveSpeed.y = 0.1f;
 			break;
-		case KeyboardButton::X:
-			rotationSpeed = -0.1f;
+		case KeyboardButton::E:
+			moveSpeed.y = -0.1f;
 			break;
 		case KeyboardButton::Enter:
 			auto screenshot = ScreenShot(width, height);
@@ -277,23 +295,23 @@ void ShapeDrawingDemo::HandleKeyRelease(KeyboardButton button)
 {
 	switch (button)
 	{
-		case KeyboardButton::Arrow_Right:
+		case KeyboardButton::W:
+			moveSpeed.z = 0.0f;
+			break;
+		case KeyboardButton::A:
 			moveSpeed.x = 0.0f;
 			break;
-		case KeyboardButton::Arrow_Left:
+		case KeyboardButton::S:
+			moveSpeed.z = 0.0f;
+			break;
+		case KeyboardButton::D:
 			moveSpeed.x = 0.0f;
 			break;
-		case KeyboardButton::Arrow_Up:
+		case KeyboardButton::Q:
 			moveSpeed.y = 0.0f;
 			break;
-		case KeyboardButton::Arrow_Down:
+		case KeyboardButton::E:
 			moveSpeed.y = 0.0f;
-			break;
-		case KeyboardButton::Z:
-			rotationSpeed = 0.0f;
-			break;
-		case KeyboardButton::X:
-			rotationSpeed = 0.0f;
 			break;
 	}
 }

@@ -42,3 +42,18 @@ mat4<float> Camera::BuildViewMatrix() const noexcept
 
 	return viewMatrix;
 }
+
+void Camera::MoveX(float distance) noexcept
+{
+	eye += distance * Vector3::normalize(right);
+}
+
+void Camera::MoveY(float distance) noexcept
+{
+	eye += distance * Vector3::normalize(up);
+}
+
+void Camera::MoveZ(float distance) noexcept
+{
+	eye += distance * Vector3::normalize(target);
+}
