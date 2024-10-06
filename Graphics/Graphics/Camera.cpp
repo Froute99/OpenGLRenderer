@@ -45,15 +45,22 @@ mat4<float> Camera::BuildViewMatrix() const noexcept
 
 void Camera::MoveX(float distance) noexcept
 {
-	eye += distance * Vector3::normalize(right);
+	vec3<float> amount = distance * Vector3::normalize(right);
+	eye += amount;
+	target += amount;
 }
 
 void Camera::MoveY(float distance) noexcept
 {
-	eye += distance * Vector3::normalize(up);
+	vec3<float> amount = distance * Vector3::normalize(up);
+	eye += amount;
+	target += amount;
 }
 
 void Camera::MoveZ(float distance) noexcept
 {
-	eye += distance * Vector3::normalize(target);
+	vec3<float> frontUnit = Vector3::normalize(Vector3::cross_product(right, up));
+	vec3<float> amount = distance * frontUnit;
+	eye += amount;
+	target += amount;
 }

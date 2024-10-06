@@ -43,146 +43,206 @@ void key_callback(GLFWwindow* /*window*/, int key, int /*scancode*/, int action,
 	{
 		switch (key)
 		{
-		case GLFW_KEY_A:
-			eventHandler->HandleKeyPress(KeyboardButton::A);
-			break;
-		case GLFW_KEY_B:
-			eventHandler->HandleKeyPress(KeyboardButton::B);
-			break;
-		case GLFW_KEY_C:
-			eventHandler->HandleKeyPress(KeyboardButton::C);
-			break;
-		case GLFW_KEY_D:
-			eventHandler->HandleKeyPress(KeyboardButton::D);
-			break;
-		case GLFW_KEY_E:
-			eventHandler->HandleKeyPress(KeyboardButton::E);
-			break;
-		case GLFW_KEY_F:
-			eventHandler->HandleKeyPress(KeyboardButton::F);
-			break;
-		case GLFW_KEY_G:
-			eventHandler->HandleKeyPress(KeyboardButton::G);
-			break;
-		case GLFW_KEY_H:
-			eventHandler->HandleKeyPress(KeyboardButton::H);
-			break;
-		case GLFW_KEY_I:
-			eventHandler->HandleKeyPress(KeyboardButton::I);
-			break;
-		case GLFW_KEY_J:
-			eventHandler->HandleKeyPress(KeyboardButton::J);
-			break;
-		case GLFW_KEY_K:
-			eventHandler->HandleKeyPress(KeyboardButton::K);
-			break;
-		case GLFW_KEY_L:
-			eventHandler->HandleKeyPress(KeyboardButton::L);
-			break;
-		case GLFW_KEY_M:
-			eventHandler->HandleKeyPress(KeyboardButton::M);
-			break;
-		case GLFW_KEY_N:
-			eventHandler->HandleKeyPress(KeyboardButton::N);
-			break;
-		case GLFW_KEY_O:
-			eventHandler->HandleKeyPress(KeyboardButton::O);
-			break;
-		case GLFW_KEY_P:
-			eventHandler->HandleKeyPress(KeyboardButton::P);
-			break;
-		case GLFW_KEY_Q:
-			eventHandler->HandleKeyPress(KeyboardButton::Q);
-			break;
-		case GLFW_KEY_R:
-			eventHandler->HandleKeyPress(KeyboardButton::R);
-			break;
-		case GLFW_KEY_S:
-			eventHandler->HandleKeyPress(KeyboardButton::S);
-			break;
-		case GLFW_KEY_T:
-			eventHandler->HandleKeyPress(KeyboardButton::T);
-			break;
-		case GLFW_KEY_U:
-			eventHandler->HandleKeyPress(KeyboardButton::U);
-			break;
-		case GLFW_KEY_V:
-			eventHandler->HandleKeyPress(KeyboardButton::V);
-			break;
-		case GLFW_KEY_W:
-			eventHandler->HandleKeyPress(KeyboardButton::W);
-			break;
-		case GLFW_KEY_X:
-			eventHandler->HandleKeyPress(KeyboardButton::X);
-			break;
-		case GLFW_KEY_Y:
-			eventHandler->HandleKeyPress(KeyboardButton::Y);
-			break;
-		case GLFW_KEY_Z:
-			eventHandler->HandleKeyPress(KeyboardButton::Z);
-			break;
-		case GLFW_KEY_LEFT:
-			eventHandler->HandleKeyPress(KeyboardButton::Arrow_Left);
-			break;
-		case GLFW_KEY_RIGHT:
-			eventHandler->HandleKeyPress(KeyboardButton::Arrow_Right);
-			break;
-		case GLFW_KEY_UP:
-			eventHandler->HandleKeyPress(KeyboardButton::Arrow_Up);
-			break;
-		case GLFW_KEY_DOWN:
-			eventHandler->HandleKeyPress(KeyboardButton::Arrow_Down);
-			break;
-		case GLFW_KEY_PAGE_DOWN:
-			eventHandler->HandleKeyPress(KeyboardButton::Page_Down);
-			break;
-		case GLFW_KEY_PAGE_UP:
-			eventHandler->HandleKeyPress(KeyboardButton::Page_Up);
-			break;
-		case GLFW_KEY_ENTER:
-			eventHandler->HandleKeyPress(KeyboardButton::Enter);
-			break;
-		case GLFW_KEY_ESCAPE:
-			eventHandler->HandleKeyPress(KeyboardButton::Escape);
-			break;
-		default:
-			break;
+			case GLFW_KEY_A:
+				eventHandler->HandleKeyPress(KeyboardButton::A);
+				break;
+			case GLFW_KEY_B:
+				eventHandler->HandleKeyPress(KeyboardButton::B);
+				break;
+			case GLFW_KEY_C:
+				eventHandler->HandleKeyPress(KeyboardButton::C);
+				break;
+			case GLFW_KEY_D:
+				eventHandler->HandleKeyPress(KeyboardButton::D);
+				break;
+			case GLFW_KEY_E:
+				eventHandler->HandleKeyPress(KeyboardButton::E);
+				break;
+			case GLFW_KEY_F:
+				eventHandler->HandleKeyPress(KeyboardButton::F);
+				break;
+			case GLFW_KEY_G:
+				eventHandler->HandleKeyPress(KeyboardButton::G);
+				break;
+			case GLFW_KEY_H:
+				eventHandler->HandleKeyPress(KeyboardButton::H);
+				break;
+			case GLFW_KEY_I:
+				eventHandler->HandleKeyPress(KeyboardButton::I);
+				break;
+			case GLFW_KEY_J:
+				eventHandler->HandleKeyPress(KeyboardButton::J);
+				break;
+			case GLFW_KEY_K:
+				eventHandler->HandleKeyPress(KeyboardButton::K);
+				break;
+			case GLFW_KEY_L:
+				eventHandler->HandleKeyPress(KeyboardButton::L);
+				break;
+			case GLFW_KEY_M:
+				eventHandler->HandleKeyPress(KeyboardButton::M);
+				break;
+			case GLFW_KEY_N:
+				eventHandler->HandleKeyPress(KeyboardButton::N);
+				break;
+			case GLFW_KEY_O:
+				eventHandler->HandleKeyPress(KeyboardButton::O);
+				break;
+			case GLFW_KEY_P:
+				eventHandler->HandleKeyPress(KeyboardButton::P);
+				break;
+			case GLFW_KEY_Q:
+				eventHandler->HandleKeyPress(KeyboardButton::Q);
+				break;
+			case GLFW_KEY_R:
+				eventHandler->HandleKeyPress(KeyboardButton::R);
+				break;
+			case GLFW_KEY_S:
+				eventHandler->HandleKeyPress(KeyboardButton::S);
+				break;
+			case GLFW_KEY_T:
+				eventHandler->HandleKeyPress(KeyboardButton::T);
+				break;
+			case GLFW_KEY_U:
+				eventHandler->HandleKeyPress(KeyboardButton::U);
+				break;
+			case GLFW_KEY_V:
+				eventHandler->HandleKeyPress(KeyboardButton::V);
+				break;
+			case GLFW_KEY_W:
+				eventHandler->HandleKeyPress(KeyboardButton::W);
+				break;
+			case GLFW_KEY_X:
+				eventHandler->HandleKeyPress(KeyboardButton::X);
+				break;
+			case GLFW_KEY_Y:
+				eventHandler->HandleKeyPress(KeyboardButton::Y);
+				break;
+			case GLFW_KEY_Z:
+				eventHandler->HandleKeyPress(KeyboardButton::Z);
+				break;
+			case GLFW_KEY_LEFT:
+				eventHandler->HandleKeyPress(KeyboardButton::Arrow_Left);
+				break;
+			case GLFW_KEY_RIGHT:
+				eventHandler->HandleKeyPress(KeyboardButton::Arrow_Right);
+				break;
+			case GLFW_KEY_UP:
+				eventHandler->HandleKeyPress(KeyboardButton::Arrow_Up);
+				break;
+			case GLFW_KEY_DOWN:
+				eventHandler->HandleKeyPress(KeyboardButton::Arrow_Down);
+				break;
+			case GLFW_KEY_PAGE_DOWN:
+				eventHandler->HandleKeyPress(KeyboardButton::Page_Down);
+				break;
+			case GLFW_KEY_PAGE_UP:
+				eventHandler->HandleKeyPress(KeyboardButton::Page_Up);
+				break;
+			case GLFW_KEY_ENTER:
+				eventHandler->HandleKeyPress(KeyboardButton::Enter);
+				break;
+			case GLFW_KEY_ESCAPE:
+				eventHandler->HandleKeyPress(KeyboardButton::Escape);
+				break;
+			default:
+				break;
 		}
 	}
 	else if (action == GLFW_RELEASE)
 	{
 		switch (key)
 		{
-		case GLFW_KEY_W:
-			eventHandler->HandleKeyRelease(KeyboardButton::W);
-			break;
-		case GLFW_KEY_A:
-			eventHandler->HandleKeyRelease(KeyboardButton::A);
-			break;
-		case GLFW_KEY_S:
-			eventHandler->HandleKeyRelease(KeyboardButton::S);
-			break;
-		case GLFW_KEY_D:
-			eventHandler->HandleKeyRelease(KeyboardButton::D);
-			break;
-		case GLFW_KEY_Z:
-			eventHandler->HandleKeyRelease(KeyboardButton::Z);
-			break;
-		case GLFW_KEY_X:
-			eventHandler->HandleKeyRelease(KeyboardButton::X);
-			break;
-		case GLFW_KEY_LEFT:
-			eventHandler->HandleKeyRelease(KeyboardButton::Arrow_Left);
-			break;
-		case GLFW_KEY_RIGHT:
-			eventHandler->HandleKeyRelease(KeyboardButton::Arrow_Right);
-			break;
-		case GLFW_KEY_UP:
-			eventHandler->HandleKeyRelease(KeyboardButton::Arrow_Up);
-			break;
-		case GLFW_KEY_DOWN:
-			eventHandler->HandleKeyRelease(KeyboardButton::Arrow_Down);
-			break;
+			case GLFW_KEY_A:
+				eventHandler->HandleKeyRelease(KeyboardButton::A);
+				break;
+			case GLFW_KEY_B:
+				eventHandler->HandleKeyRelease(KeyboardButton::B);
+				break;
+			case GLFW_KEY_C:
+				eventHandler->HandleKeyRelease(KeyboardButton::C);
+				break;
+			case GLFW_KEY_D:
+				eventHandler->HandleKeyRelease(KeyboardButton::D);
+				break;
+			case GLFW_KEY_E:
+				eventHandler->HandleKeyRelease(KeyboardButton::E);
+				break;
+			case GLFW_KEY_F:
+				eventHandler->HandleKeyRelease(KeyboardButton::F);
+				break;
+			case GLFW_KEY_G:
+				eventHandler->HandleKeyRelease(KeyboardButton::G);
+				break;
+			case GLFW_KEY_H:
+				eventHandler->HandleKeyRelease(KeyboardButton::H);
+				break;
+			case GLFW_KEY_I:
+				eventHandler->HandleKeyRelease(KeyboardButton::I);
+				break;
+			case GLFW_KEY_J:
+				eventHandler->HandleKeyRelease(KeyboardButton::J);
+				break;
+			case GLFW_KEY_K:
+				eventHandler->HandleKeyRelease(KeyboardButton::K);
+				break;
+			case GLFW_KEY_L:
+				eventHandler->HandleKeyRelease(KeyboardButton::L);
+				break;
+			case GLFW_KEY_M:
+				eventHandler->HandleKeyRelease(KeyboardButton::M);
+				break;
+			case GLFW_KEY_N:
+				eventHandler->HandleKeyRelease(KeyboardButton::N);
+				break;
+			case GLFW_KEY_O:
+				eventHandler->HandleKeyRelease(KeyboardButton::O);
+				break;
+			case GLFW_KEY_P:
+				eventHandler->HandleKeyRelease(KeyboardButton::P);
+				break;
+			case GLFW_KEY_Q:
+				eventHandler->HandleKeyRelease(KeyboardButton::Q);
+				break;
+			case GLFW_KEY_R:
+				eventHandler->HandleKeyRelease(KeyboardButton::R);
+				break;
+			case GLFW_KEY_S:
+				eventHandler->HandleKeyRelease(KeyboardButton::S);
+				break;
+			case GLFW_KEY_T:
+				eventHandler->HandleKeyRelease(KeyboardButton::T);
+				break;
+			case GLFW_KEY_U:
+				eventHandler->HandleKeyRelease(KeyboardButton::U);
+				break;
+			case GLFW_KEY_V:
+				eventHandler->HandleKeyRelease(KeyboardButton::V);
+				break;
+			case GLFW_KEY_W:
+				eventHandler->HandleKeyRelease(KeyboardButton::W);
+				break;
+			case GLFW_KEY_X:
+				eventHandler->HandleKeyRelease(KeyboardButton::X);
+				break;
+			case GLFW_KEY_Y:
+				eventHandler->HandleKeyRelease(KeyboardButton::Y);
+				break;
+			case GLFW_KEY_Z:
+				eventHandler->HandleKeyRelease(KeyboardButton::Z);
+				break;
+			case GLFW_KEY_LEFT:
+				eventHandler->HandleKeyRelease(KeyboardButton::Arrow_Left);
+				break;
+			case GLFW_KEY_RIGHT:
+				eventHandler->HandleKeyRelease(KeyboardButton::Arrow_Right);
+				break;
+			case GLFW_KEY_UP:
+				eventHandler->HandleKeyRelease(KeyboardButton::Arrow_Up);
+				break;
+			case GLFW_KEY_DOWN:
+				eventHandler->HandleKeyRelease(KeyboardButton::Arrow_Down);
+				break;
 		}
 	}
 }
