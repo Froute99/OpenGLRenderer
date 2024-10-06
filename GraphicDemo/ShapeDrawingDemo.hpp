@@ -39,6 +39,7 @@ private:
 
 	GameObject* cube;
 	GameObject* backpack;
+	GameObject* skybox;
 
 	Shader shader;
 	Shader skyboxShader;

@@ -173,6 +173,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="ShapeDrawingDemo.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="TextureDrawingDemo.cpp" />
     <ClCompile Include="TransformParentDemo.cpp" />
   </ItemGroup>
@@ -183,6 +184,7 @@
     <ClInclude Include="Demo.hpp" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="ShapeDrawingDemo.hpp" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="TextureDrawingDemo.hpp" />
     <ClInclude Include="TransformParentDemo.hpp" />
   </ItemGroup>

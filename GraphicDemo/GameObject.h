@@ -46,7 +46,7 @@ public:
 
 	mat4<float> GetModelToWorld() { return transform.BuildModelMatrix(); }
 
-	void Draw();
+	virtual void Draw();
 
 	static GameObject* CreateCube(const vec3<float>& location,
 		const vec3<float>& rotation, float size);
