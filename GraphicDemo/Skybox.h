@@ -1,7 +1,8 @@
 #pragma once
-#include "GameObject.h"
+#include "Object.h"
+#include <vector>
 
-class Skybox : public GameObject
+class Skybox : public Object
 {
 public:
 	Skybox();

@@ -183,6 +183,7 @@
     <ClInclude Include="ComputeShaderDemo.h" />
     <ClInclude Include="Demo.hpp" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="ShapeDrawingDemo.hpp" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="TextureDrawingDemo.hpp" />

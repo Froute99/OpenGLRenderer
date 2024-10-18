@@ -179,18 +179,15 @@ Mesh3D* GameObject::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 
 void GameObject::Draw()
 {
-	unsigned int numMeshes = GetMeshesCount();
+	glActiveTexture(GL_TEXTURE0);
+	//glUniform1i(glGetUniformLocation(shader.GetHandleToShader(), "textureDiffuse1"), 0);
+	glBindTexture(GL_TEXTURE_2D, textures[0].GetTexturehandle());
+
+	unsigned int numMeshes = meshes.size();
 	for (unsigned int i = 0; i < numMeshes; ++i)
 	{
 		glBindVertexArray(vertexObject[i]->VAO);
 		glDrawElements(GL_TRIANGLES, meshes[i]->GetIndicesCount(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 	}
-	//for (unsigned int i = 0; i < numMeshes; ++i)
-	//{
-	//	unsigned int index = numMeshes - i - 1;
-	//	glBindVertexArray(vertexObject[index]->VAO);
-	//	glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(meshes[index]->indices.size()), GL_UNSIGNED_INT, 0);
-	//	glBindVertexArray(0);
-	//}
 }

@@ -85,7 +85,6 @@ void ShapeDrawingDemo::Update(float dt)
 
 	// std::cout << "\r" << dt;
 
-	// camera.Rotate(rotationSpeed);
 	 camera.MoveX(moveSpeed.x);
 	 camera.MoveY(moveSpeed.y);
 	 camera.MoveZ(moveSpeed.z);
@@ -95,13 +94,12 @@ void ShapeDrawingDemo::Update(float dt)
 	// ==================================
 	// Simple Cube
 	// ==================================
+
+	Shader::UseShader(shader);
 	backpack->Rotate({ 0.f, ANGLE::DegreeToRadian(35.f * angle * dt), 0.f });
 	const mat4<float>& Model = backpack->GetModelToWorld();
 	const mat4<float>& View = camera.BuildViewMatrix();
 	const mat4<float>& Projection = view.BuildProjectionMatrix();
-	// column-major operations should be ordered like v2 = PVM * v1;
-
-	Shader::UseShader(shader);
 	glUniformMatrix4fv(uniformModelLocation, 1, GL_FALSE, &Model.elements[0][0]);
 	glUniformMatrix4fv(uniformViewLocation, 1, GL_FALSE, &View.elements[0][0]);
 	glUniformMatrix4fv(uniformProjectionLocation, 1, GL_FALSE, &Projection.elements[0][0]);
@@ -110,14 +108,11 @@ void ShapeDrawingDemo::Update(float dt)
 	glUniform3fv(uniformLightPosLocation, 1, &lightPos.x);
 	glUniform3fv(uniformLightColorLocation, 1, &lightColor.x);
 
-	glActiveTexture(GL_TEXTURE0);
-	// now set the sampler to the correct texture unit
 	glUniform1i(glGetUniformLocation(shader.GetHandleToShader(), "textureDiffuse1"), 0);
-	// and finally bind the texture
-	glBindTexture(GL_TEXTURE_2D, backpack->GetTextureHandle(0));
+	//glActiveTexture(GL_TEXTURE0);
+	//glBindTexture(GL_TEXTURE_2D, backpack->GetTextureHandle(0));
 
 	backpack->Draw();
-	glActiveTexture(GL_TEXTURE0);
 
 	// ==================================
 	// Skybox

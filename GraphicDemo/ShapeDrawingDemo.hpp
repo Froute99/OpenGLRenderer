@@ -12,6 +12,7 @@
 #include "Demo.hpp"
 #include <Graphics/Shader.h>
 
+class Object;
 class GameObject;
 struct aiScene;
 
@@ -37,9 +38,9 @@ public:
 private:
 	vec3<float> moveSpeed;
 
-	GameObject* cube;
+	//Object* cube;
 	GameObject* backpack;
-	GameObject* skybox;
+	Object* skybox;
 
 	Shader shader;
 	Shader skyboxShader;

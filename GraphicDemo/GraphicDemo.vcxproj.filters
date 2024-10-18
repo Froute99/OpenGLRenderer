@@ -46,6 +46,7 @@
     </ClInclude>
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Skybox.h" />
+    <ClInclude Include="Object.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Demo">
