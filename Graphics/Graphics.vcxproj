@@ -138,7 +138,7 @@
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Graphics;$(SolutionDir)include\assimp;$(SolutionDir)include\catch2;$(SolutionDir)include\GL\glfw3;$(SolutionDir)include\GL\glew;$(SolutionDir)include\stbi;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Graphics;$(SolutionDir)include\assimp;$(SolutionDir)include\catch2;$(SolutionDir)include\GL\glfw3;$(SolutionDir)include\GL\glew;$(SolutionDir)include\stbi;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>

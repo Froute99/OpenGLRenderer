@@ -61,7 +61,7 @@ private:
 	vec3<float> lightPos;
 	vec3<float> lightColor;
 
-	vec3<float> cubeTranslation;
+	vec3<float> backpackTranslation;
 
 	float angle = 1.f;
 

@@ -47,9 +47,9 @@ void ShapeDrawingDemo::Initialize()
 	const std::string& filename = "../assets/backpack/backpack.obj";
 	backpack = GameObject::LoadMeshFromFile(filename);
 
-	vec3<float> cubePos(0.0f, 0.0f, 5.0f);
-	cubeTranslation = cubePos;
-	backpack->Move(cubePos);
+	vec3<float> pos(0.0f, 0.0f, 5.0f);
+	backpackTranslation = pos;
+	backpack->Move(pos);
 	objectColor = { 1.0f, 0.5f, 0.31f };
 
 	lightPos = { 0.7f, 0.4f, 0.8f };
@@ -213,19 +213,85 @@ void ShapeDrawingDemo::ImguiHelper()
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 	{
-		ImGui::Begin("Global"); // Create a window called "Hello, world!" and append into it.
+		ImGui::Begin("Global");
 		ImGui::SetWindowCollapsed(false);
 
 		ImGui::Text("Phong Shading Model Demo."); // Display some text (you can use a format strings too)
-
-		ImGui::ColorEdit3("Light color", (float*)&lightColor); // Edit 3 floats representing a color
-		ImGui::ColorEdit3("Cube color", (float*)&objectColor); // Edit 3 floats representing a
-
 		ImGui::NewLine();
-		ImGui::DragFloat3("Drag Float3", &cubeTranslation.x, 0.1f);
+
+		// toggle object window
+		// toggle light window
+
 		//cube->GetTransform()->SetTranslation(cubeTranslation);
 
 		ImGui::End();
+	}
+	//ImGui::NewFrame();
+	{
+		ImGui::Begin("Objects");
+		ImGui::SetWindowCollapsed(false);
+		
+		ImVec2 p = ImGui::GetCursorScreenPos();
+		ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 2);
+		ImGui::BeginChild("X", { 100, 100 }, true);
+		ImGui::Text("X:");
+		ImGui::SameLine();
+		ImGui::DragFloat("", &backpackTranslation.x, 0.1f);
+		ImGui::EndChild();
+
+		ImGui::SetNextWindowPos({ p.x + 150, p.y }, 0, ImVec2(0.4f, 0.0f));
+		ImGui::BeginChild("Y", { 100, 100 }, true);
+		ImGui::Text("Y:");
+		ImGui::SameLine();
+		ImGui::DragFloat("", &backpackTranslation.y, 0.1f);
+		ImGui::EndChild();
+
+		ImGui::SetNextWindowPos({ p.x + 250, p.y }, 0, ImVec2(0.3f, 0.0f));
+		ImGui::BeginChild("Z", { 100, 100 }, true);
+		ImGui::Text("Z:");
+		ImGui::SameLine();
+		ImGui::DragFloat("", &backpackTranslation.z, 0.1f);
+		ImGui::EndChild();
+
+		ImGui::PopStyleVar();
+		ImGui::NewLine();
+
+		backpack->GetTransform()->SetTranslation(backpackTranslation);
+	}
+	//ImGui::NewFrame();
+	{
+		ImGui::Begin("Lights");
+		ImGui::SetWindowCollapsed(false);
+
+		ImGui::ColorEdit3("Directional Light", (float*)&lightColor); // Edit 3 floats representing a color
+		
+		ImGui::NewLine();
+		ImGui::Text("  Light Position");
+
+		ImVec2 p = ImGui::GetCursorScreenPos();
+		ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 2);
+		ImGui::BeginChild("X", { 100, 100 }, true);
+		ImGui::Text("X:");
+		ImGui::SameLine();
+		ImGui::DragFloat("", &lightPos.x, 0.1f);
+		ImGui::EndChild();
+
+		ImGui::SetNextWindowPos({ p.x + 150, p.y }, 0, ImVec2(0.4f, 0.0f));
+		ImGui::BeginChild("Y", { 100, 100 }, true);
+		ImGui::Text("Y:");
+		ImGui::SameLine();
+		ImGui::DragFloat("", &lightPos.y, 0.1f);
+		ImGui::EndChild();
+
+		ImGui::SetNextWindowPos({ p.x + 250, p.y }, 0, ImVec2(0.3f, 0.0f));
+		ImGui::BeginChild("Z", { 100, 100 }, true);
+		ImGui::Text("Z:");
+		ImGui::SameLine();
+		ImGui::DragFloat("", &lightPos.z, 0.1f);
+		ImGui::EndChild();
+
+		ImGui::PopStyleVar();
+
 	}
 
 	// Rendering
