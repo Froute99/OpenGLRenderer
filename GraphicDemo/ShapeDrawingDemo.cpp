@@ -85,9 +85,9 @@ void ShapeDrawingDemo::Update(float dt)
 
 	// std::cout << "\r" << dt;
 
-	 camera.MoveX(moveSpeed.x);
-	 camera.MoveY(moveSpeed.y);
-	 camera.MoveZ(moveSpeed.z);
+	camera.MoveX(moveSpeed.x);
+	camera.MoveY(moveSpeed.y);
+	camera.MoveZ(moveSpeed.z);
 
 	Draw::StartDrawing();
 
@@ -96,7 +96,7 @@ void ShapeDrawingDemo::Update(float dt)
 	// ==================================
 
 	Shader::UseShader(shader);
-	backpack->Rotate({ 0.f, ANGLE::DegreeToRadian(35.f * angle * dt), 0.f });
+	backpack->Rotate(backpackRotationSpeed * dt);
 	const mat4<float>& Model = backpack->GetModelToWorld();
 	const mat4<float>& View = camera.BuildViewMatrix();
 	const mat4<float>& Projection = view.BuildProjectionMatrix();
@@ -220,42 +220,77 @@ void ShapeDrawingDemo::ImguiHelper()
 		ImGui::NewLine();
 
 		// toggle object window
+		ImGui::Checkbox("Show Object Window", &showObjectWindow);
+		
 		// toggle light window
-
-		//cube->GetTransform()->SetTranslation(cubeTranslation);
+		ImGui::Checkbox("Show Light Window", &showLightWindow);
 
 		ImGui::End();
 	}
-	//ImGui::NewFrame();
+	// Object window
 	{
 		ImGui::Begin("Objects");
 		ImGui::SetWindowCollapsed(false);
 		
+
+		// Center text
+		//std::string text = "Translation";
+		//auto windowWidth = ImGui::GetWindowSize().x;
+		//auto textWidth = ImGui::CalcTextSize(text.c_str()).x;
+
+		//ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
+		//ImGui::Text(text.c_str());
+
+		// translation
+		ImGui::SetCursorPosX(120.f);
+		ImGui::Text("Translation");
 		ImVec2 p = ImGui::GetCursorScreenPos();
 		ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 2);
 		ImGui::BeginChild("X", { 100, 100 }, true);
-		ImGui::Text("X:");
-		ImGui::SameLine();
+		ImGui::Text("X");
 		ImGui::DragFloat("", &backpackTranslation.x, 0.1f);
 		ImGui::EndChild();
 
 		ImGui::SetNextWindowPos({ p.x + 150, p.y }, 0, ImVec2(0.4f, 0.0f));
 		ImGui::BeginChild("Y", { 100, 100 }, true);
-		ImGui::Text("Y:");
-		ImGui::SameLine();
+		ImGui::Text("Y");
 		ImGui::DragFloat("", &backpackTranslation.y, 0.1f);
 		ImGui::EndChild();
 
 		ImGui::SetNextWindowPos({ p.x + 250, p.y }, 0, ImVec2(0.3f, 0.0f));
 		ImGui::BeginChild("Z", { 100, 100 }, true);
-		ImGui::Text("Z:");
-		ImGui::SameLine();
+		ImGui::Text("Z");
 		ImGui::DragFloat("", &backpackTranslation.z, 0.1f);
 		ImGui::EndChild();
 
-		ImGui::PopStyleVar();
 		ImGui::NewLine();
 
+		// rotation
+		ImGui::Text("Rotation");
+		p = ImGui::GetCursorScreenPos();
+		ImGui::BeginChild("Pitch", { 100, 100 }, true);
+		ImGui::Text("Pitch");
+		ImGui::DragFloat("", &backpackRotationOffset.x, 0.1f);
+		ImGui::EndChild();
+
+		ImGui::SetNextWindowPos({ p.x + 150, p.y }, 0, ImVec2(0.4f, 0.0f));
+		ImGui::BeginChild("Yaw", { 100, 100 }, true);
+		ImGui::Text("Yaw");
+		ImGui::DragFloat("", &backpackRotationOffset.y, 0.1f);
+		ImGui::EndChild();
+
+		ImGui::SetNextWindowPos({ p.x + 250, p.y }, 0, ImVec2(0.3f, 0.0f));
+		ImGui::BeginChild("Roll", { 100, 100 }, true);
+		ImGui::Text("Roll");
+		ImGui::DragFloat("", &backpackRotationOffset.z, 0.1f);
+		ImGui::EndChild();
+
+		ImGui::PopStyleVar();
+
+		if (ImGui::Button("Set", { 50, 20 }))
+		{
+			backpack->GetTransform()->SetRotation(backpackRotationOffset);
+		}
 		backpack->GetTransform()->SetTranslation(backpackTranslation);
 	}
 	//ImGui::NewFrame();
@@ -271,27 +306,23 @@ void ShapeDrawingDemo::ImguiHelper()
 		ImVec2 p = ImGui::GetCursorScreenPos();
 		ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 2);
 		ImGui::BeginChild("X", { 100, 100 }, true);
-		ImGui::Text("X:");
-		ImGui::SameLine();
-		ImGui::DragFloat("", &lightPos.x, 0.1f);
+		ImGui::Text("X");
+		ImGui::DragFloat("", &lightPos.x, 0.05f);
 		ImGui::EndChild();
 
 		ImGui::SetNextWindowPos({ p.x + 150, p.y }, 0, ImVec2(0.4f, 0.0f));
 		ImGui::BeginChild("Y", { 100, 100 }, true);
-		ImGui::Text("Y:");
-		ImGui::SameLine();
-		ImGui::DragFloat("", &lightPos.y, 0.1f);
+		ImGui::Text("Y");
+		ImGui::DragFloat("", &lightPos.y, 0.05f);
 		ImGui::EndChild();
 
 		ImGui::SetNextWindowPos({ p.x + 250, p.y }, 0, ImVec2(0.3f, 0.0f));
 		ImGui::BeginChild("Z", { 100, 100 }, true);
-		ImGui::Text("Z:");
-		ImGui::SameLine();
-		ImGui::DragFloat("", &lightPos.z, 0.1f);
+		ImGui::Text("Z");
+		ImGui::DragFloat("", &lightPos.z, 0.05f);
 		ImGui::EndChild();
 
 		ImGui::PopStyleVar();
-
 	}
 
 	// Rendering

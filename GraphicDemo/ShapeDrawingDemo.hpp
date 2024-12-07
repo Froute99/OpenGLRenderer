@@ -61,12 +61,12 @@ private:
 	vec3<float> lightPos;
 	vec3<float> lightColor;
 
+	// imgui
 	vec3<float> backpackTranslation;
+	vec3<float> backpackRotationOffset;
+	vec3<float> backpackRotationSpeed{ 0.f, 1.f, 0.f };
 
-	float angle = 1.f;
+	bool showObjectWindow = true;
+	bool showLightWindow = true;
 
-	std::vector<std::string> cubemapPaths;
-	unsigned int			 cubemapTextureID;
-	unsigned int			 skyboxVAO;
-	unsigned int			 skyboxVBO;
 };
