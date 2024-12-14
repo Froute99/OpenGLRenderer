@@ -74,6 +74,11 @@ GameObject* GameObject::LoadMeshFromFile(const std::string& filePath)
 		object->LoadTexture(path);
 	}
 
+	if (object->texturePaths.empty())
+	{
+		object->SetObjectType(ObjectType::NonTextured);
+	}
+
 	return object;
 }
 
@@ -179,13 +184,48 @@ Mesh3D* GameObject::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 
 void GameObject::Draw()
 {
+	if (objectType == ObjectType::Textured)
+	{
+		DrawTextured();
+	}
+	else
+	{
+		DrawNonTextured();
+	}
+	//glActiveTexture(GL_TEXTURE0);
+	////glUniform1i(glGetUniformLocation(shader.GetHandleToShader(), "textureDiffuse1"), 0);
+	//glBindTexture(GL_TEXTURE_2D, textures[0].GetTexturehandle());
+
+	//unsigned int numMeshes = meshes.size();
+	//for (unsigned int i = 0; i < numMeshes; ++i)
+	//{
+	//	glBindVertexArray(vertexObject[i]->VAO);
+	//	glDrawElements(GL_TRIANGLES, meshes[i]->GetIndicesCount(), GL_UNSIGNED_INT, 0);
+	//	glBindVertexArray(0);
+	//}
+}
+
+void GameObject::DrawTextured()
+{
 	glActiveTexture(GL_TEXTURE0);
-	//glUniform1i(glGetUniformLocation(shader.GetHandleToShader(), "textureDiffuse1"), 0);
+	// glUniform1i(glGetUniformLocation(shader.GetHandleToShader(), "textureDiffuse1"), 0);
 	glBindTexture(GL_TEXTURE_2D, textures[0].GetTexturehandle());
 
 	unsigned int numMeshes = meshes.size();
 	for (unsigned int i = 0; i < numMeshes; ++i)
 	{
+		glBindVertexArray(vertexObject[i]->VAO);
+		glDrawElements(GL_TRIANGLES, meshes[i]->GetIndicesCount(), GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
+	}
+}
+
+void GameObject::DrawNonTextured()
+{
+	unsigned int numMeshes = meshes.size();
+	for (unsigned int i = 0; i < numMeshes; ++i)
+	{
+		std::cout << "Draw Non Textured\n";
 		glBindVertexArray(vertexObject[i]->VAO);
 		glDrawElements(GL_TRIANGLES, meshes[i]->GetIndicesCount(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);

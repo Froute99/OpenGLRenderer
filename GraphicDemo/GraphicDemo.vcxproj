@@ -171,6 +171,7 @@
     <ClCompile Include="ComputeShaderDemo.cpp" />
     <ClCompile Include="Demo.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="PBRdemo.cpp" />
     <ClCompile Include="ShapeDrawingDemo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Skybox.cpp" />
@@ -184,6 +185,7 @@
     <ClInclude Include="Demo.hpp" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="PBRdemo.h" />
     <ClInclude Include="ShapeDrawingDemo.hpp" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="TextureDrawingDemo.hpp" />

@@ -1,14 +1,15 @@
 #version 330 core
-out vec4 FragColor;
-in vec2 TexCoords;
 in vec3 WorldPos;
 in vec3 Normal;
+in vec2 TexCoords;
+
+out vec4 FragColor;
 
 // material parameters
 uniform vec3 albedo;
-uniform float metallic;
 uniform float roughness;
 uniform float ao;
+uniform float metallic;
 
 // lights
 uniform vec3 lightPositions[4];
@@ -17,13 +18,14 @@ uniform vec3 lightColors[4];
 uniform vec3 camPos;
 
 const float PI = 3.14159265359;
-// ----------------------------------------------------------------------------
+
+// GGX / Trowbridge-Reitz
 float DistributionGGX(vec3 N, vec3 H, float roughness)
 {
-    float a = roughness*roughness;
-    float a2 = a*a;
+    float a = roughness * roughness;
+    float a2 = a * a;
     float NdotH = max(dot(N, H), 0.0);
-    float NdotH2 = NdotH*NdotH;
+    float NdotH2 = NdotH * NdotH;
 
     float nom   = a2;
     float denom = (NdotH2 * (a2 - 1.0) + 1.0);
@@ -31,18 +33,18 @@ float DistributionGGX(vec3 N, vec3 H, float roughness)
 
     return nom / denom;
 }
-// ----------------------------------------------------------------------------
+// schlick-beckmann model + smith model = schlick-ggx model
 float GeometrySchlickGGX(float NdotV, float roughness)
 {
     float r = (roughness + 1.0);
-    float k = (r*r) / 8.0;
+    float k = (r * r) / 8.0;
 
     float nom   = NdotV;
     float denom = NdotV * (1.0 - k) + k;
 
     return nom / denom;
 }
-// ----------------------------------------------------------------------------
+
 float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
 {
     float NdotV = max(dot(N, V), 0.0);
@@ -52,20 +54,21 @@ float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
 
     return ggx1 * ggx2;
 }
-// ----------------------------------------------------------------------------
+// fresnel function
 vec3 fresnelSchlick(float cosTheta, vec3 F0)
 {
     return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
-// ----------------------------------------------------------------------------
+
 void main()
 {		
     vec3 N = normalize(Normal);
     vec3 V = normalize(camPos - WorldPos);
 
-    // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0 
-    // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)    
-    vec3 F0 = vec3(0.04); 
+    // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0
+    // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)
+
+    vec3 F0 = vec3(0.04);
     F0 = mix(F0, albedo, metallic);
 
     // reflectance equation
@@ -80,12 +83,15 @@ void main()
         vec3 radiance = lightColors[i] * attenuation;
 
         // Cook-Torrance BRDF
-        float NDF = DistributionGGX(N, H, roughness);   
-        float G   = GeometrySmith(N, V, L, roughness);      
+        float D = DistributionGGX(N, H, roughness);
+        float G   = GeometrySmith(N, V, L, roughness);
         vec3 F    = fresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
-           
-        vec3 numerator    = NDF * G * F; 
-        float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001; // + 0.0001 to prevent divide by zero
+
+        vec3 numerator    = D * G * F;
+        float NdotV = max(dot(N, V), 0.0);
+        float NdotL = max(dot(N, L), 0.0);
+
+        float denominator = 4.0 * NdotV * NdotL + 0.0001; // + 0.0001 to prevent divide by zero
         vec3 specular = numerator / denominator;
         
         // kS is equal to Fresnel
@@ -100,7 +106,7 @@ void main()
         kD *= 1.0 - metallic;	  
 
         // scale light by NdotL
-        float NdotL = max(dot(N, L), 0.0);        
+        // float NdotL = max(dot(N, L), 0.0);
 
         // add to outgoing radiance Lo
         Lo += (kD * albedo / PI + specular) * radiance * NdotL;  // note that we already multiplied the BRDF by the Fresnel (kS) so we won't multiply by kS again

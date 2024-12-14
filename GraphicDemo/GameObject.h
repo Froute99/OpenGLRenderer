@@ -1,11 +1,11 @@
 #pragma once
-#include "Object.h"
-#include <Graphics/Transform.hpp>
-#include <Graphics/Texture.hpp>
-#include <Graphics/Mesh3D.h>
-#include <Graphics/Draw.hpp>
-#include <Math/mat4.hpp>
-#include <set>
+#include "Object.h"					// parent class
+#include <Graphics/Transform.hpp>	// transforms
+#include <Graphics/Texture.hpp>		// textures
+#include <Graphics/Mesh3D.h>		// meshes
+#include <Graphics/Vertices.h>		// vertex object
+#include <Math/mat4.hpp>			// matrices for the transforms
+#include <set>						// texture paths container
 
 struct aiScene;
 struct aiNode;
@@ -15,6 +15,12 @@ struct Vertex
 {
 	vec3<float> position;
 	vec3<float> normal;
+};
+
+enum class ObjectType
+{
+	Textured,
+	NonTextured
 };
 
 class GameObject : public Object
@@ -52,6 +58,15 @@ public:
 
 	// For Debug
 	unsigned int GetTextureHandle(int index) { return textures[index].GetTexturehandle(); }
+
+	ObjectType GetObjectType() { return objectType; }
+	void	   SetObjectType(ObjectType newObjectType) { objectType = newObjectType; }
+
+private:
+	void DrawTextured();
+	void DrawNonTextured();
+
+	ObjectType objectType = ObjectType::Textured;
 
 private:
 	std::vector<Mesh3D*> meshes;

@@ -37,7 +37,7 @@
 
 void ShapeDrawingDemo::Initialize()
 {
-	shader.LoadShaderFrom(PATH::shape_vert, PATH::shape_frag);
+	shader.LoadShaderFrom(PATH::texture_vert, PATH::texture_frag);
 	skyboxShader.LoadShaderFrom(PATH::skyboxVS, PATH::skyboxFS);
 
 	glEnable(GL_CULL_FACE);
@@ -231,7 +231,6 @@ void ShapeDrawingDemo::ImguiHelper()
 	{
 		ImGui::Begin("Objects");
 		ImGui::SetWindowCollapsed(false);
-		
 
 		// Center text
 		//std::string text = "Translation";

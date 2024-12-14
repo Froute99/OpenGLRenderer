@@ -21,8 +21,15 @@
     <ClCompile Include="ComputeShaderDemo.cpp">
       <Filter>Demo\ComputeShader</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="PBRdemo.cpp">
+      <Filter>Demo\PBR</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -44,9 +51,18 @@
     <ClInclude Include="ComputeShaderDemo.h">
       <Filter>Demo\ComputeShader</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h" />
-    <ClInclude Include="Skybox.h" />
-    <ClInclude Include="Object.h" />
+    <ClInclude Include="PBRdemo.h">
+      <Filter>Demo\PBR</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Demo">
@@ -66,6 +82,12 @@
     </Filter>
     <Filter Include="Demo\ComputeShader">
       <UniqueIdentifier>{3a69e391-9ea4-4232-afb8-098213001507}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Demo\PBR">
+      <UniqueIdentifier>{09a9560c-3d65-48bf-83ea-c6262593cf55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{f3104392-0695-4831-88b3-b9d81fcced9e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
