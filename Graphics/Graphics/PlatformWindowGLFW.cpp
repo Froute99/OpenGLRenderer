@@ -339,9 +339,9 @@ bool PlatformWindow::CanCreateWindow(int width, int height, EventHandler* event_
 		return false;
 	}
 
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
-	glDepthMask(GL_TRUE);
+	//glEnable(GL_DEPTH_TEST);
+	//glDepthFunc(GL_LESS);
+	//glDepthMask(GL_TRUE);
 
 	SetWindowIcon();
 

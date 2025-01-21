@@ -4,6 +4,8 @@
 #include "Demo.hpp"
 #include <Graphics/Shader.h>
 
+#include <Graphics/Texture.hpp>
+
 class GameObject;
 
 class PBRDemo : public Demo
@@ -23,6 +25,8 @@ public:
 	void HandleFocusEvent(bool focused) override final;
 
 private:
+	vec3<float> moveSpeed;
+
 	Shader pbrShader;
 
 	GameObject* sphere;
@@ -49,4 +53,18 @@ private:
 	vec3<float>	 lightCol[4];
 
 	unsigned int camPosLocation;
+
+	unsigned int gammaLocation;
+	float		 gamma = 1.0f;
+	bool		 shouldGammaCorrected = false;
+
+	Shader		 hdrShader;
+	unsigned int hdrFBO;	  // framebuffer object handle for HDR
+	unsigned int colorBuffer; // colorbuffer for HDR
+	bool		 hdr = true;
+	float		 exposure = 1.0f;
+
+	void RenderQuad();
+	unsigned int quadVAO = 0;
+	unsigned int quadVBO;
 };

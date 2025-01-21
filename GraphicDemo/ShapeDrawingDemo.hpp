@@ -69,4 +69,14 @@ private:
 	bool showObjectWindow = true;
 	bool showLightWindow = true;
 
+	// HDR
+	Shader		 hdrShader;
+	unsigned int hdrFBO;	  // framebuffer object handle for HDR
+	unsigned int colorBuffer; // colorbuffer for HDR
+	bool		 hdr = true;
+	float		 exposure = 1.0f;
+
+	void		 RenderQuad();
+	unsigned int quadVAO = 0;
+	unsigned int quadVBO;
 };

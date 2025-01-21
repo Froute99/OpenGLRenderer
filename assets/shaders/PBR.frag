@@ -17,6 +17,8 @@ uniform vec3 lightColors[4];
 
 uniform vec3 camPos;
 
+uniform float gammaCorrection;
+
 const float PI = 3.14159265359;
 
 // GGX / Trowbridge-Reitz
@@ -119,9 +121,11 @@ void main()
     vec3 color = ambient + Lo;
 
     // HDR tonemapping
-    color = color / (color + vec3(1.0));
+    // color = color / (color + vec3(1.0));
+ 
     // gamma correct
-    color = pow(color, vec3(1.0/2.2)); 
+    color = pow(color, vec3(1.0 / gammaCorrection));
+    // color = pow(color, vec3(1.0 / 2.2));
 
     FragColor = vec4(color, 1.0);
 }

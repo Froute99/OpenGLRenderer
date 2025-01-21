@@ -1,10 +1,10 @@
 /********************************************************
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
- *	
+ *
  *	File_name: Demo.h
- *	
+ *
  *	Graphic demo main file
- *	
+ *
  *	Nov.28 2019
  *******************************************************/
 
@@ -29,10 +29,14 @@ public:
 	void HandleResizeEvent(const int& width, const int& height) override;
 	void HandleScrollEvent(float scroll_amount) override;
 	void HandleFocusEvent(bool focused) override;
+
+	int GetScreenWidth() { return width; }
+	int GetScreenHeight() { return height; }
+
 protected:
-	Camera camera;
+	Camera	   camera;
 	CameraView view;
-	int width;
-	int height;
-	bool isFocused = true;
+	int		   width;
+	int		   height;
+	bool	   isFocused = true;
 };
