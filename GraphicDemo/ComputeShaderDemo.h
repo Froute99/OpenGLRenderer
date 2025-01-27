@@ -1,7 +1,7 @@
 #pragma once
-#include "Demo.hpp"
+#include "Demo.h"
 #include <Graphics/Shader.h>
-#include <Graphics/Texture.hpp>
+#include <Graphics/Texture.h>
 #include <Graphics/Vertices.h>
 #include <Graphics/ComputeShader.h>
 

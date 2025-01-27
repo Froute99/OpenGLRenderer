@@ -9,7 +9,7 @@
  */
 
 #pragma once
-#include "Texture.hpp"
+#include "Texture.h"
 #include <vector>
 #include <string>
 #include <unordered_map>

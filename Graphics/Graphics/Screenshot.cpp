@@ -8,7 +8,7 @@
  *	Dec.05 2019
  */
 
-#include "Screenshot.hpp"
+#include "Screenshot.h"
 #include <glew.h>
 
 Image ScreenShot(int pixels_width, int pixels_height, int left_x, int bottom_y) noexcept

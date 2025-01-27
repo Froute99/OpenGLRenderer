@@ -1,7 +1,7 @@
 /********************************************************
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *
- *	File_name: ShapeDrawingDemo.cpp
+ *	File_name: PhongShadingDemo.cpp
  *
  *	Simple Shape Drawing Demo
  *
@@ -10,11 +10,11 @@
 
 #include <glew.h>
 #include <glfw3.h>
-#include "ShapeDrawingDemo.hpp"
+#include "PhongShadingDemo.h"
 #include "GameObject.h"
-#include <Graphics/Draw.hpp>
-#include <Graphics/PATH.hpp>
-#include <Graphics/Screenshot.hpp>
+#include <Graphics/Draw.h>
+#include <Graphics/PATH.h>
+#include <Graphics/Screenshot.h>
 #include <Graphics/Mesh3D.h>
 
 #include <Math/Angle.hpp>
@@ -29,13 +29,13 @@
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
 
-#include <Graphics/Image.hpp>
+#include <Graphics/Image.h>
 #include "stb_image.h"
 #include "stb_image_write.h"
 
 #include "Skybox.h"
 
-void ShapeDrawingDemo::Initialize()
+void PhongShadingDemo::Initialize()
 {
 	shader.LoadShaderFrom(PATH::texture_vert, PATH::texture_frag);
 	skyboxShader.LoadShaderFrom(PATH::skyboxVS, PATH::skyboxFS);
@@ -74,11 +74,12 @@ void ShapeDrawingDemo::Initialize()
 	uniformLightCubeProjection = glGetUniformLocation(skyboxShader.GetHandleToShader(), "projection");
 
 	// ==================================
-	// skybox
+	// Skybox
 	// ==================================
-
 	skybox = new Skybox();
 
+
+	// HDR
 	// floating point framebuffer
 	glGenFramebuffers(1, &hdrFBO);
 	glGenTextures(1, &colorBuffer);
@@ -109,7 +110,7 @@ void ShapeDrawingDemo::Initialize()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void ShapeDrawingDemo::Update(float dt)
+void PhongShadingDemo::Update(float dt)
 {
 	// if (!isFocused)
 	//{
@@ -151,19 +152,21 @@ void ShapeDrawingDemo::Update(float dt)
 
 		backpack->Draw();
 	}
-		//// ==================================
-		//// Skybox
-		//// ==================================
-		// Shader::UseShader(skyboxShader);
-		////const mat4<float>& LightCubeModel = cube->GetModelToWorld();
-		// const mat4<float>& LightCubeModel = skybox->GetModelToWorld();
-		// const mat4<float>& skyboxView = Matrix4::CutOffTranslation(View); // remove translation from origin view matrix
-		// glUniformMatrix4fv(uniformLightCubeModel, 1, GL_FALSE, &LightCubeModel.elements[0][0]);
-		// glUniformMatrix4fv(uniformLightCubeView, 1, GL_FALSE, &skyboxView.elements[0][0]);
-		// glUniformMatrix4fv(uniformLightCubeProjection, 1, GL_FALSE, &Projection.elements[0][0]);
 
-		// skybox->Draw();
+	//// ==================================
+	//// Skybox
+	//// ==================================
+	// Shader::UseShader(skyboxShader);
+	////const mat4<float>& LightCubeModel = cube->GetModelToWorld();
+	// const mat4<float>& LightCubeModel = skybox->GetModelToWorld();
+	// const mat4<float>& skyboxView = Matrix4::CutOffTranslation(View); // remove translation from origin view matrix
+	// glUniformMatrix4fv(uniformLightCubeModel, 1, GL_FALSE, &LightCubeModel.elements[0][0]);
+	// glUniformMatrix4fv(uniformLightCubeView, 1, GL_FALSE, &skyboxView.elements[0][0]);
+	// glUniformMatrix4fv(uniformLightCubeProjection, 1, GL_FALSE, &Projection.elements[0][0]);
 
+	// skybox->Draw();
+
+	// HDR
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	Shader::UseShader(hdrShader);
@@ -179,17 +182,17 @@ void ShapeDrawingDemo::Update(float dt)
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void ShapeDrawingDemo::ResetCamera()
+void PhongShadingDemo::ResetCamera()
 {
 	// camera.ResetUp();
 }
 
-void ShapeDrawingDemo::HandleResizeEvent(const int& new_width, const int& new_height)
+void PhongShadingDemo::HandleResizeEvent(const int& new_width, const int& new_height)
 {
 	Demo::HandleResizeEvent(new_width, new_height);
 }
 
-void ShapeDrawingDemo::HandleKeyPress(KeyboardButton button)
+void PhongShadingDemo::HandleKeyPress(KeyboardButton button)
 {
 	switch (button)
 	{
@@ -218,7 +221,7 @@ void ShapeDrawingDemo::HandleKeyPress(KeyboardButton button)
 	}
 }
 
-void ShapeDrawingDemo::HandleKeyRelease(KeyboardButton button)
+void PhongShadingDemo::HandleKeyRelease(KeyboardButton button)
 {
 	switch (button)
 	{
@@ -243,17 +246,17 @@ void ShapeDrawingDemo::HandleKeyRelease(KeyboardButton button)
 	}
 }
 
-void ShapeDrawingDemo::HandleScrollEvent(float scroll_amount)
+void PhongShadingDemo::HandleScrollEvent(float scroll_amount)
 {
 	Demo::HandleScrollEvent(scroll_amount);
 }
 
-void ShapeDrawingDemo::HandleFocusEvent(bool focused)
+void PhongShadingDemo::HandleFocusEvent(bool focused)
 {
 	Demo::HandleFocusEvent(focused);
 }
 
-void ShapeDrawingDemo::ImguiHelper()
+void PhongShadingDemo::ImguiHelper()
 {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
@@ -374,7 +377,7 @@ void ShapeDrawingDemo::ImguiHelper()
 	ImGui::Render();
 }
 
-void ShapeDrawingDemo::RenderQuad()
+void PhongShadingDemo::RenderQuad()
 {
 	if (quadVAO == 0)
 	{

@@ -1,7 +1,7 @@
 #pragma once
 #include "Object.h"					// parent class
-#include <Graphics/Transform.hpp>	// transforms
-#include <Graphics/Texture.hpp>		// textures
+#include <Graphics/Transform.h>	// transforms
+#include <Graphics/Texture.h>		// textures
 #include <Graphics/Mesh3D.h>		// meshes
 #include <Graphics/Vertices.h>		// vertex object
 #include <Math/mat4.hpp>			// matrices for the transforms

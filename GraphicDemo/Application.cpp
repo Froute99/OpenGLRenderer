@@ -11,10 +11,10 @@
 #include <iostream>
 #include "glfw3.h"
 #include "Application.h"
-#include "ShapeDrawingDemo.hpp"
-#include "TextureDrawingDemo.hpp"
-#include "AnimationDemo.hpp"
-#include "TransformParentDemo.hpp"
+#include "PhongShadingDemo.h"
+#include "TextureDrawingDemo.h"
+#include "AnimationDemo.h"
+#include "TransformParentDemo.h"
 #include "ComputeShaderDemo.h"
 #include "PBRdemo.h"
 
@@ -37,7 +37,7 @@ void Application::Initialize()
 	window.ToggleVSync(true);
 	isRunning = true;
 
-	demo[SHAPEDRAWING] = std::make_unique<ShapeDrawingDemo>(window);
+	demo[SHAPEDRAWING] = std::make_unique<PhongShadingDemo>(window);
 	demo[PBRDEMO] = std::make_unique<PBRDemo>(window);
 	//demo[TEXTUREDRAWING] = std::make_unique<TextureDrawingDemo>(window);
 	//demo[ANIMATION] = std::make_unique<AnimationDemo>(window);

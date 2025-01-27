@@ -1,7 +1,7 @@
 /********************************************************
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *
- *	File_name: ShapeDrawingDemo.h
+ *	File_name: PhongShadingDemo.h
  *
  *	Simple Shape Drawing Demo
  *
@@ -9,17 +9,17 @@
  *******************************************************/
 
 #pragma once
-#include "Demo.hpp"
+#include "Demo.h"
 #include <Graphics/Shader.h>
 
 class Object;
 class GameObject;
 struct aiScene;
 
-class ShapeDrawingDemo : public Demo
+class PhongShadingDemo : public Demo
 {
 public:
-	explicit ShapeDrawingDemo(OpenGLWindow& window)
+	explicit PhongShadingDemo(OpenGLWindow& window)
 		: Demo(window) { Initialize(); }
 
 	void Initialize() override final;

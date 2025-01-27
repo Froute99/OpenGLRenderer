@@ -1,7 +1,7 @@
 #include "ComputeShaderDemo.h"
 #include <Graphics/Mesh.h>
-#include <Graphics/Draw.hpp>
-#include <Graphics/PATH.hpp>
+#include <Graphics/Draw.h>
+#include <Graphics/PATH.h>
 #include <glew.h>
 #include <iostream>
 

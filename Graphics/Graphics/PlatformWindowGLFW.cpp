@@ -8,9 +8,9 @@
  *	Sep.21 2019
  */
 
-#include "PlatformWindowGLFW.hpp"
-#include "PATH.hpp"
-#include "EventHandler.hpp"
+#include "PlatformWindowGLFW.h"
+#include "PATH.h"
+#include "EventHandler.h"
 #include <stb_image.h>
 #include <iostream>
 #include <glew.h>

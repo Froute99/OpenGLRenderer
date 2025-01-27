@@ -3,15 +3,15 @@
 #include "GameObject.h"
 #include <glew.h>		// glUniform
 #include <iostream>		// error logging
-#include <Graphics/Draw.hpp>	// rendering objects
-#include <Graphics/PATH.hpp>	// path for shaders
+#include <Graphics/Draw.h>	// rendering objects
+#include <Graphics/PATH.h>	// path for shaders
+#include <Graphics/Texture.h>		// for HDR framebuffer
 
 // imguis
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
 
-#include <Graphics/Texture.hpp>
 
 
 void PBRDemo::Initialize()

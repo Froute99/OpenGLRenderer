@@ -8,7 +8,7 @@
  *	Oct.10 2019
  */
 
-#include "CameraView.hpp"
+#include "CameraView.h"
 #include <Math/Angle.hpp>
 
 CameraView::CameraView(float newFOV, float newNear)

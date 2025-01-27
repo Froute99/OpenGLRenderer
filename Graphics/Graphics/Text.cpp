@@ -8,7 +8,7 @@
  *	Nov.23 2019
  */
 
-#include "Text.hpp"
+#include "Text.h"
 
 Text::Text(std::wstring text_string, const BitmapFont& text_font) noexcept
 {

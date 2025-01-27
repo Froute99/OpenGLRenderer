@@ -1,10 +1,9 @@
 
 #pragma once
 
-#include "Demo.hpp"
+#include "Demo.h"
 #include <Graphics/Shader.h>
-
-#include <Graphics/Texture.hpp>
+#include <Graphics/Texture.h>
 
 class GameObject;
 
@@ -23,6 +22,8 @@ public:
 	void HandleKeyRelease(KeyboardButton button) override final;
 	void HandleScrollEvent(float scroll_amount) override final;
 	void HandleFocusEvent(bool focused) override final;
+
+	void ImguiHelper();
 
 private:
 	vec3<float> moveSpeed;

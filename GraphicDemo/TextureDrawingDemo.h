@@ -9,17 +9,17 @@
  *******************************************************/
 
 #pragma once
-#include "Demo.hpp"
+#include "Demo.h"
 #include <Graphics/Shader.h>
 #include <Graphics/Mesh.h>
 #include <Graphics/Vertices.h>
 #include <Graphics/VerticesDescription.h>
-#include <Graphics/Texture.hpp>
-#include <Graphics/Transform.hpp>
-#include <Graphics/Animation.hpp>
-#include <Graphics/BitmapFont.hpp>
-#include <Graphics/Text.hpp>
-#include <Graphics/Draw.hpp>
+#include <Graphics/Texture.h>
+#include <Graphics/Transform.h>
+#include <Graphics/Animation.h>
+#include <Graphics/BitmapFont.h>
+#include <Graphics/Text.h>
+#include <Graphics/Draw.h>
 
 class TextureDrawingDemo : public Demo
 {

@@ -169,26 +169,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Graphics\BitmapFont.hpp" />
+    <ClInclude Include="Graphics\BitmapFont.h" />
     <ClInclude Include="Graphics\ComputeShader.h" />
-    <ClInclude Include="Graphics\Draw.hpp" />
-    <ClInclude Include="Graphics\Animation.hpp" />
-    <ClInclude Include="Graphics\Camera.hpp" />
-    <ClInclude Include="Graphics\CameraView.hpp" />
-    <ClInclude Include="Graphics\Color4f.hpp" />
-    <ClInclude Include="Graphics\ColorInChar.hpp" />
-    <ClInclude Include="Graphics\EventHandler.hpp" />
-    <ClInclude Include="Graphics\Image.hpp" />
+    <ClInclude Include="Graphics\Draw.h" />
+    <ClInclude Include="Graphics\Animation.h" />
+    <ClInclude Include="Graphics\Camera.h" />
+    <ClInclude Include="Graphics\CameraView.h" />
+    <ClInclude Include="Graphics\Color4f.h" />
+    <ClInclude Include="Graphics\ColorInChar.h" />
+    <ClInclude Include="Graphics\EventHandler.h" />
+    <ClInclude Include="Graphics\Image.h" />
     <ClInclude Include="Graphics\Mesh.h" />
     <ClInclude Include="Graphics\Mesh3D.h" />
-    <ClInclude Include="Graphics\OpenGLWindow.hpp" />
-    <ClInclude Include="Graphics\PATH.hpp" />
-    <ClInclude Include="Graphics\PlatformWindowGLFW.hpp" />
-    <ClInclude Include="Graphics\Screenshot.hpp" />
+    <ClInclude Include="Graphics\OpenGLWindow.h" />
+    <ClInclude Include="Graphics\PATH.h" />
+    <ClInclude Include="Graphics\PlatformWindowGLFW.h" />
+    <ClInclude Include="Graphics\Screenshot.h" />
     <ClInclude Include="Graphics\Shader.h" />
-    <ClInclude Include="Graphics\Text.hpp" />
-    <ClInclude Include="Graphics\Texture.hpp" />
-    <ClInclude Include="Graphics\Transform.hpp" />
+    <ClInclude Include="Graphics\Text.h" />
+    <ClInclude Include="Graphics\Texture.h" />
+    <ClInclude Include="Graphics\Transform.h" />
     <ClInclude Include="Graphics\Vertices.h" />
     <ClInclude Include="Graphics\VerticesDescription.h" />
     <ClInclude Include="imgui\imconfig.h" />

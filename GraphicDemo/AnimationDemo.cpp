@@ -8,9 +8,9 @@
  *	Dec.03 2019
  *******************************************************/
 
-#include "AnimationDemo.hpp"
-#include <Graphics/Draw.hpp>
-#include <Graphics/PATH.hpp>
+#include "AnimationDemo.h"
+#include <Graphics/Draw.h>
+#include <Graphics/PATH.h>
 #include <iostream>
 
 const std::filesystem::path& fire_png = "../assets/fire.png";

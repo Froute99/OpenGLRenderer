@@ -11,8 +11,8 @@
 #pragma once
 #include "Shader.h"
 #include "Vertices.h"
-#include "Texture.hpp"
-#include "Text.hpp"
+#include "Texture.h"
+#include "Text.h"
 #include <Math/mat4.hpp>
 
 class GameObject;

@@ -11,7 +11,7 @@
 #pragma once
 #include <vector>
 #include <Math/vec2.hpp>
-#include "Color4f.hpp"
+#include "Color4f.h"
 
 enum class ShapePattern
 {

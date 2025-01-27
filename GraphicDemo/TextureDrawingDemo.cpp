@@ -8,9 +8,9 @@
  *	Nov.29 2019
  *******************************************************/
 
-#include "TextureDrawingDemo.hpp"
-#include <Graphics/PATH.hpp>
+#include "TextureDrawingDemo.h"
 #include "GameObject.h"
+#include <Graphics/PATH.h>
 #include <glfw3.h>
 #include <iostream>
 

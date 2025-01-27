@@ -9,14 +9,14 @@
  *******************************************************/
 
 #pragma once
-#include "Demo.hpp"
-#include <Graphics/Animation.hpp>
+#include "Demo.h"
+#include <Graphics/Animation.h>
 #include <Graphics/Mesh.h>
 #include <Graphics/Vertices.h>
 #include <Graphics/VerticesDescription.h>
-#include <Graphics/Texture.hpp>
-#include <Graphics/Transform.hpp>
-#include <Graphics/Draw.hpp>
+#include <Graphics/Texture.h>
+#include <Graphics/Transform.h>
+#include <Graphics/Draw.h>
 
 class AnimationDemo : public Demo
 {

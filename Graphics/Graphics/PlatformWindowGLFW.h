@@ -9,7 +9,7 @@
  */
 
 #pragma once
-#include "OpenGLWindow.hpp"
+#include "OpenGLWindow.h"
 
 struct GLFWwindow;
 

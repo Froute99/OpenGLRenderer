@@ -1,6 +1,6 @@
 #pragma once
 #include "Mesh.h"
-#include <Graphics/Color4f.hpp>
+#include <Graphics/Color4f.h>
 #include <Math/vec2.hpp>
 #include <Math/vec3.hpp>
 #include <vector>

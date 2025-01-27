@@ -11,8 +11,8 @@
 #pragma once
 #include <vector>
 #include <filesystem>
-#include "Color4f.hpp"
-#include "ColorInChar.hpp"
+#include "Color4f.h"
+#include "ColorInChar.h"
 
 class [[nodiscard]] Image
 {

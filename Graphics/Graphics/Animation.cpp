@@ -8,7 +8,7 @@
  *	Nov.01 2019
  */
 
-#include "Animation.hpp"
+#include "Animation.h"
 
 void Animation::Initialize(SpriteSheet new_sheet, const Shader& new_shader)
 {

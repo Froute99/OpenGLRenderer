@@ -8,9 +8,8 @@
  *	Nov.28 2019
  *******************************************************/
 
-#include "Demo.hpp"
-#include <Graphics/Draw.hpp>
-#include <iostream>
+#include "Demo.h"
+#include <Graphics/Draw.h>
 
 void Demo::HandleResizeEvent(const int& new_width, const int& new_height)
 {

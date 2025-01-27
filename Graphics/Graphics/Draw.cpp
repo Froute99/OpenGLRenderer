@@ -8,7 +8,7 @@
  *	Nov.02 2019
  */
 
-#include "Draw.hpp"
+#include "Draw.h"
 #include <glew.h>
 
 void Draw::StartDrawing()

@@ -8,9 +8,9 @@
  *	Oct.07 2019
  */
 
-#include "Texture.hpp"
-#include "Image.hpp"
-#include "PATH.hpp"
+#include "Texture.h"
+#include "Image.h"
+#include "PATH.h"
 #include <glew.h>
 
 Texture::Texture(Image& image)

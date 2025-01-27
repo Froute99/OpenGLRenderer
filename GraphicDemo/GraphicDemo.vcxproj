@@ -172,24 +172,24 @@
     <ClCompile Include="Demo.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="PBRdemo.cpp" />
-    <ClCompile Include="ShapeDrawingDemo.cpp" />
+    <ClCompile Include="PhongShadingDemo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="TextureDrawingDemo.cpp" />
     <ClCompile Include="TransformParentDemo.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AnimationDemo.hpp" />
+    <ClInclude Include="AnimationDemo.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="ComputeShaderDemo.h" />
-    <ClInclude Include="Demo.hpp" />
+    <ClInclude Include="Demo.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="PBRdemo.h" />
-    <ClInclude Include="ShapeDrawingDemo.hpp" />
+    <ClInclude Include="PhongShadingDemo.h" />
     <ClInclude Include="Skybox.h" />
-    <ClInclude Include="TextureDrawingDemo.hpp" />
-    <ClInclude Include="TransformParentDemo.hpp" />
+    <ClInclude Include="TextureDrawingDemo.h" />
+    <ClInclude Include="TransformParentDemo.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Graphics\Graphics.vcxproj">

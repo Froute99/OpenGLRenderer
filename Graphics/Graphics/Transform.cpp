@@ -8,7 +8,7 @@
  *	Oct.10 2019
  */
 
-#include "Transform.hpp"
+#include "Transform.h"
 
 float Transform::CalculateWorldDepth() const noexcept
 {

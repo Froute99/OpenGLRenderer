@@ -1,6 +1,6 @@
 #include "ComputeShader.h"
 #include "Shader.h"
-#include "PATH.hpp"
+#include "PATH.h"
 #include <iostream>
 #include <fstream>
 #include <glew.h>

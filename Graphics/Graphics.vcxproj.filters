@@ -42,28 +42,28 @@
     <ClInclude Include="Math\vec3.hpp">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\PATH.hpp">
+    <ClInclude Include="Graphics\PATH.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\EventHandler.hpp">
+    <ClInclude Include="Graphics\EventHandler.h">
       <Filter>Graphics\Window</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Camera.hpp">
+    <ClInclude Include="Graphics\Camera.h">
       <Filter>Graphics\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\CameraView.hpp">
+    <ClInclude Include="Graphics\CameraView.h">
       <Filter>Graphics\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\BitmapFont.hpp">
+    <ClInclude Include="Graphics\BitmapFont.h">
       <Filter>Graphics\Text</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Text.hpp">
+    <ClInclude Include="Graphics\Text.h">
       <Filter>Graphics\Text</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Texture.hpp">
+    <ClInclude Include="Graphics\Texture.h">
       <Filter>Graphics\Image\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Draw.hpp">
+    <ClInclude Include="Graphics\Draw.h">
       <Filter>Graphics\Drawing</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Mesh.h">
@@ -78,31 +78,31 @@
     <ClInclude Include="Graphics\VerticesDescription.h">
       <Filter>Graphics\Drawing</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Transform.hpp">
+    <ClInclude Include="Graphics\Transform.h">
       <Filter>Graphics\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Color4f.hpp">
+    <ClInclude Include="Graphics\Color4f.h">
       <Filter>Graphics\Image</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\ColorInChar.hpp">
+    <ClInclude Include="Graphics\ColorInChar.h">
       <Filter>Graphics\Image</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Image.hpp">
+    <ClInclude Include="Graphics\Image.h">
       <Filter>Graphics\Image</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Screenshot.hpp">
+    <ClInclude Include="Graphics\Screenshot.h">
       <Filter>Graphics\Image</Filter>
     </ClInclude>
     <ClInclude Include="Math\Angle.hpp">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\PlatformWindowGLFW.hpp">
+    <ClInclude Include="Graphics\PlatformWindowGLFW.h">
       <Filter>Graphics\Window</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\OpenGLWindow.hpp">
+    <ClInclude Include="Graphics\OpenGLWindow.h">
       <Filter>Graphics\Window</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Animation.hpp">
+    <ClInclude Include="Graphics\Animation.h">
       <Filter>Graphics\Animation</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\ComputeShader.h">

@@ -13,9 +13,10 @@
 #include <unordered_map>
 #include "Mesh.h"
 #include "Vertices.h"
-#include "BitmapFont.hpp"
+#include "BitmapFont.h"
 
 class BitmapFont;
+class Texture;
 
 class [[nodiscard]]Text
 {

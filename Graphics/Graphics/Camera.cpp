@@ -8,8 +8,8 @@
  *	Oct.10 2019
  */
 
-#include "Camera.hpp"
-#include "Transform.hpp"
+#include "Camera.h"
+#include "Transform.h"
 #include <Math/Angle.hpp>
 
 Camera::Camera(vec3<float> newPos) noexcept

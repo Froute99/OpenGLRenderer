@@ -2,7 +2,7 @@
 #include <string>
 #include <filesystem>
 #include <Math/vec2.hpp>
-#include <Graphics/Texture.hpp>
+#include <Graphics/Texture.h>
 
 class ComputeShader
 {

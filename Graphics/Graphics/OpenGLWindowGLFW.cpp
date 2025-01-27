@@ -8,9 +8,8 @@
  *	Sep.21 2019
  */
 
-
-#include "PlatformWindowGLFW.hpp"
-#include "OpenGLWindow.hpp"
+#include "PlatformWindowGLFW.h"
+#include "OpenGLWindow.h"
 
 OpenGLWindow::OpenGLWindow() noexcept
 	: platformWindow(std::make_unique<PlatformWindow>()) {}
