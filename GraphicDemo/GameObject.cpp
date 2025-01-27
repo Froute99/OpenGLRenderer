@@ -225,7 +225,6 @@ void GameObject::DrawNonTextured()
 	unsigned int numMeshes = meshes.size();
 	for (unsigned int i = 0; i < numMeshes; ++i)
 	{
-		std::cout << "Draw Non Textured\n";
 		glBindVertexArray(vertexObject[i]->VAO);
 		glDrawElements(GL_TRIANGLES, meshes[i]->GetIndicesCount(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);

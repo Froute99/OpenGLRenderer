@@ -37,7 +37,7 @@ void Application::Initialize()
 	window.ToggleVSync(true);
 	isRunning = true;
 
-	demo[SHAPEDRAWING] = std::make_unique<ShapeDrawingDemo>(window);
+	demo[SHAPEDRAWING] = std::make_unique<PhongShadingDemo>(window);
 	demo[PBRDEMO] = std::make_unique<PBRDemo>(window);
 	//demo[TEXTUREDRAWING] = std::make_unique<TextureDrawingDemo>(window);
 	//demo[ANIMATION] = std::make_unique<AnimationDemo>(window);
