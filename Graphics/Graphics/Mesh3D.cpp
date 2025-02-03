@@ -3,6 +3,7 @@
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 #include <iostream>
+#include <math/Angle.hpp>
 
 Mesh3D MESH::LoadFromFBX(const std::string& filePath)
 {
@@ -47,10 +48,9 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	// parrelel to the +z direction, v4, v5, v6, v7
 	// with 4 vertices, one plane of the cube is consists, i need 24 vertices for total.
 
-	vec3<float> center;
-
 	Mesh3D* cube = new Mesh3D();
 
+	vec3<float> center;
 	float halfLength = size / 2.f;
 	float r = center.x + halfLength; // right
 	float l = center.x - halfLength; // left
@@ -157,3 +157,51 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	return cube;
 }
 
+Mesh3D* MESH::BuildSphere()
+{
+	Mesh3D* sphere = new Mesh3D();
+	sphere->SetShapePattern(ShapePattern::TriangleStrip);
+
+	const unsigned int X_SEGMENTS = 64;
+	const unsigned int Y_SEGMENTS = 64;
+
+	for (unsigned int i = 0; i <= X_SEGMENTS; ++i)
+	{
+		for (unsigned int j = 0; j <= Y_SEGMENTS; ++j)
+		{
+			float xSegment = (float)i / (float)X_SEGMENTS;
+			float ySegment = (float)j / (float)Y_SEGMENTS;
+			float x = std::cos(xSegment * ANGLE::two_pi) * std::sin(ySegment * ANGLE::pi);
+			float y = std::cos(ySegment * ANGLE::pi);
+			float z = std::cos(xSegment * ANGLE::two_pi) * std::sin(ySegment * ANGLE::pi);
+
+			sphere->AddPoint({ x, y, z });
+			sphere->AddNormal({ x, y, z });
+			sphere->AddTexCoord({ xSegment, ySegment });
+		}
+	}
+
+	bool oddRow = false;
+	for (unsigned int y = 0; y < Y_SEGMENTS; ++y)
+	{
+		if (!oddRow)
+		{
+			for (unsigned int x = 0; x <= X_SEGMENTS; ++x)
+			{
+				sphere->AddIndex(y * (X_SEGMENTS + 1) + x);
+				sphere->AddIndex((y + 1) * (X_SEGMENTS + 1) + x);
+			}
+		}
+		else
+		{
+			for (int x = X_SEGMENTS; x >= 0; --x)
+			{
+				sphere->AddIndex((y + 1) * (X_SEGMENTS + 1) + x);
+				sphere->AddIndex(y * (X_SEGMENTS + 1) + x);
+			}
+		}
+		oddRow = !oddRow;
+	}
+
+	return sphere;
+}

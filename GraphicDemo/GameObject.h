@@ -7,6 +7,8 @@
 #include <Math/mat4.hpp>			// matrices for the transforms
 #include <set>						// texture paths container
 
+#include <assimp/material.h>		// material texture type | needed for helper function
+
 struct aiScene;
 struct aiNode;
 struct aiMesh;
@@ -52,6 +54,8 @@ public:
 	static GameObject* CreateCube(const vec3<float>& location,
 		const vec3<float>& rotation, float size);
 
+	static GameObject* CreateSphere(const vec3<float>& location);
+
 	static GameObject* LoadMeshFromFile(const std::string& filePath);
 	void			   ProcessNode(aiNode* node, const aiScene* scene);
 	Mesh3D*			   ProcessMesh(aiMesh* mesh, const aiScene* scene);
@@ -63,9 +67,6 @@ public:
 	void	   SetObjectType(ObjectType newObjectType) { objectType = newObjectType; }
 
 private:
-	void DrawTextured();
-	void DrawNonTextured();
-
 	ObjectType objectType = ObjectType::Textured;
 
 private:
@@ -78,4 +79,7 @@ private:
 
 	Transform  transform;
 	// Material material;
+
+	// Helper function that print material texture count per type.
+	void CheckMaterialTextureTypeExist(aiMaterial* material, aiTextureType type);
 };

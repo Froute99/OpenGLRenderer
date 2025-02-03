@@ -30,6 +30,9 @@
     <ClCompile Include="Skybox.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="TexturedPBRDemo.cpp">
+      <Filter>Demo\TexturedPBR</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -63,6 +66,9 @@
     <ClInclude Include="Object.h">
       <Filter>Objects</Filter>
     </ClInclude>
+    <ClInclude Include="TexturedPBRDemo.h">
+      <Filter>Demo\TexturedPBR</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Demo">
@@ -88,6 +94,9 @@
     </Filter>
     <Filter Include="Demo\PhongShading">
       <UniqueIdentifier>{d56e2b89-6e5e-4f8e-94a9-9889196c06f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Demo\TexturedPBR">
+      <UniqueIdentifier>{1b22f51b-6681-42eb-9fe3-aae88e3b03a8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -47,4 +47,5 @@ namespace MESH
 	Mesh3D	LoadFromFBX(const std::string& path);
 	Mesh3D* BuildCube(float size, vec3<float> color);
 	Mesh3D* BuildCube(float size, Color4f color = { 0.5f });
+	Mesh3D* BuildSphere();
 } // namespace MESH

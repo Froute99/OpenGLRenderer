@@ -14,9 +14,8 @@ uniform mat4 projection;
 
 void main()
 {
-    // WorldPos = vec3(model * vec4(aPos, 1.0));
-    // Normal = normalMatrix * aNormal;
     WorldPos = vec3(model * vec4(aPosition, 1.0));
+    // Normal = normalMatrix * aNormal;
     Normal = mat3(transpose(inverse(model))) * aNormal;
     TexCoords = aTexCoords;
 

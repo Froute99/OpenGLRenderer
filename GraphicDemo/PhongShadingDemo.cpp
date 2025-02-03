@@ -49,7 +49,7 @@ void PhongShadingDemo::Initialize()
 	glFrontFace(GL_CW);
 	glCullFace(GL_BACK);
 
-	const std::string& filename = "../assets/backpack/backpack.obj";
+	const std::string& filename = "../assets/Models/backpack.obj";
 	backpack = GameObject::LoadMeshFromFile(filename);
 
 	vec3<float> pos(0.0f, 0.0f, 5.0f);
@@ -58,7 +58,7 @@ void PhongShadingDemo::Initialize()
 	objectColor = { 1.0f, 0.5f, 0.31f };
 
 	lightPos = { 0.0f, 2.45f, 3.85f };
-	lightColor = { 10.0f, 10.0f, 10.0f };
+	lightColor = { 1.0f, 1.0f, 1.0f };
 
 	// uniform variable location
 	uniformModelLocation = glGetUniformLocation(shader.GetHandleToShader(), "model");
@@ -134,7 +134,8 @@ void PhongShadingDemo::Update(float dt)
 		// ==================================
 
 		Shader::UseShader(shader);
-		backpack->Rotate(backpackRotationSpeed * dt);
+		dt;
+		//backpack->Rotate(backpackRotationSpeed * dt);
 		const mat4<float>& Model = backpack->GetModelToWorld();
 		const mat4<float>& View = camera.BuildViewMatrix();
 		const mat4<float>& Projection = view.BuildProjectionMatrix();

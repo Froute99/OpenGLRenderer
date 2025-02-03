@@ -17,6 +17,7 @@
 #include "TransformParentDemo.h"
 #include "ComputeShaderDemo.h"
 #include "PBRdemo.h"
+#include "TexturedPBRDemo.h"
 
 bool Application::IsRunning() const
 {
@@ -38,8 +39,8 @@ void Application::Initialize()
 	isRunning = true;
 
 	demo[SHAPEDRAWING] = std::make_unique<PhongShadingDemo>(window);
-	demo[PBRDEMO] = std::make_unique<PBRDemo>(window);
-	//demo[TEXTUREDRAWING] = std::make_unique<TextureDrawingDemo>(window);
+	demo[PBR] = std::make_unique<PBRDemo>(window);
+	demo[TEXTUREDPBR] = std::make_unique<TexturedPBRDemo>(window);
 	//demo[ANIMATION] = std::make_unique<AnimationDemo>(window);
 	//demo[TRANSFORMPARENTDEMO] = std::make_unique<TransformParentDemo>(window);
 	//demo[COMPUTESHADERDEMO] = std::make_unique<ComputeShaderDemo>(window);
