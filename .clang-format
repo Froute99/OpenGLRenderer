@@ -4,13 +4,10 @@ BasedOnStyle: LLVM
 AccessModifierOffset: -4
 AlignAfterOpenBracket: DontAlign
 AlignConsecutiveDeclarations: true
-AlignEscapedNewlines: Left
-AlignOperands: DontAlign
+AlignEscapedNewlines: DontAlign
+AlignOperands: AlignAfterOperator
 AlignTrailingComments: Always
-AllowShortBlocksOnASingleLine: Never
-AllowShortEnumsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: InlineOnly
-AllowShortLambdasOnASingleLine: All
 BraceWrapping:
   AfterCaseLabel: true
   AfterClass: true
@@ -18,7 +15,6 @@ BraceWrapping:
   AfterEnum: true
   AfterFunction: true
   AfterNamespace: true
-  AfterObjCDeclaration: true
   AfterStruct: true
   AfterUnion: true
   AfterExternBlock: true
@@ -38,10 +34,12 @@ EmptyLineBeforeAccessModifier: LogicalBlock
 IndentCaseBlocks: false
 IndentCaseLabels: true
 IndentPPDirectives: BeforeHash
-IndentWidth: 4
 NamespaceIndentation: All
 PointerAlignment: Left
 SortIncludes: false
 SpaceBeforeCaseColon: false
 TabWidth: 4
 UseTab: Always
+IndentWidth: 4
+ColumnLimit: 0
+CommentPragmas: '^[^ ]'   # preventing comment indent

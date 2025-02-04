@@ -3,7 +3,7 @@ out vec4 FragColor;
 
 in vec3 vertexNormal;
 in vec3 fragPos;
-in vec2 TexCoords;
+// in vec2 TexCoords;
 
 uniform vec3 objectColor;
 uniform vec3 lightPosition;

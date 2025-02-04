@@ -11,7 +11,7 @@ Mesh3D MESH::LoadFromFBX(const std::string& filePath)
 
 	Assimp::Importer importer;
 
-	const aiScene* scene = importer.ReadFile(filePath, flag);
+	const aiScene*	   scene = importer.ReadFile(filePath, flag);
 	const unsigned int isFailedToLoad = scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE;
 	if (isFailedToLoad)
 	{
@@ -51,23 +51,23 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	Mesh3D* cube = new Mesh3D();
 
 	vec3<float> center;
-	float halfLength = size / 2.f;
-	float r = center.x + halfLength; // right
-	float l = center.x - halfLength; // left
-	float t = center.y + halfLength; // top
-	float b = center.y - halfLength; // bottom
-	float p = center.z + halfLength; // positive (bigger z coordinate)
-	float n = center.z - halfLength; // negative (smaller z coordinate)
+	float		halfLength = size / 2.f;
+	float		r = center.x + halfLength; // right
+	float		l = center.x - halfLength; // left
+	float		t = center.y + halfLength; // top
+	float		b = center.y - halfLength; // bottom
+	float		f = center.z + halfLength; // far (bigger z coordinate)
+	float		n = center.z - halfLength; // near (smaller z coordinate)
 
 	vec3<float> v0 = { r, t, n };
 	vec3<float> v1 = { l, t, n };
 	vec3<float> v2 = { l, b, n };
 	vec3<float> v3 = { r, b, n };
 
-	vec3<float> v4 = { r, t, p };
-	vec3<float> v5 = { l, t, p };
-	vec3<float> v6 = { l, b, p };
-	vec3<float> v7 = { r, b, p };
+	vec3<float> v4 = { r, t, f };
+	vec3<float> v5 = { l, t, f };
+	vec3<float> v6 = { l, b, f };
+	vec3<float> v7 = { r, b, f };
 
 	// front face
 	cube->AddPoint(v0);
@@ -159,11 +159,28 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 
 Mesh3D* MESH::BuildSphere()
 {
+	/* This method create sphere by completing two hemisphere
+	 * Hemisphere which look from top(eye +Y to -Y)
+	 * Each loop makes a circle has vertices of SEGMENTS
+	 * 
+	 * Indices consist like this:
+	 * (in 16 16 segments sphere)
+	 * 0    *    17
+	 * 1   ***   18
+	 *    *****
+	 * 2 ******* 19
+	 * 
+	 * Not sure, but trinangle strip and CCW winding will draw triangle like this
+	 * 0 1 17, 17 1 18
+	 * 1 2 18, 18 2 19
+	 * 
+	 * So, this sphere drawing 
+	 */
 	Mesh3D* sphere = new Mesh3D();
 	sphere->SetShapePattern(ShapePattern::TriangleStrip);
 
-	const unsigned int X_SEGMENTS = 64;
-	const unsigned int Y_SEGMENTS = 64;
+	const unsigned int X_SEGMENTS = 16;
+	const unsigned int Y_SEGMENTS = 16;
 
 	for (unsigned int i = 0; i <= X_SEGMENTS; ++i)
 	{
@@ -173,13 +190,16 @@ Mesh3D* MESH::BuildSphere()
 			float ySegment = (float)j / (float)Y_SEGMENTS;
 			float x = std::cos(xSegment * ANGLE::two_pi) * std::sin(ySegment * ANGLE::pi);
 			float y = std::cos(ySegment * ANGLE::pi);
-			float z = std::cos(xSegment * ANGLE::two_pi) * std::sin(ySegment * ANGLE::pi);
+			float z = std::sin(xSegment * ANGLE::two_pi) * std::sin(ySegment * ANGLE::pi);
 
 			sphere->AddPoint({ x, y, z });
+			std::cout << x << ", " << y << ", " << z << std::endl;
 			sphere->AddNormal({ x, y, z });
 			sphere->AddTexCoord({ xSegment, ySegment });
 		}
 	}
+
+	std::cout << "===================================\n";
 
 	bool oddRow = false;
 	for (unsigned int y = 0; y < Y_SEGMENTS; ++y)
@@ -190,6 +210,7 @@ Mesh3D* MESH::BuildSphere()
 			{
 				sphere->AddIndex(y * (X_SEGMENTS + 1) + x);
 				sphere->AddIndex((y + 1) * (X_SEGMENTS + 1) + x);
+				std::cout << y * (X_SEGMENTS + 1) + x << ", " << (y + 1) * (X_SEGMENTS + 1) + x << std::endl;
 			}
 		}
 		else

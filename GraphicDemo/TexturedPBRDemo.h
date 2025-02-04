@@ -56,8 +56,8 @@ private:
 	unsigned int lightColLocation;
 	//vec3<float>	 lightPos[4];
 	//vec3<float>	 lightCol[4];
-	vec3<float>	 lightPos;
-	vec3<float>	 lightCol;
+	vec3<float> lightPos;
+	vec3<float> lightCol;
 
 	unsigned int camPosLocation;
 
@@ -71,7 +71,13 @@ private:
 	bool		 hdr = true;
 	float		 exposure = 1.0f;
 
-	void RenderQuad();
+	void		 RenderQuad();
 	unsigned int quadVAO = 0;
 	unsigned int quadVBO;
+
+	// IMGui
+	float lightIntensity = 1.f;
+
+	Shader equirectangularMappingShader;
+
 };

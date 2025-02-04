@@ -33,6 +33,9 @@
     <ClCompile Include="TexturedPBRDemo.cpp">
       <Filter>Demo\TexturedPBR</Filter>
     </ClCompile>
+    <ClCompile Include="TestStage.cpp">
+      <Filter>Demo\Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -69,6 +72,9 @@
     <ClInclude Include="TexturedPBRDemo.h">
       <Filter>Demo\TexturedPBR</Filter>
     </ClInclude>
+    <ClInclude Include="TestStage.h">
+      <Filter>Demo\Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Demo">
@@ -97,6 +103,9 @@
     </Filter>
     <Filter Include="Demo\TexturedPBR">
       <UniqueIdentifier>{1b22f51b-6681-42eb-9fe3-aae88e3b03a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Demo\Test">
+      <UniqueIdentifier>{07984a7f-8356-4014-9ef6-95fc04f08217}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -52,12 +52,11 @@ void PhongShadingDemo::Initialize()
 	const std::string& filename = "../assets/Models/backpack.obj";
 	backpack = GameObject::LoadMeshFromFile(filename);
 
-	vec3<float> pos(0.0f, 0.0f, 5.0f);
-	backpackTranslation = pos;
-	backpack->Move(pos);
+	backpack->Move({ 2.0f, 0.0f, 6.5f });
+	backpackTranslation = backpack->GetTransform()->GetTranslation();
 	objectColor = { 1.0f, 0.5f, 0.31f };
 
-	lightPos = { 0.0f, 2.45f, 3.85f };
+	lightPos = { 0.0f, 2.45f, 4.85f };
 	lightColor = { 1.0f, 1.0f, 1.0f };
 
 	// uniform variable location
@@ -77,7 +76,6 @@ void PhongShadingDemo::Initialize()
 	// Skybox
 	// ==================================
 	skybox = new Skybox();
-
 
 	// HDR
 	// floating point framebuffer
@@ -134,8 +132,7 @@ void PhongShadingDemo::Update(float dt)
 		// ==================================
 
 		Shader::UseShader(shader);
-		dt;
-		//backpack->Rotate(backpackRotationSpeed * dt);
+		backpack->Rotate(backpackRotationSpeed * dt);
 		const mat4<float>& Model = backpack->GetModelToWorld();
 		const mat4<float>& View = camera.BuildViewMatrix();
 		const mat4<float>& Projection = view.BuildProjectionMatrix();

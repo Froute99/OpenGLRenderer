@@ -263,10 +263,6 @@ void PBRDemo::ImguiHelper()
 		ImGui::Begin("PBR Properties");
 		ImGui::SetWindowCollapsed(false);
 
-		// uniform vec3  albedo;
-		// uniform float roughness;
-		// uniform float ao;
-		// uniform float metallic;
 		ImGui::NewLine();
 		ImGui::ColorEdit3("albedo", &sphereColor.x);
 

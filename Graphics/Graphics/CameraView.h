@@ -30,6 +30,7 @@ public:
 	constexpr float GetZoom() const noexcept { return zoom; }
 	float			GetAspectRatio() const noexcept { return aspectRatio; }
 
+	// Perspective
 	mat4<float> BuildProjectionMatrix() const noexcept;
 
 private:

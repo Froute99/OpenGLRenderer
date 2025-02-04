@@ -16,10 +16,10 @@ class Object;
 class GameObject;
 struct aiScene;
 
-class PhongShadingDemo : public Demo
+class TestStage : public Demo
 {
 public:
-	explicit PhongShadingDemo(OpenGLWindow& window)
+	explicit TestStage(OpenGLWindow& window)
 		: Demo(window) { Initialize(); }
 
 	void Initialize() override final;
@@ -38,12 +38,9 @@ public:
 private:
 	vec3<float> moveSpeed;
 
-	//Object* cube;
-	GameObject* backpack;
-	Object* skybox;
+	GameObject* cube;
 
 	Shader shader;
-	Shader skyboxShader;
 
 	GLuint uniformModelLocation;
 	GLuint uniformViewLocation;
@@ -62,21 +59,6 @@ private:
 	vec3<float> lightColor;
 
 	// IMGui
-	vec3<float> backpackTranslation;
-	vec3<float> backpackRotationOffset;
-	vec3<float> backpackRotationSpeed{ 0.f, 1.f, 0.f };
-
 	bool showObjectWindow = true;
 	bool showLightWindow = true;
-
-	// HDR
-	Shader		 hdrShader;
-	unsigned int hdrFBO;	  // framebuffer object handle for HDR
-	unsigned int colorBuffer; // colorbuffer for HDR
-	bool		 hdr = true;
-	float		 exposure = 1.0f;
-
-	void		 RenderQuad();
-	unsigned int quadVAO = 0;
-	unsigned int quadVBO;
 };

@@ -175,6 +175,7 @@
     <ClCompile Include="PhongShadingDemo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="TestStage.cpp" />
     <ClCompile Include="TexturedPBRDemo.cpp" />
     <ClCompile Include="TextureDrawingDemo.cpp" />
     <ClCompile Include="TransformParentDemo.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="PBRdemo.h" />
     <ClInclude Include="PhongShadingDemo.h" />
     <ClInclude Include="Skybox.h" />
+    <ClInclude Include="TestStage.h" />
     <ClInclude Include="TexturedPBRDemo.h" />
     <ClInclude Include="TextureDrawingDemo.h" />
     <ClInclude Include="TransformParentDemo.h" />
