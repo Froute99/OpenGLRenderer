@@ -1,8 +1,9 @@
 #version 330 core
-out vec4 FragColor;
-in vec2 TexCoords;
 in vec3 WorldPos;
 in vec3 Normal;
+in vec2 TexCoords;
+
+out vec4 FragColor;
 
 // material parameters
 uniform sampler2D albedoMap;
@@ -27,19 +28,21 @@ const float PI = 3.14159265359;
 // technique somewhere later in the normal mapping tutorial.
 vec3 getNormalFromMap()
 {
-    vec3 tangentNormal = texture(normalMap, TexCoords).xyz * 2.0 - 1.0;
+    // vec3 tangentNormal = texture(normalMap, TexCoords).xyz * 2.0 - 1.0;
 
-    vec3 Q1  = dFdx(WorldPos);
-    vec3 Q2  = dFdy(WorldPos);
-    vec2 st1 = dFdx(TexCoords);
-    vec2 st2 = dFdy(TexCoords);
+    // vec3 Q1  = dFdx(WorldPos);
+    // vec3 Q2  = dFdy(WorldPos);
+    // vec2 st1 = dFdx(TexCoords);
+    // vec2 st2 = dFdy(TexCoords);
 
-    vec3 N   = normalize(Normal);
-    vec3 T  = normalize(Q1*st2.t - Q2*st1.t);
-    vec3 B  = -normalize(cross(N, T));
-    mat3 TBN = mat3(T, B, N);
+    // vec3 N   = normalize(Normal);
+    // vec3 T  = normalize(Q1*st2.t - Q2*st1.t);
+    // vec3 B  = -normalize(cross(N, T));
+    // mat3 TBN = mat3(T, B, N);
 
-    return normalize(TBN * tangentNormal);
+    // return normalize(TBN * tangentNormal);
+    vec3 N = normalize(Normal);
+    return N;
 }
 // ----------------------------------------------------------------------------
 float DistributionGGX(vec3 N, vec3 H, float roughness)
@@ -156,7 +159,7 @@ void main()
     // HDR tonemapping
     // color = color / (color + vec3(1.0));
     // gamma correct
-    color = pow(color, vec3(1.0/2.2));
+    color = pow(color, vec3(1.0 / 2.2));
 
     FragColor = vec4(color, 1.0);
 }

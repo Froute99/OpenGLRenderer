@@ -74,4 +74,7 @@ private:
 	void RenderQuad();
 	unsigned int quadVAO = 0;
 	unsigned int quadVBO;
+
+	// IMGui
+	float lightIntensity = 1.f;
 };

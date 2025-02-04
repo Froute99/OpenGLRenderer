@@ -54,8 +54,8 @@ protected:
 	OpenGLWindow window;
 	Camera		 camera;
 	CameraView	 view;
-	const int	 width = 800;
-	const int	 height = 800;
+	const int	 width = 1000;
+	const int	 height = 1000;
 
 	int											demoIndex = 0;
 	std::array<std::unique_ptr<Demo>, DEMOSIZE> demo;

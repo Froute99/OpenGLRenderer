@@ -162,8 +162,8 @@ Mesh3D* MESH::BuildSphere()
 	Mesh3D* sphere = new Mesh3D();
 	sphere->SetShapePattern(ShapePattern::TriangleStrip);
 
-	const unsigned int X_SEGMENTS = 64;
-	const unsigned int Y_SEGMENTS = 64;
+	const unsigned int X_SEGMENTS = 128;
+	const unsigned int Y_SEGMENTS = 128;
 
 	for (unsigned int i = 0; i <= X_SEGMENTS; ++i)
 	{
@@ -173,7 +173,7 @@ Mesh3D* MESH::BuildSphere()
 			float ySegment = (float)j / (float)Y_SEGMENTS;
 			float x = std::cos(xSegment * ANGLE::two_pi) * std::sin(ySegment * ANGLE::pi);
 			float y = std::cos(ySegment * ANGLE::pi);
-			float z = std::cos(xSegment * ANGLE::two_pi) * std::sin(ySegment * ANGLE::pi);
+			float z = std::sin(xSegment * ANGLE::two_pi) * std::sin(ySegment * ANGLE::pi);
 
 			sphere->AddPoint({ x, y, z });
 			sphere->AddNormal({ x, y, z });

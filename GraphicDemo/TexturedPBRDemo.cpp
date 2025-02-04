@@ -62,10 +62,6 @@ void TexturedPBRDemo::Initialize()
 	backpack->Move({ 0.f, 0.f, 5.0f });
 
 	sphere = GameObject::CreateSphere({ 0, 0, 3 });
-	//const std::string& spherePath = "../assets/sphere.fbx";
-	//sphere = GameObject::LoadMeshFromFile(spherePath);
-	//sphere->SetObjectType(ObjectType::NonTextured);
-	//sphere->Move({ 0.0f, 0.0f, 5.0f });
 
 	uniformModelLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "model");
 	uniformViewLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "view");
@@ -108,8 +104,8 @@ void TexturedPBRDemo::Initialize()
 		std::cout << "There's no uniform variable named \"lightColors\"" << std::endl;
 	}
 
-	lightPos = { 0.f, 3.f, 7.5f };
-	lightCol = { 100.f, 100.f, 100.f };
+	lightPos = { 1.12f, 1.04f, 3.44f };
+	lightCol = { 10.f, 10.f, 10.f };
 
 
 	//lightPos[0] = { 0.00f, 0.4f, 4.0f };
@@ -146,7 +142,8 @@ void TexturedPBRDemo::Update(float /*dt*/)
 
 		// lights
 		glUniform3fv(lightPosLocation, 1, &lightPos.x);
-		glUniform3fv(lightColLocation, 1, &lightCol.x);
+		vec3<float> uniformLight = lightCol * lightIntensity;
+		glUniform3fv(lightColLocation, 1, &uniformLight.x);
 
 		//glUniform1f(gammaLocation, gamma); // whether perform a gamma correction or not
 
@@ -278,10 +275,6 @@ void TexturedPBRDemo::ImguiHelper()
 		ImGui::Begin("PBR Properties");
 		ImGui::SetWindowCollapsed(false);
 
-		// uniform vec3  albedo;
-		// uniform float roughness;
-		// uniform float ao;
-		// uniform float metallic;
 		ImGui::NewLine();
 
 		ImGui::Checkbox("Gamma Correction", &shouldGammaCorrected);
@@ -300,6 +293,9 @@ void TexturedPBRDemo::ImguiHelper()
 		ImGui::NewLine();
 		ImGui::DragFloat3("Light Position", &lightPos.x, 0.02f);
 		ImGui::ColorEdit3("Light Color", &lightCol.x);
+
+		ImGui::NewLine();
+		ImGui::DragFloat("Light Intensity", &lightIntensity, 0.2f, 1.f, 100.f);
 
 
 		//ImGui::DragFloat3("Light 1 Position", &lightPos[0].x, 0.02f);

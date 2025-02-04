@@ -61,7 +61,7 @@ private:
 	vec3<float> lightPos;
 	vec3<float> lightColor;
 
-	// imgui
+	// IMGui
 	vec3<float> backpackTranslation;
 	vec3<float> backpackRotationOffset;
 	vec3<float> backpackRotationSpeed{ 0.f, 1.f, 0.f };
