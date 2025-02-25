@@ -41,6 +41,7 @@ public:
 	//	return vec3<float>{ cos_value * v.x - sin_value * v.y, sin_value * v.x + cos_value * v.y };
 	//}
 
+	// LookAt, eye space, camera space, view space
 	mat4<float> BuildViewMatrix() const noexcept;
 
 private:

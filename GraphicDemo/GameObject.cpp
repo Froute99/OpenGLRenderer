@@ -35,7 +35,7 @@ GameObject* GameObject::CreateCube(const vec3<float>& location, const vec3<float
 	GameObject* cube = new GameObject(location, rotation, size);
 
 	Mesh3D*				cubeMesh = MESH::BuildCube(1.f);
-	VerticesDescription layout{ VerticesDescription::Type::Position };
+	VerticesDescription layout{ VerticesDescription::Type::Position, VerticesDescription::Type::Normal };
 	VertexObject*		vertexObject = new VertexObject(cubeMesh, layout);
 	cube->AddMesh(cubeMesh);
 	cube->vertexObject.push_back(vertexObject);
@@ -175,37 +175,15 @@ Mesh3D* GameObject::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 			texturePaths.insert(texturePath);
 		}
 
-		CheckMaterialTextureTypeExist(material, aiTextureType_DIFFUSE);
-		CheckMaterialTextureTypeExist(material, aiTextureType_BASE_COLOR);
-		CheckMaterialTextureTypeExist(material, aiTextureType_SPECULAR);
-		CheckMaterialTextureTypeExist(material, aiTextureType_METALNESS);
-		CheckMaterialTextureTypeExist(material, aiTextureType_DIFFUSE_ROUGHNESS);
-		CheckMaterialTextureTypeExist(material, aiTextureType_NORMALS);
-		CheckMaterialTextureTypeExist(material, aiTextureType_HEIGHT);
-		CheckMaterialTextureTypeExist(material, aiTextureType_AMBIENT);
-		CheckMaterialTextureTypeExist(material, aiTextureType_AMBIENT_OCCLUSION);
-		//std::cout << "BaseColor: " << material->GetTextureCount(aiTextureType_BASE_COLOR) << std::endl;
-		//std::cout << "Diffuse: " << material->GetTextureCount(aiTextureType_DIFFUSE) << std::endl;
-		//std::cout << "Specular: " << material->GetTextureCount(aiTextureType_SPECULAR) << std::endl;
-		//std::cout << "Metallic: " << material->GetTextureCount(aiTextureType_METALNESS) << std::endl;
-		//std::cout << "Roughness: " << material->GetTextureCount(aiTextureType_DIFFUSE_ROUGHNESS) << std::endl;
-		//std::cout << "Normal: " << material->GetTextureCount(aiTextureType_NORMALS) << std::endl;
-		//std::cout << "Height: " << material->GetTextureCount(aiTextureType_HEIGHT) << std::endl;
-		//std::cout << "A: " << material->GetTextureCount(aiTextureType_AMBIENT) << std::endl;
-		//std::cout << "AO: " << material->GetTextureCount(aiTextureType_AMBIENT_OCCLUSION) << std::endl;
-		////std::cout << "Emissive: " << material->GetTextureCount(aiTextureType_EMISSIVE) << std::endl;
-		////std::cout << "Displacement: " << material->GetTextureCount(aiTextureType_DISPLACEMENT) << std::endl;
-		////std::cout << "Reflection: " << material->GetTextureCount(aiTextureType_REFLECTION) << std::endl;
-		////std::cout << "Transmission: " << material->GetTextureCount(aiTextureType_TRANSMISSION) << std::endl;
-		////std::cout << "Shininess: " << material->GetTextureCount(aiTextureType_SHININESS) << std::endl;
-		////std::cout << "LightMap: " << material->GetTextureCount(aiTextureType_LIGHTMAP) << std::endl;
-		////std::cout << "CLEARCOAT: " << material->GetTextureCount(aiTextureType_CLEARCOAT) << std::endl;
-		////std::cout << "NormalCamera: " << material->GetTextureCount(aiTextureType_NORMAL_CAMERA) << std::endl;
-		////std::cout << "SHEEN: " << material->GetTextureCount(aiTextureType_SHEEN) << std::endl;
-		////std::cout << "Opacity: " << material->GetTextureCount(aiTextureType_OPACITY) << std::endl;
-		//std::cout << "Unknown: " << material->GetTextureCount(aiTextureType_UNKNOWN) << std::endl;
-		//std::cout << "None: " << material->GetTextureCount(aiTextureType_NONE) << std::endl;
-		
+		//CheckMaterialTextureTypeExist(material, aiTextureType_DIFFUSE);
+		//CheckMaterialTextureTypeExist(material, aiTextureType_BASE_COLOR);
+		//CheckMaterialTextureTypeExist(material, aiTextureType_SPECULAR);
+		//CheckMaterialTextureTypeExist(material, aiTextureType_METALNESS);
+		//CheckMaterialTextureTypeExist(material, aiTextureType_DIFFUSE_ROUGHNESS);
+		//CheckMaterialTextureTypeExist(material, aiTextureType_NORMALS);
+		//CheckMaterialTextureTypeExist(material, aiTextureType_HEIGHT);
+		//CheckMaterialTextureTypeExist(material, aiTextureType_AMBIENT);
+		//CheckMaterialTextureTypeExist(material, aiTextureType_AMBIENT_OCCLUSION);
 
 		// for (unsigned int i = 0; i < material->GetTextureCount(aiTextureType_SPECULAR); ++i)
 		//{
