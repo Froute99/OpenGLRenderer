@@ -29,8 +29,7 @@ class GameObject : public Object
 {
 public:
 	GameObject() = default;
-	GameObject(const vec3<float>& location,
-		const vec3<float>& rotation, float scale);
+	GameObject(const vec3<float>& location, const vec3<float>& rotation, float scale);
 	~GameObject();
 
 	// void Initialize(Mesh newMesh, VertexObject* newVertices);
@@ -77,7 +76,6 @@ private:
 	std::set<std::string> texturePaths;
 	std::vector<Texture>  textures;
 
-	Transform  transform;
 	// Material material;
 
 	// Helper function that print material texture count per type.

@@ -12,6 +12,7 @@ public:
 
 	void Move(const vec3<float>& v) noexcept { transform.SetTranslation(transform.GetTranslation() + v); }
 	void Rotate(const vec3<float>& v) noexcept { transform.SetRotation(transform.GetRotation() + v); }
+	void Scale(const float s) noexcept { transform.SetScale({ s, s, s }); }
 
 private:
 	Transform transform;

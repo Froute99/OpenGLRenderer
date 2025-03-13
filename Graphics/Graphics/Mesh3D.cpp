@@ -71,8 +71,8 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 
 	// front face
 	cube->AddPoint(v0);
-	cube->AddPoint(v1);
 	cube->AddPoint(v2);
+	cube->AddPoint(v1);
 	cube->AddPoint(v3);
 
 	cube->AddNormal({ 0.f, 0.f, -1.f });
@@ -81,13 +81,13 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	cube->AddNormal({ 0.f, 0.f, -1.f });
 
 	// indices are also ccw, need to change into cw
-	cube->AddIndices({ 3, 1, 2 });
-	cube->AddIndices({ 3, 0, 1 });
+	cube->AddIndices({ 0, 1, 2 });
+	cube->AddIndices({ 0, 3, 1 });
 
 	// right face
 	cube->AddPoint(v4);
-	cube->AddPoint(v0);
 	cube->AddPoint(v3);
+	cube->AddPoint(v0);
 	cube->AddPoint(v7);
 
 	cube->AddNormal({ 1.f, 0.f, 0.f });
@@ -96,13 +96,13 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	cube->AddNormal({ 1.f, 0.f, 0.f });
 
 	cube->AddIndices({ 4, 5, 6 });
-	cube->AddIndices({ 4, 6, 7 });
+	cube->AddIndices({ 4, 7, 5 });
 
 	// up face
-	cube->AddPoint(v0);
 	cube->AddPoint(v4);
-	cube->AddPoint(v5);
 	cube->AddPoint(v1);
+	cube->AddPoint(v5);
+	cube->AddPoint(v0);
 
 	cube->AddNormal({ 0.f, 1.f, 0.f });
 	cube->AddNormal({ 0.f, 1.f, 0.f });
@@ -110,12 +110,12 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	cube->AddNormal({ 0.f, 1.f, 0.f });
 
 	cube->AddIndices({ 8, 9, 10 });
-	cube->AddIndices({ 8, 10, 11 });
+	cube->AddIndices({ 8, 11, 9 });
 
 	// left face
 	cube->AddPoint(v1);
-	cube->AddPoint(v5);
 	cube->AddPoint(v6);
+	cube->AddPoint(v5);
 	cube->AddPoint(v2);
 
 	cube->AddNormal({ -1.f, 0.f, 0.f });
@@ -123,27 +123,27 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	cube->AddNormal({ -1.f, 0.f, 0.f });
 	cube->AddNormal({ -1.f, 0.f, 0.f });
 
-	cube->AddIndices({ 12, 14, 15 });
 	cube->AddIndices({ 12, 13, 14 });
+	cube->AddIndices({ 12, 15, 13 });
 
 	// bottom face
-	cube->AddPoint(v2);
-	cube->AddPoint(v6);
-	cube->AddPoint(v7);
 	cube->AddPoint(v3);
+	cube->AddPoint(v6);
+	cube->AddPoint(v2);
+	cube->AddPoint(v7);
 
 	cube->AddNormal({ 0.f, -1.f, 0.f });
 	cube->AddNormal({ 0.f, -1.f, 0.f });
 	cube->AddNormal({ 0.f, -1.f, 0.f });
 	cube->AddNormal({ 0.f, -1.f, 0.f });
 
+	cube->AddIndices({ 16, 17, 18 });
 	cube->AddIndices({ 16, 19, 17 });
-	cube->AddIndices({ 17, 19, 18 });
 
 	// back face
 	cube->AddPoint(v5);
-	cube->AddPoint(v4);
 	cube->AddPoint(v7);
+	cube->AddPoint(v4);
 	cube->AddPoint(v6);
 
 	cube->AddNormal({ 0.f, 0.f, 1.f });
@@ -151,8 +151,8 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	cube->AddNormal({ 0.f, 0.f, 1.f });
 	cube->AddNormal({ 0.f, 0.f, 1.f });
 
-	cube->AddIndices({ 20, 21, 23 });
-	cube->AddIndices({ 21, 22, 23 });
+	cube->AddIndices({ 20, 21, 22 });
+	cube->AddIndices({ 20, 23, 21 });
 
 	return cube;
 }

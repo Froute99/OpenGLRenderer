@@ -14,9 +14,9 @@
 
 GameObject::GameObject(const vec3<float>& location, const vec3<float>& rotation, float scale)
 {
-	transform.SetTranslation(location);
-	transform.SetRotation(rotation);
-	transform.SetScale(scale);
+	Move(location);
+	Rotate(rotation);
+	Scale(scale);
 }
 
 GameObject::~GameObject()
@@ -62,7 +62,9 @@ GameObject* GameObject::CreateSphere(const vec3<float>& location)
 GameObject* GameObject::LoadMeshFromFile(const std::string& filePath)
 {
 	std::cout << "Start to load file: " << filePath << std::endl;
-	unsigned int	 flag = aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices;
+	unsigned int	 flag = aiProcess_MakeLeftHanded
+		| aiProcess_Triangulate | aiProcess_GenSmoothNormals
+		| aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices;
 	Assimp::Importer importer;
 
 	const aiScene*	   scene = importer.ReadFile(filePath, flag);
@@ -115,11 +117,11 @@ Mesh3D* GameObject::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 
 	for (unsigned int i = 0; i < mesh->mNumVertices; ++i)
 	{
-		result->AddPoint({ mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z });
+		result->AddPoint({ mesh->mVertices[i].x, mesh->mVertices[i].y, -mesh->mVertices[i].z });
 
 		if (mesh->HasNormals())
 		{
-			result->AddNormal({ mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z });
+			result->AddNormal({ mesh->mNormals[i].x, mesh->mNormals[i].y, -mesh->mNormals[i].z });
 		}
 
 		if (mesh->mTextureCoords[0])
