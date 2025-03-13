@@ -36,13 +36,14 @@ float DistributionGGX(vec3 N, vec3 H, float roughness)
     return nom / denom;
 }
 // schlick-beckmann model + smith model = schlick-ggx model
-float GeometrySchlickGGX(float NdotV, float roughness)
+// this function name should be GeometrySchlickBeckmann
+// float GeometrySchlickGGX(float NdotV, float roughness)
+float GeometrySchlickBeckmann(float NdotX, float roughness)     // X is either V or L
 {
-    float r = (roughness + 1.0);
-    float k = (r * r) / 8.0;
+    float k = (roughness * roughness) / 2;
 
-    float nom   = NdotV;
-    float denom = NdotV * (1.0 - k) + k;
+    float nom   = NdotX;
+    float denom = NdotX * (1.0 - k) + k;
 
     return nom / denom;
 }
@@ -51,14 +52,15 @@ float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
 {
     float NdotV = max(dot(N, V), 0.0);
     float NdotL = max(dot(N, L), 0.0);
-    float ggx2 = GeometrySchlickGGX(NdotV, roughness);
-    float ggx1 = GeometrySchlickGGX(NdotL, roughness);
+    float ggx2 = GeometrySchlickBeckmann(NdotV, roughness);
+    float ggx1 = GeometrySchlickBeckmann(NdotL, roughness);
 
     return ggx1 * ggx2;
 }
-// fresnel function
-vec3 fresnelSchlick(float cosTheta, vec3 F0)
+
+vec3 FresnelSchlick(float cosTheta, vec3 F0)
 {
+    // clamp using: to prevent black spot.
     return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
 
@@ -69,12 +71,13 @@ void main()
 
     // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0
     // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)
-
+    // TODO: in cases of metal, normal incidence is similar to RGB triplet, of course, there is some exceptions but mostly, very similar.
+    // so, maybe saving these common material's normal incidence somewhere, and can be chosen in the fly.
     vec3 F0 = vec3(0.04);
     F0 = mix(F0, albedo, metallic);
 
     // reflectance equation
-    vec3 Lo = vec3(0.0);
+    vec3 lightOutgoing = vec3(0.0);
     for (int i = 0; i < 4; ++i) 
     {
         // calculate per-light radiance
@@ -86,13 +89,14 @@ void main()
 
         // Cook-Torrance BRDF
         float D = DistributionGGX(N, H, roughness);
-        float G   = GeometrySmith(N, V, L, roughness);
-        vec3 F    = fresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
+        float G = GeometrySmith(N, V, L, roughness);
+        // clamp part represent F0, and this means the base reflectivity of surface. And that is between 0 and 1.
+        // i'm quite sure that HdotV won't over 1.0, but using clamp for sure.
+        vec3 F = FresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
 
-        vec3 numerator    = D * G * F;
+        vec3 numerator = D * G * F;
         float NdotV = max(dot(N, V), 0.0);
         float NdotL = max(dot(N, L), 0.0);
-
         float denominator = 4.0 * NdotV * NdotL + 0.0001; // + 0.0001 to prevent divide by zero
         vec3 specular = numerator / denominator;
         
@@ -107,18 +111,14 @@ void main()
         // have no diffuse light).
         kD *= 1.0 - metallic;	  
 
-        // scale light by NdotL
-        // float NdotL = max(dot(N, L), 0.0);
-
         // add to outgoing radiance Lo
-        Lo += (kD * albedo / PI + specular) * radiance * NdotL;  // note that we already multiplied the BRDF by the Fresnel (kS) so we won't multiply by kS again
+        lightOutgoing += (kD * albedo / PI + specular) * radiance * NdotL;  // note that we already multiplied the BRDF by the Fresnel (kS) so we won't multiply by kS again
     }   
     
-    // ambient lighting (note that the next IBL tutorial will replace 
-    // this ambient lighting with environment lighting).
+    // this ambient light will be changed when IBL is implemented.
     vec3 ambient = vec3(0.03) * albedo * ao;
 
-    vec3 color = ambient + Lo;
+    vec3 color = ambient + lightOutgoing;
 
     // HDR tonemapping
     // color = color / (color + vec3(1.0));
