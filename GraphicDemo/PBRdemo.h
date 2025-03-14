@@ -55,10 +55,6 @@ private:
 
 	unsigned int camPosLocation;
 
-	unsigned int gammaLocation;
-	float		 gamma = 1.0f;
-	bool		 shouldGammaCorrected = false;
-
 	Shader		 hdrShader;
 	unsigned int hdrFBO;	  // framebuffer object handle for HDR
 	unsigned int colorBuffer; // colorbuffer for HDR
@@ -68,4 +64,7 @@ private:
 	void RenderQuad();
 	unsigned int quadVAO = 0;
 	unsigned int quadVBO;
+
+	int				  surfaceIndex = 0;
+	const char* const surfacesList[6] = { "Plastic", "Glass", "Diamond", "Iron", "Copper", "Gold" };
 };

@@ -179,8 +179,8 @@ Mesh3D* MESH::BuildSphere()
 	Mesh3D* sphere = new Mesh3D();
 	sphere->SetShapePattern(ShapePattern::TriangleStrip);
 
-	const unsigned int X_SEGMENTS = 16;
-	const unsigned int Y_SEGMENTS = 16;
+	const unsigned int X_SEGMENTS = 32;
+	const unsigned int Y_SEGMENTS = 32;
 
 	for (unsigned int i = 0; i <= X_SEGMENTS; ++i)
 	{
@@ -193,13 +193,13 @@ Mesh3D* MESH::BuildSphere()
 			float z = std::sin(xSegment * ANGLE::two_pi) * std::sin(ySegment * ANGLE::pi);
 
 			sphere->AddPoint({ x, y, z });
-			std::cout << x << ", " << y << ", " << z << std::endl;
+			//std::cout << x << ", " << y << ", " << z << std::endl;
 			sphere->AddNormal({ x, y, z });
 			sphere->AddTexCoord({ xSegment, ySegment });
 		}
 	}
 
-	std::cout << "===================================\n";
+	//std::cout << "===================================\n";
 
 	bool oddRow = false;
 	for (unsigned int y = 0; y < Y_SEGMENTS; ++y)
@@ -210,7 +210,7 @@ Mesh3D* MESH::BuildSphere()
 			{
 				sphere->AddIndex(y * (X_SEGMENTS + 1) + x);
 				sphere->AddIndex((y + 1) * (X_SEGMENTS + 1) + x);
-				std::cout << y * (X_SEGMENTS + 1) + x << ", " << (y + 1) * (X_SEGMENTS + 1) + x << std::endl;
+				//std::cout << y * (X_SEGMENTS + 1) + x << ", " << (y + 1) * (X_SEGMENTS + 1) + x << std::endl;
 			}
 		}
 		else

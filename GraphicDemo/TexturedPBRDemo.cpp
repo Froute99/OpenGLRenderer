@@ -28,37 +28,37 @@ void TexturedPBRDemo::Initialize()
 	glFrontFace(GL_CW);
 	glCullFace(GL_BACK);
 
-	// floating point framebuffer
-	glGenFramebuffers(1, &hdrFBO);
-	glGenTextures(1, &colorBuffer);
-	glBindTexture(GL_TEXTURE_2D, colorBuffer);
-	// mind that the internal format is GL_FLOAT
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetScreenWidth(), GetScreenHeight(), 0, GL_RGBA, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	//// floating point framebuffer
+	//glGenFramebuffers(1, &hdrFBO);
+	//glGenTextures(1, &colorBuffer);
+	//glBindTexture(GL_TEXTURE_2D, colorBuffer);
+	//// mind that the internal format is GL_FLOAT
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetScreenWidth(), GetScreenHeight(), 0, GL_RGBA, GL_FLOAT, NULL);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	//glBindTexture(GL_TEXTURE_2D, 0);
 
-	unsigned int rboDepth;
-	glGenRenderbuffers(1, &rboDepth);
-	glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, GetScreenWidth(), GetScreenHeight());
+	//unsigned int rboDepth;
+	//glGenRenderbuffers(1, &rboDepth);
+	//glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
+	//glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, GetScreenWidth(), GetScreenHeight());
 
-	glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBuffer, 0);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	{
-		std::cout << "Framebuffer not completed. Requirements are written in the code as a comment. Check them." << std::endl;
-		/*
-			We have to attach at least one buffer (color, depth or stencil buffer).
-			There should be at least one color attachment.
-			All attachments should be complete as well (reserved memory).
-			Each buffer should have the same number of samples.
-		*/
-	}
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
+	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBuffer, 0);
+	//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
+	//if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	//{
+	//	std::cout << "Framebuffer not completed. Requirements are written in the code as a comment. Check them." << std::endl;
+	//	/*
+	//		We have to attach at least one buffer (color, depth or stencil buffer).
+	//		There should be at least one color attachment.
+	//		All attachments should be complete as well (reserved memory).
+	//		Each buffer should have the same number of samples.
+	//	*/
+	//}
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	const std::string& filename = "../assets/Models/backpack.obj";
 	backpack = GameObject::LoadMeshFromFile(filename);
@@ -108,7 +108,7 @@ void TexturedPBRDemo::Initialize()
 	}
 
 	lightPos = { 1.12f, 1.04f, 3.44f };
-	lightCol = { 10.f, 10.f, 10.f };
+	lightCol = { 1.f };
 
 	//lightPos[0] = { 0.00f, 0.4f, 4.0f };
 	//lightPos[1] = { 0.25f, 0.4f, 4.0f };
@@ -203,7 +203,7 @@ void TexturedPBRDemo::Update(float /*dt*/)
 	camera.MoveY(moveSpeed.y);
 	camera.MoveZ(moveSpeed.z);
 
-	Draw::StartDrawing({ 0.0f, 0.12f, 0.2f });
+	Draw::StartDrawing();
 
 	//glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
 	{
@@ -220,8 +220,7 @@ void TexturedPBRDemo::Update(float /*dt*/)
 
 		// lights
 		glUniform3fv(lightPosLocation, 1, &lightPos.x);
-		vec3<float> uniformLight = lightCol * lightIntensity;
-		glUniform3fv(lightColLocation, 1, &uniformLight.x);
+		glUniform3fv(lightColLocation, 1, &lightCol.x);
 
 		//glUniform1f(gammaLocation, gamma); // whether perform a gamma correction or not
 
@@ -346,21 +345,15 @@ void TexturedPBRDemo::ImguiHelper()
 
 		ImGui::End();
 	}
-	// PBR properties
-	{
-		ImGui::Begin("PBR Properties");
-		ImGui::SetWindowCollapsed(false);
+	//// PBR properties
+	//{
+	//	ImGui::Begin("PBR Properties");
+	//	ImGui::SetWindowCollapsed(false);
 
-		ImGui::NewLine();
+	//	ImGui::NewLine();
 
-		ImGui::Checkbox("Gamma Correction", &shouldGammaCorrected);
-		if (shouldGammaCorrected)
-			gamma = 2.2f;
-		else
-			gamma = 1.0f;
-
-		ImGui::End();
-	}
+	//	ImGui::End();
+	//}
 	// lights
 	{
 		ImGui::Begin("Lights");
@@ -371,7 +364,6 @@ void TexturedPBRDemo::ImguiHelper()
 		ImGui::ColorEdit3("Light Color", &lightCol.x);
 
 		ImGui::NewLine();
-		ImGui::DragFloat("Light Intensity", &lightIntensity, 0.2f, 1.f, 100.f);
 
 		//ImGui::DragFloat3("Light 1 Position", &lightPos[0].x, 0.02f);
 		//ImGui::ColorEdit3("Light 1 Color", &lightCol[0].x);

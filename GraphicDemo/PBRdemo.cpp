@@ -60,8 +60,9 @@ void PBRDemo::Initialize()
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	const std::string& spherePath = "../assets/sphere.fbx";
-	sphere = GameObject::LoadMeshFromFile(spherePath);
+	//const std::string& spherePath = "../assets/sphere.fbx";
+	//sphere = GameObject::LoadMeshFromFile(spherePath);
+	sphere = GameObject::CreateSphere({ 0, 0, 0 });
 	sphere->SetObjectType(ObjectType::NonTextured);
 	sphere->Move({ 0.0f, 0.0f, 5.0f });
 
@@ -80,8 +81,6 @@ void PBRDemo::Initialize()
 	//lightColLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "lightColor");
 	lightColLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "lightColors");
 	camPosLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "camPos");
-
-	gammaLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "gammaCorrection");
 
 	if (lightPosLocation == -1)
 	{
@@ -115,7 +114,7 @@ void PBRDemo::Update(float /*dt*/)
 	camera.MoveY(moveSpeed.y);
 	camera.MoveZ(moveSpeed.z);
 
-	Draw::StartDrawing({ 0.0f, 0.12f, 0.2f });
+	Draw::StartDrawing();
 
 	glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
 	{
@@ -145,8 +144,6 @@ void PBRDemo::Update(float /*dt*/)
 		// uniform vec3 lightColors[4];
 		glUniform3fv(lightPosLocation, 4, &lightPos[0].x);
 		glUniform3fv(lightColLocation, 4, &lightCol[0].x);
-
-		glUniform1f(gammaLocation, gamma); // whether perform a gamma correction or not
 
 		// uniform vec3 camPos;
 		vec3<float> camPos = camera.GetEyePosition();
@@ -260,8 +257,10 @@ void PBRDemo::ImguiHelper()
 	}
 	// PBR properties
 	{
-		ImGui::Begin("PBR Properties");
+		ImGuiWindowFlags flags = ImGuiWindowFlags_NoResize;
+		ImGui::Begin("PBR Properties", NULL, flags);
 		ImGui::SetWindowCollapsed(false);
+		ImGui::SetWindowSize({ 300, 150 });
 
 		ImGui::NewLine();
 		ImGui::ColorEdit3("albedo", &sphereColor.x);
@@ -272,11 +271,21 @@ void PBRDemo::ImguiHelper()
 
 		ImGui::DragFloat("metallic", &metallic, 0.005f, 0.000001f, 1.0f);
 
-		ImGui::Checkbox("Gamma Correction", &shouldGammaCorrected);
-		if (shouldGammaCorrected)
-			gamma = 2.2f;
-		else
-			gamma = 1.0f;
+		// using this thing to set values preset.
+		//bool isModified = ImGui::ListBox("Surface type", &surfaceIndex, surfacesList, sizeof(surfacesList) / sizeof(char*));
+		//if (isModified)
+		//{
+		//	switch (surfaceIndex)
+		//	{
+		//		default:
+		//		case 0: baseReflectivity = { 0.04f }; break;
+		//		case 1: baseReflectivity = { 0.04f }; break;
+		//		case 2: baseReflectivity = { 0.17f }; break;
+		//		case 3: baseReflectivity = { 0.56f, 0.57f, 0.58f }; break;
+		//		case 4: baseReflectivity = { 0.95f, 0.64f, 0.54f }; break;
+		//		case 5: baseReflectivity = { 1.00f, 0.71f, 0.29f }; break;
+		//	}
+		//}
 
 		ImGui::End();
 	}

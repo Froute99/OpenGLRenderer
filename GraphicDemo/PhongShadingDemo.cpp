@@ -124,7 +124,7 @@ void PhongShadingDemo::Update(float dt)
 
 	Draw::StartDrawing();
 
-	glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
+	//glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		// ==================================
@@ -165,14 +165,14 @@ void PhongShadingDemo::Update(float dt)
 	// skybox->Draw();
 
 	// HDR
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	Shader::UseShader(hdrShader);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, colorBuffer);
-	glUniform1i(glGetUniformLocation(hdrShader.GetHandleToShader(), "hdr"), hdr);
-	glUniform1f(glGetUniformLocation(hdrShader.GetHandleToShader(), "exposure"), exposure);
-	RenderQuad();
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//Shader::UseShader(hdrShader);
+	//glActiveTexture(GL_TEXTURE0);
+	//glBindTexture(GL_TEXTURE_2D, colorBuffer);
+	//glUniform1i(glGetUniformLocation(hdrShader.GetHandleToShader(), "hdr"), hdr);
+	//glUniform1f(glGetUniformLocation(hdrShader.GetHandleToShader(), "exposure"), exposure);
+	//RenderQuad();
 
 	Draw::FinishDrawing();
 
