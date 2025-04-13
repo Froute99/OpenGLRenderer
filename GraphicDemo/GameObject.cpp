@@ -62,9 +62,8 @@ GameObject* GameObject::CreateSphere(const vec3<float>& location)
 GameObject* GameObject::LoadMeshFromFile(const std::string& filePath)
 {
 	std::cout << "Start to load file: " << filePath << std::endl;
-	unsigned int	 flag = aiProcess_MakeLeftHanded
-		| aiProcess_Triangulate | aiProcess_GenSmoothNormals
-		| aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices;
+	unsigned int	 flag = aiProcess_Triangulate | aiProcess_GenSmoothNormals
+		| aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcess_CalcTangentSpace;
 	Assimp::Importer importer;
 
 	const aiScene*	   scene = importer.ReadFile(filePath, flag);
@@ -117,11 +116,11 @@ Mesh3D* GameObject::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 
 	for (unsigned int i = 0; i < mesh->mNumVertices; ++i)
 	{
-		result->AddPoint({ mesh->mVertices[i].x, mesh->mVertices[i].y, -mesh->mVertices[i].z });
+		result->AddPoint({ mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z });
 
 		if (mesh->HasNormals())
 		{
-			result->AddNormal({ mesh->mNormals[i].x, mesh->mNormals[i].y, -mesh->mNormals[i].z });
+			result->AddNormal({ mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z });
 		}
 
 		if (mesh->mTextureCoords[0])
@@ -214,8 +213,6 @@ void GameObject::Draw()
 	unsigned int numMeshes = meshes.size();
 	for (unsigned int i = 0; i < numMeshes; ++i)
 	{
-		// using below one instead of GL_TRIANGLES
-		// vertexObject[i]->GetPattern();
 		glBindVertexArray(vertexObject[i]->VAO);
 		glDrawElements(vertexObject[i]->GetPattern(), meshes[i]->GetIndicesCount(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);

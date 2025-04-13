@@ -35,7 +35,7 @@ vec3 getNormalFromMap()
     vec2 st2 = dFdy(TexCoords);
 
     vec3 N  = normalize(Normal);
-    vec3 T  = normalize(Q1*st2.t - Q2*st1.t);
+    vec3 T  = normalize(Q1 * st2.t - Q2 * st1.t);
     vec3 B  = -normalize(cross(N, T));
     mat3 TBN = mat3(T, B, N);
 
@@ -44,10 +44,10 @@ vec3 getNormalFromMap()
 // GGX / Trowbridge-Reitz
 float DistributionGGX(vec3 N, vec3 H, float roughness)
 {
-    float a = roughness*roughness;
-    float a2 = a*a;
+    float a = roughness * roughness;
+    float a2 = a * a;
     float NdotH = max(dot(N, H), 0.0);
-    float NdotH2 = NdotH*NdotH;
+    float NdotH2 = NdotH * NdotH;
 
     float nom   = a2;
     float denom = (NdotH2 * (a2 - 1.0) + 1.0);
@@ -60,7 +60,7 @@ float GeometrySchlickBeckmann(float NdotX, float roughness)
 {
     // float k = (roughness * roughness) / 2;
     float r = (roughness + 1.0);
-    float k = (r*r) / 8.0;
+    float k = (r * r) / 8.0;
 
     float nom   = NdotX;
     float denom = NdotX * (1.0 - k) + k;

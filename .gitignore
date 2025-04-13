@@ -3,3 +3,4 @@
 /build
 external/
 *.fbx
+imgui_sample.png

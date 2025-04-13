@@ -46,17 +46,17 @@ void PhongShadingDemo::Initialize()
 	glDepthMask(GL_TRUE);
 
 	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CW);
+	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 
 	const std::string& filename = "../assets/Models/backpack.obj";
 	backpack = GameObject::LoadMeshFromFile(filename);
 
-	backpack->Move({ 2.0f, 0.0f, 6.5f });
+	backpack->Move({ 0.0f, 0.0f, -6.5f });
 	backpackTranslation = backpack->GetTransform()->GetTranslation();
 	objectColor = { 1.0f, 0.5f, 0.31f };
 
-	lightPos = { 0.0f, 2.45f, 4.85f };
+	lightPos = { 0.0f, 2.45f, -5.85f };
 	lightColor = { 1.0f, 1.0f, 1.0f };
 
 	// uniform variable location
@@ -132,7 +132,10 @@ void PhongShadingDemo::Update(float dt)
 		// ==================================
 
 		Shader::UseShader(shader);
-		backpack->Rotate(backpackRotationSpeed * dt);
+		if (shouldRotate)
+		{
+			backpack->Rotate(backpackRotationSpeed * dt);
+		}
 		const mat4<float>& Model = backpack->GetModelToWorld();
 		const mat4<float>& View = camera.BuildViewMatrix();
 		const mat4<float>& Projection = view.BuildProjectionMatrix();
@@ -308,10 +311,10 @@ void PhongShadingDemo::ImguiHelper()
 		ImGui::Text("Z");
 		ImGui::DragFloat("", &backpackTranslation.z, 0.1f);
 		ImGui::EndChild();
-
-		ImGui::NewLine();
+		backpack->GetTransform()->SetTranslation(backpackTranslation);
 
 		// rotation
+		ImGui::NewLine();
 		ImGui::Text("Rotation");
 		p = ImGui::GetCursorScreenPos();
 		ImGui::BeginChild("Pitch", { 100, 100 }, true);
@@ -337,7 +340,6 @@ void PhongShadingDemo::ImguiHelper()
 		{
 			backpack->GetTransform()->SetRotation(backpackRotationOffset);
 		}
-		backpack->GetTransform()->SetTranslation(backpackTranslation);
 	}
 	//ImGui::NewFrame();
 	{

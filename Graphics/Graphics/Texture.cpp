@@ -12,21 +12,50 @@
 #include "Image.h"
 #include "PATH.h"
 #include <glew.h>
+#include "stb_image.h"
 
 Texture::Texture(Image& image)
 {
 	LoadFromImage(image);
 }
 
+/* This is the improved verison of texture loader function.
+ The original one was little bit wasting memory and performance because
+ it assumes all image has 4 component.
+ Now this is exactly fit to size of image file. */
 bool Texture::LoadFromPath(const std::filesystem::path& image_path) noexcept
 {
-	Image image;
-
-	if (!image.LoadFrom(image_path))
+	if (!std::filesystem::exists(image_path))
 	{
 		return false;
 	}
-	return LoadFromImage(image);
+
+	int channel, width, height;
+	stbi_set_flip_vertically_on_load(true);
+	unsigned char* image = stbi_load(image_path.generic_string().c_str(), &width, &height, &channel, 0);
+
+	GLenum format = GL_RGBA;
+	if (channel == 1)
+		format = GL_RED;
+	else if (channel == 3)
+		format = GL_RGB;
+	else if (channel == 4)
+		format = GL_RGBA;
+
+	glBindTexture(GL_TEXTURE_2D, textureHandle);
+	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, image);
+
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+
+	stbi_image_free(image);
+
+	return true;
 }
 
 bool Texture::LoadFromImage(const Image& image) noexcept
@@ -49,7 +78,9 @@ bool Texture::LoadFromImage(const Image& image) noexcept
 		format = GL_RGBA;
 
 	glBindTexture(GL_TEXTURE_2D, textureHandle);
+	// Format fixed to GL_RGBA because of assuming an image always has "4" component(RBGA)
 	glTexImage2D(GL_TEXTURE_2D, 0, format, image.GetWidth(), image.GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image.GetPixelPointer());
+
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -57,8 +88,6 @@ bool Texture::LoadFromImage(const Image& image) noexcept
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	
-	//stbi_image_free(image);
-
 	return true;
 }
 

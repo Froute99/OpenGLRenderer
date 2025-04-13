@@ -68,6 +68,7 @@ private:
 
 	bool showObjectWindow = true;
 	bool showLightWindow = true;
+	bool shouldRotate = false;
 
 	// HDR
 	Shader		 hdrShader;

@@ -75,6 +75,9 @@ private:
 	unsigned int quadVAO = 0;
 	unsigned int quadVBO;
 
+	// IBL (Diffuse)
 	Shader equirectangularMappingShader;
+
+	vec3<float> rotationOffset{ 0.f };
 
 };

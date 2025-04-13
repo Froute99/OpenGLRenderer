@@ -23,42 +23,43 @@ void PBRDemo::Initialize()
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 	glDepthMask(GL_TRUE);
+	glEnable(GL_FRAMEBUFFER_SRGB);
 
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CW);
 	glCullFace(GL_BACK);
 
-	// floating point framebuffer
-	glGenFramebuffers(1, &hdrFBO);
-	glGenTextures(1, &colorBuffer);
-	glBindTexture(GL_TEXTURE_2D, colorBuffer);
-	// mind that the internal format is GL_FLOAT
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetScreenWidth(), GetScreenHeight(), 0, GL_RGBA, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);	
-	glBindTexture(GL_TEXTURE_2D, 0);
+	//// floating point framebuffer
+	//glGenFramebuffers(1, &hdrFBO);
+	//glGenTextures(1, &colorBuffer);
+	//glBindTexture(GL_TEXTURE_2D, colorBuffer);
+	//// mind that the internal format is GL_FLOAT
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetScreenWidth(), GetScreenHeight(), 0, GL_RGBA, GL_FLOAT, NULL);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);	
+	//glBindTexture(GL_TEXTURE_2D, 0);
 
-	unsigned int rboDepth;
-	glGenRenderbuffers(1, &rboDepth);
-	glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, GetScreenWidth(), GetScreenHeight());
+	//unsigned int rboDepth;
+	//glGenRenderbuffers(1, &rboDepth);
+	//glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
+	//glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, GetScreenWidth(), GetScreenHeight());
 
-	glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBuffer, 0);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	{
-		std::cout << "Framebuffer not completed. Requirements are written in the code as a comment. Check them." << std::endl;
-		/* 
-			We have to attach at least one buffer (color, depth or stencil buffer).
-			There should be at least one color attachment.
-			All attachments should be complete as well (reserved memory).
-			Each buffer should have the same number of samples.
-		*/
-	}
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
+	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBuffer, 0);
+	//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
+	//if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	//{
+	//	std::cout << "Framebuffer not completed. Requirements are written in the code as a comment. Check them." << std::endl;
+	//	/* 
+	//		We have to attach at least one buffer (color, depth or stencil buffer).
+	//		There should be at least one color attachment.
+	//		All attachments should be complete as well (reserved memory).
+	//		Each buffer should have the same number of samples.
+	//	*/
+	//}
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	//const std::string& spherePath = "../assets/sphere.fbx";
 	//sphere = GameObject::LoadMeshFromFile(spherePath);
@@ -116,7 +117,7 @@ void PBRDemo::Update(float /*dt*/)
 
 	Draw::StartDrawing();
 
-	glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
+	//glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -151,7 +152,7 @@ void PBRDemo::Update(float /*dt*/)
 
 		sphere->Draw();
 	}
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
 	glClear(GL_COLOR_BUFFER_BIT);

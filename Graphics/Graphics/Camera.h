@@ -45,13 +45,10 @@ public:
 	mat4<float> BuildViewMatrix() const noexcept;
 
 private:
-	vec3<float> eye{ 0.0f, 0.0f, 0.0f };				// camera position
-	vec3<float> target{ 0.0f, 0.0f, 1.0f };				// camera look at
+	vec3<float> eye{ 0.0f, 0.0f, 1.0f };				// camera position
+	vec3<float> target{ 0.0f, 0.0f, 0.0f };				// camera look at
 
 	vec3<float> up{ 0.0f, 1.0f, 0.0f };
 	vec3<float> right{ 1.0f, 0.0f, 0.0f };
 
-
-	//vec3<float> up{ 0.f, 0.f, 1.f };
-	//vec3<float> right{ 1.f, 0.f };
 };

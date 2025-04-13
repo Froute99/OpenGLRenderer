@@ -47,13 +47,13 @@ void TestStage::Initialize()
 	glFrontFace(GL_CW);
 	glCullFace(GL_BACK);
 
-	cube = GameObject::CreateCube({ 0, 0, 5 }, { 0, 0, 0 }, 1);
+	cube = GameObject::CreateCube({ 0, 0, -5 }, { 0, 0, 0 }, 1);
 	//const std::string& filename = "../assets/Models/backpack.obj";
 	//cube = GameObject::LoadMeshFromFile(filename);
 
 	objectColor = { 1.0f, 0.5f, 0.31f };
 
-	lightPos = { 0.0f, 2.45f, 4.85f };
+	lightPos = { 0.0f, 2.45f, -4.50f };
 	lightColor = { 1.0f, 1.0f, 1.0f };
 
 	// uniform variable location

@@ -60,11 +60,12 @@ void TexturedPBRDemo::Initialize()
 	//}
 	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	const std::string& filename = "../assets/Models/backpack.obj";
-	backpack = GameObject::LoadMeshFromFile(filename);
-	backpack->Move({ 0.f, 0.f, 5.0f });
+	//const std::string& filename = "../assets/Models/backpack.obj";
+	//backpack = GameObject::LoadMeshFromFile(filename);
+	//backpack->Move({ 0.f, 0.f, -5.0f });
 
-	sphere = GameObject::CreateSphere({ 0, 0, 3 });
+	sphere = GameObject::CreateSphere({ 0, 0, 0 });
+	sphere->Move({ 0.f, 0.f, -50.f });
 
 	uniformModelLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "model");
 	uniformViewLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "view");
@@ -107,7 +108,7 @@ void TexturedPBRDemo::Initialize()
 		std::cout << "There's no uniform variable named \"lightColors\"" << std::endl;
 	}
 
-	lightPos = { 1.12f, 1.04f, 3.44f };
+	lightPos = { 0.34f, 0.20f, -4.00f };
 	lightCol = { 1.f };
 
 	//lightPos[0] = { 0.00f, 0.4f, 4.0f };
@@ -211,7 +212,7 @@ void TexturedPBRDemo::Update(float /*dt*/)
 
 		Shader::UseShader(pbrShader);
 
-		const mat4<float>& Model = backpack->GetModelToWorld();
+		const mat4<float>& Model = sphere->GetModelToWorld();
 		const mat4<float>& View = camera.BuildViewMatrix();
 		const mat4<float>& Projection = view.BuildProjectionMatrix();
 		glUniformMatrix4fv(uniformModelLocation, 1, GL_FALSE, &Model.elements[0][0]);
@@ -345,15 +346,18 @@ void TexturedPBRDemo::ImguiHelper()
 
 		ImGui::End();
 	}
-	//// PBR properties
-	//{
-	//	ImGui::Begin("PBR Properties");
-	//	ImGui::SetWindowCollapsed(false);
+	// PBR properties
+	{
+		ImGui::Begin("PBR Properties");
+		ImGui::SetWindowCollapsed(false);
 
-	//	ImGui::NewLine();
+		if (ImGui::DragFloat3("Rotation", &rotationOffset.x, 0.1f))
+		{
+			backpack->GetTransform()->SetRotation(rotationOffset);
+		}
 
-	//	ImGui::End();
-	//}
+		ImGui::End();
+	}
 	// lights
 	{
 		ImGui::Begin("Lights");

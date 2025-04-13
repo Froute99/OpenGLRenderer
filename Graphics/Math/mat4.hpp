@@ -1,11 +1,10 @@
 /*
- *	Author: JeongHak Kim	junghak.kim@digipen.edu
- *	File_name: mat3.hpp
+ *	Author: JeongHak Kim	froute99619@gmail.com
+ *	File_name: mat4.hpp
  *
- *	Custom math library for mat3
+ *	Custom math library for mat4
  *
- *	Fall 2019
- *	Sep.20 2019
+ *	July.20 2024
  */
 
 #pragma once
@@ -294,11 +293,11 @@ namespace Matrix4
 	}
 
 	template <typename T>
-	constexpr mat4<T> BuildLookAt(const vec3<T>& eye, const vec3<T>& lookAt, const vec3<T>& up)
+	constexpr mat4<T> BuildLookAt(const vec3<T>& eyePosition, const vec3<T>& lookAt, const vec3<T>& up)
 	{
-		vec3<float> f = Vector3::normalize(lookAt -eye);
-		vec3<float> r = Vector3::normalize(Vector3::cross_product(up, f));
-		vec3<float> u = Vector3::cross_product(f, r);
+		vec3<float> f = Vector3::normalize(lookAt - eyePosition);
+		vec3<float> r = Vector3::normalize(Vector3::cross_product(f, up));
+		vec3<float> u = Vector3::cross_product(r, f);
 
 		mat4<float> viewMatrix = Matrix4::build_identity<float>();
 
@@ -308,12 +307,12 @@ namespace Matrix4
 		viewMatrix.elements[0][1] = u.x;
 		viewMatrix.elements[1][1] = u.y;
 		viewMatrix.elements[2][1] = u.z;
-		viewMatrix.elements[0][2] = f.x;
-		viewMatrix.elements[1][2] = f.y;
-		viewMatrix.elements[2][2] = f.z;
-		viewMatrix.elements[3][0] = -Vector3::dot_product(r, eye);
-		viewMatrix.elements[3][1] = -Vector3::dot_product(u, eye);
-		viewMatrix.elements[3][2] = -Vector3::dot_product(f, eye);
+		viewMatrix.elements[0][2] = -f.x;
+		viewMatrix.elements[1][2] = -f.y;
+		viewMatrix.elements[2][2] = -f.z;
+		viewMatrix.elements[3][0] = -Vector3::dot_product(r, eyePosition);
+		viewMatrix.elements[3][1] = -Vector3::dot_product(u, eyePosition);
+		viewMatrix.elements[3][2] = -Vector3::dot_product(f, eyePosition);
 		viewMatrix.elements[3][3] = 1.0f;
 
 		return viewMatrix;
@@ -334,7 +333,7 @@ namespace Matrix4
 		mat4<T> result(0.0);
 		result.elements[0][0] = static_cast<T>(1.0) / (aspect * tangent);
 		result.elements[1][1] = static_cast<T>(1.0) / (tangent);
-		result.elements[2][2] = zFar / (zNear - zFar);
+		result.elements[2][2] = -(zFar + zNear) / (zFar - zNear);
 		result.elements[2][3] = -static_cast<T>(1.0);
 		result.elements[3][2] = -static_cast<T>(2.0) * (zFar * zNear) / (zFar - zNear);
 
