@@ -9,7 +9,7 @@
  */
 
 #include "Mesh.h"
-#include "Math/Angle.hpp"
+#include <Math/Angle.hpp>
 
 void Mesh::AddPoint(vec2<float> point)
 {
@@ -35,7 +35,6 @@ void Mesh::AddTextureCoordinate(float u, float v)
 {
 	textureCoordinates.push_back({ u, v });
 }
-
 
 void Mesh::SetShapePattern(ShapePattern new_pattern) noexcept
 {

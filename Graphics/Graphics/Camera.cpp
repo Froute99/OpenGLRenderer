@@ -8,53 +8,60 @@
  *	Oct.10 2019
  */
 
-#include "Camera.hpp"
-#include "Transform.hpp"
+#include "Camera.h"
+#include "Transform.h"
+#include <Math/Angle.hpp>
 
-void Camera::ResetUp(vec2<float> camera_up) noexcept
+Camera::Camera(vec3<float> newPos) noexcept
 {
-	up.x = camera_up.x;
-	up.y = camera_up.y;
-	right = { up.y, -up.x };
+	eye = newPos;
 }
 
-void Camera::MoveUp(float distance) noexcept
+mat4<float> Camera::BuildViewMatrix() const noexcept
 {
-	center += normalize(up) * distance;
+	return Matrix4::BuildLookAt(eye, target, up);
+
+	//vec3<float> f = Vector3::normalize(target - eye);
+	//vec3<float> r = Vector3::normalize(Vector3::cross_product(up, f));
+	//vec3<float> u = Vector3::cross_product(f, r);
+
+	//mat4<float> viewMatrix = Matrix4::build_identity<float>();
+
+	//viewMatrix.elements[0][0] = r.x;
+	//viewMatrix.elements[1][0] = r.y;
+	//viewMatrix.elements[2][0] = r.z;
+	//viewMatrix.elements[0][1] = u.x;
+	//viewMatrix.elements[1][1] = u.y;
+	//viewMatrix.elements[2][1] = u.z;
+	//viewMatrix.elements[0][2] = f.x;
+	//viewMatrix.elements[1][2] = f.y;
+	//viewMatrix.elements[2][2] = f.z;
+	//viewMatrix.elements[3][0] = -Vector3::dot_product(r, eye);
+	//viewMatrix.elements[3][1] = -Vector3::dot_product(u, eye);
+	//viewMatrix.elements[3][2] = -Vector3::dot_product(f, eye);
+	//viewMatrix.elements[3][3] = 1.0f;
+
+	//return viewMatrix;
 }
 
-void Camera::MoveRight(float distance) noexcept
+void Camera::MoveX(float distance) noexcept
 {
-	center += normalize(right) * distance;
+	vec3<float> amount = distance * Vector3::normalize(right);
+	eye += amount;
+	target += amount;
 }
 
-void Camera::Rotate(float angle_radians) noexcept
+void Camera::MoveY(float distance) noexcept
 {
-	up = rotate_by(angle_radians, up);
-	right = rotate_by(angle_radians, right);
+	vec3<float> amount = distance * Vector3::normalize(up);
+	eye += amount;
+	target += amount;
 }
 
-mat3<float> Camera::CameraToWorld() const noexcept
+void Camera::MoveZ(float distance) noexcept
 {
-	//return build_translation(center.x, center.y) * transpose(mat3<float>{
-	//	right.x, up.x, 0.f,
-	//	right.y, up.y, 0.f,
-	//	0.f, 0.f, 1.f });
-	mat3<float> inverseTransformMatrix = { up.y,  -right.y, (right.y * dot_product(-up, center) - dot_product(-right, center) * up.y),
-		-up.x, right.x,  (dot_product(-right, center) * up.x - right.x * dot_product(-up, center)),
-		0.0f,  0.0f,     1.0f };
-	return transpose(inverseTransformMatrix);
-}
-
-mat3<float> Camera::WorldToCamera() const noexcept
-{
-	//return transpose(mat3<float>{
-	//	right.x, right.y, 0.f,
-	//	up.x, up.y, 0.f,
-	//	0.f, 0.f, 1.f }) * build_translation(-center.x, -center.y);
-	mat3<float> transformMatrix = {
-		right.x, up.x, 0.0f,
-		right.y, up.y, 0.0f,
-		dot_product(right, center), dot_product(up, center),1.0f };
-	return transformMatrix;
+	vec3<float> frontUnit = Vector3::normalize(Vector3::cross_product(right, up));
+	vec3<float> amount = distance * frontUnit;
+	eye += amount;
+	target += amount;
 }

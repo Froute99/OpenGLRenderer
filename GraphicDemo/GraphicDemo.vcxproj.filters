@@ -9,8 +9,8 @@
     <ClCompile Include="Demo.cpp">
       <Filter>Demo</Filter>
     </ClCompile>
-    <ClCompile Include="ShapeDrawingDemo.cpp">
-      <Filter>Demo\ShapeDrawing</Filter>
+    <ClCompile Include="PhongShadingDemo.cpp">
+      <Filter>Demo\PhongShading</Filter>
     </ClCompile>
     <ClCompile Include="TextureDrawingDemo.cpp">
       <Filter>Demo\TextureDrawing</Filter>
@@ -21,26 +21,59 @@
     <ClCompile Include="ComputeShaderDemo.cpp">
       <Filter>Demo\ComputeShader</Filter>
     </ClCompile>
+    <ClCompile Include="PBRdemo.cpp">
+      <Filter>Demo\PBR</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="TexturedPBRDemo.cpp">
+      <Filter>Demo\TexturedPBR</Filter>
+    </ClCompile>
+    <ClCompile Include="TestStage.cpp">
+      <Filter>Demo\Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
-    <ClInclude Include="AnimationDemo.hpp">
+    <ClInclude Include="AnimationDemo.h">
       <Filter>Demo\Animation</Filter>
     </ClInclude>
-    <ClInclude Include="Demo.hpp">
+    <ClInclude Include="Demo.h">
       <Filter>Demo</Filter>
     </ClInclude>
-    <ClInclude Include="ShapeDrawingDemo.hpp">
-      <Filter>Demo\ShapeDrawing</Filter>
+    <ClInclude Include="PhongShadingDemo.h">
+      <Filter>Demo\PhongShading</Filter>
     </ClInclude>
-    <ClInclude Include="TextureDrawingDemo.hpp">
+    <ClInclude Include="TextureDrawingDemo.h">
       <Filter>Demo\TextureDrawing</Filter>
     </ClInclude>
-    <ClInclude Include="TransformParentDemo.hpp">
+    <ClInclude Include="TransformParentDemo.h">
       <Filter>Demo\TransformParent</Filter>
     </ClInclude>
     <ClInclude Include="ComputeShaderDemo.h">
       <Filter>Demo\ComputeShader</Filter>
+    </ClInclude>
+    <ClInclude Include="PBRdemo.h">
+      <Filter>Demo\PBR</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="TexturedPBRDemo.h">
+      <Filter>Demo\TexturedPBR</Filter>
+    </ClInclude>
+    <ClInclude Include="TestStage.h">
+      <Filter>Demo\Test</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -50,9 +83,6 @@
     <Filter Include="Demo\Animation">
       <UniqueIdentifier>{db475a0e-dbf4-49b5-bfe3-35f7a3fde8cf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Demo\ShapeDrawing">
-      <UniqueIdentifier>{d56e2b89-6e5e-4f8e-94a9-9889196c06f8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Demo\TextureDrawing">
       <UniqueIdentifier>{9d088894-563a-400c-809d-935b7540c02f}</UniqueIdentifier>
     </Filter>
@@ -61,6 +91,21 @@
     </Filter>
     <Filter Include="Demo\ComputeShader">
       <UniqueIdentifier>{3a69e391-9ea4-4232-afb8-098213001507}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Demo\PBR">
+      <UniqueIdentifier>{09a9560c-3d65-48bf-83ea-c6262593cf55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{f3104392-0695-4831-88b3-b9d81fcced9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Demo\PhongShading">
+      <UniqueIdentifier>{d56e2b89-6e5e-4f8e-94a9-9889196c06f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Demo\TexturedPBR">
+      <UniqueIdentifier>{1b22f51b-6681-42eb-9fe3-aae88e3b03a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Demo\Test">
+      <UniqueIdentifier>{07984a7f-8356-4014-9ef6-95fc04f08217}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -1,9 +1,9 @@
 #pragma once
-#include "Demo.hpp"
-#include "Shader.h"
-#include "Texture.hpp"
-#include "Vertices.h"
-#include "ComputeShader.h"
+#include "Demo.h"
+#include <Graphics/Shader.h>
+#include <Graphics/Texture.h>
+#include <Graphics/Vertices.h>
+#include <Graphics/ComputeShader.h>
 
 class ComputeShaderDemo : public Demo
 {
@@ -35,7 +35,7 @@ private:
 	//VerticesDescription layout{ VerticesDescription::Type::Point, VerticesDescription::Type::TextureCoordinate };
 	//Texture texture;
 	//Shader textureShader;
-	//Vertices computeShaderVertices;
+	//VertexObject computeShaderVertices;
 
 };
 

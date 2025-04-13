@@ -8,35 +8,49 @@
  *	Nov.29 2019
  *******************************************************/
 
+#include "TextureDrawingDemo.h"
+#include "GameObject.h"
+#include <Graphics/PATH.h>
+#include <glfw3.h>
 #include <iostream>
-#include "glfw3.h"
-#include "TextureDrawingDemo.hpp"
-#include "PATH.hpp"
 
 void TextureDrawingDemo::Initialize()
 {
 	shader.LoadShaderFrom(PATH::texture_vert, PATH::texture_frag);
+	layout = { VerticesDescription::Type::Position, VerticesDescription::Type::TextureCoordinate };
 
-	const Mesh& rectangle = MESH::create_rectangle({ 0.0f }, { 1.0f }, { 0.0f });
-	dragon.shader = shader;
-	dragon.vertices.InitializeWithMeshAndLayout(rectangle, layout);
-	dragon.texture.LoadFromPath(dragon_png);
-	dragonTransform.SetScale(500.0f);
+	//view.SetViewSize(width, height);
+	//cameraToNDC = view.GetCameraToNDCTransform() * camera.WorldToCamera();
 
-	blueFire.shader.LoadShaderFrom(PATH::animation_vert, PATH::animation_frag);
-	blueFire.vertices.InitializeWithMeshAndLayout(rectangle, layout);
-	blueFire.texture.LoadFromPath(blue_fire_sprite_sheet);
-	blueFireTransform.SetScale(130.0f);
 
-	blueFireAnimation.Initialize({ 10, 6, 25.0f }, blueFire.shader);
+	//const Mesh& rectangle = MESH::create_rectangle({ 0.0f }, { 1.0f }, { 0.0f });
 
-	font.LoadFromFile(PATH::bitmapfont_fnt);
-	text.SetFont(font);
-	text.SetString(L"Blue Fire Dragon");
-	textTransform.SetTranslation({ -500.0f, 300.0f });
+	//dragon.shader = &shader;
+	//dragon.vertices.InitializeWithMeshAndLayout(rectangle, layout);
+	//dragon.texture.LoadFromPath(dragon_png);
+	//dragonTransform.SetScale(500.0f);
 
-	view.SetViewSize(width, height);
-	cameraToNDC = view.GetCameraToNDCTransform() * camera.WorldToCamera();
+	//blueFire.shader.LoadShaderFrom(PATH::animation_vert, PATH::animation_frag);
+	//blueFire.vertices.InitializeWithMeshAndLayout(rectangle, layout);
+	//blueFire.texture.LoadFromPath(blue_fire_sprite_sheet);
+	//blueFireTransform.SetScale(130.0f);
+
+	//blueFireAnimation.Initialize({ 10, 6, 25.0f }, blueFire.shader);
+
+	//const Mesh rectangle = MESH::create_rectangle({ 0.0f }, { 1.0f }, { 0.0f });
+	//dragon = new GameObject(rectangle, layout);
+	//dragon->SetShader(&shader);
+	//dragon->LoadTexture(dragon_png);
+
+	//mat4<float> ndc = cameraToNDC * dragon->GetTransform()->GetModelToWorld();
+	//dragon->GetTransform()->SetScale(500.0f);
+	//dragon->SetNDC(ndc);
+
+	//font.LoadFromFile(PATH::bitmapfont_fnt);
+	//text.SetFont(font);
+	//text.SetString(L"Blue Fire Dragon");
+	//textTransform.SetTranslation({ -500.0f, 300.0f });
+
 	timePassed = 0.0f;
 	std::cout << "\t====================================\n";
 	std::cout << "\tPress R key to animate from start\n";
@@ -54,56 +68,60 @@ void TextureDrawingDemo::Update(float dt)
 	timePassed += dt;
 	Draw::StartDrawing();
 
-	const mat3<float> ndc = cameraToNDC * textTransform.GetModelToWorld();
-	Draw::DrawText(shader, ndc, text);
+	//const mat3<float> ndc = cameraToNDC * textTransform.GetModelToWorld();
+	//Draw::DrawText(shader, ndc, text);
 
-	if (timePassed >= 1.0f)
-	{
-		dragon.ndc = cameraToNDC * dragonTransform.GetModelToWorld();
-		Draw::draw(dragon);
-	}
-	if (timePassed >= 1.4f)
-	{
-		blueFireTransform.SetTranslation({ -100.0f, 120.0f });
-		blueFire.ndc = cameraToNDC * blueFireTransform.GetModelToWorld();
-		blueFireAnimation.Animate(dt);
-		Draw::draw(blueFire);
-	}
-	if (timePassed >= 0.2f)
-	{
-		blueFireTransform.SetTranslation({ fireDistance, 0.0f });
-		blueFire.ndc = cameraToNDC * blueFireTransform.GetModelToWorld();
-		blueFireAnimation.Animate(dt);
-		Draw::draw(blueFire);
-	}
-	if (timePassed >= 0.4f)
-	{
-		blueFireTransform.SetTranslation({ -fireDistance, 0.0f });
-		blueFire.ndc = cameraToNDC * blueFireTransform.GetModelToWorld();
-		blueFireAnimation.Animate(dt);
-		Draw::draw(blueFire);
-	}
-	if (timePassed >= 0.6f)
-	{
-		blueFireTransform.SetTranslation({ 0.0f, fireDistance });
-		blueFire.ndc = cameraToNDC * blueFireTransform.GetModelToWorld();
-		blueFireAnimation.Animate(dt);
-		Draw::draw(blueFire);
-	}
-	if (timePassed >= 0.8f)
-	{
-		blueFireTransform.SetTranslation({ 0.0f, -fireDistance });
-		blueFire.ndc = cameraToNDC * blueFireTransform.GetModelToWorld();
-		blueFireAnimation.Animate(dt);
-		Draw::draw(blueFire);
-	}
-	
+	//dragon.ndc = cameraToNDC * dragonTransform.GetModelToWorld();
+	//Draw::DrawSprite(dragon);
+	//Draw::DrawGameObject(DrawType::Sprite, dragon->GetMaterial());
+
+	//if (timePassed >= 1.0f)
+	//{
+	//	dragon.ndc = cameraToNDC * dragonTransform.GetModelToWorld();
+	//	Draw::draw(dragon);
+	//}
+	//if (timePassed >= 1.4f)
+	//{
+	//	blueFireTransform.SetTranslation({ -100.0f, 120.0f });
+	//	blueFire.ndc = cameraToNDC * blueFireTransform.GetModelToWorld();
+	//	blueFireAnimation.Animate(dt);
+	//	Draw::draw(blueFire);
+	//}
+	//if (timePassed >= 0.2f)
+	//{
+	//	blueFireTransform.SetTranslation({ fireDistance, 0.0f });
+	//	blueFire.ndc = cameraToNDC * blueFireTransform.GetModelToWorld();
+	//	blueFireAnimation.Animate(dt);
+	//	Draw::draw(blueFire);
+	//}
+	//if (timePassed >= 0.4f)
+	//{
+	//	blueFireTransform.SetTranslation({ -fireDistance, 0.0f });
+	//	blueFire.ndc = cameraToNDC * blueFireTransform.GetModelToWorld();
+	//	blueFireAnimation.Animate(dt);
+	//	Draw::draw(blueFire);
+	//}
+	//if (timePassed >= 0.6f)
+	//{
+	//	blueFireTransform.SetTranslation({ 0.0f, fireDistance });
+	//	blueFire.ndc = cameraToNDC * blueFireTransform.GetModelToWorld();
+	//	blueFireAnimation.Animate(dt);
+	//	Draw::draw(blueFire);
+	//}
+	//if (timePassed >= 0.8f)
+	//{
+	//	blueFireTransform.SetTranslation({ 0.0f, -fireDistance });
+	//	blueFire.ndc = cameraToNDC * blueFireTransform.GetModelToWorld();
+	//	blueFireAnimation.Animate(dt);
+	//	Draw::draw(blueFire);
+	//}
+
 	Draw::FinishDrawing();
 }
 
 void TextureDrawingDemo::ResetCamera()
 {
-	camera.ResetUp();
+	//camera.ResetUp();
 }
 
 void TextureDrawingDemo::HandleKeyPress(KeyboardButton button)

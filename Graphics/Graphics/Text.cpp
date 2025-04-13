@@ -8,7 +8,7 @@
  *	Nov.23 2019
  */
 
-#include "Text.hpp"
+#include "Text.h"
 
 Text::Text(std::wstring text_string, const BitmapFont& text_font) noexcept
 {
@@ -17,16 +17,16 @@ Text::Text(std::wstring text_string, const BitmapFont& text_font) noexcept
 	InitializeWithEmptyVertices();
 }
 
-std::vector<std::pair<const Vertices*, const Texture*>> Text::GetPairOfVerticesAndTextures() const noexcept
+std::vector<std::pair<const VertexObject*, const Texture*>> Text::GetPairOfVerticesAndTextures() const noexcept
 {
-	std::vector<std::pair<const Vertices*, const Texture*>> pairs;
+	std::vector<std::pair<const VertexObject*, const Texture*>> pairs;
 
 	BuildNewMeshesIfNeeded();
 	for (int i = 0; i < font->GetInformation().pagesCount; ++i)
 	{
 		if (vertices.at(i).GetVerticesCount() != 0)
 		{
-			std::pair<const Vertices*, const Texture*> input;
+			std::pair<const VertexObject*, const Texture*> input;
 			input.first = &vertices.at(i);
 			input.second = &font->GetTexture(i);
 			pairs.push_back(input);
@@ -55,11 +55,11 @@ void Text::InitializeWithEmptyVertices() const noexcept
 {
 	for (int i = 0; i < font->GetInformation().pagesCount; ++i)
 	{
-		Mesh meshToInput;
-		Vertices verticesToInput;
-		verticesToInput.InitializeWithMeshAndLayout(meshToInput,
-			{ VerticesDescription::Type::Point, VerticesDescription::Type::TextureCoordinate });
-		vertices.insert_or_assign(i, std::move(verticesToInput));
+		//Mesh meshToInput;
+		//VertexObject verticesToInput;
+		//verticesToInput.InitializeWithMeshAndLayout(meshToInput,
+		//	{ VerticesDescription::Type::Position, VerticesDescription::Type::TextureCoordinate });
+		//vertices.insert_or_assign(i, std::move(verticesToInput));
 	}
 }
 
@@ -137,8 +137,8 @@ void Text::BuildNewMeshesIfNeeded() const noexcept
 		}
 		for (int i = 0; i < font->GetInformation().pagesCount; i++)
 		{
-			vertices.find(i)->second.InitializeWithMeshAndLayout(meshes.at(i),
-				{ VerticesDescription::Type::Point, VerticesDescription::Type::TextureCoordinate });
+			//vertices.find(i)->second.InitializeWithMeshAndLayout(meshes.at(i),
+			//	{ VerticesDescription::Type::Position, VerticesDescription::Type::TextureCoordinate });
 		}
 	}
 	needNewMeshes = false;

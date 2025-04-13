@@ -8,30 +8,37 @@
  *	Oct.31 2019
  */
 
-#include "GL/glew.h"
 #include "VerticesDescription.h"
+#include <glew.h>
 
 void VerticesDescription::AddType(Type type) noexcept
 {
 	TypeDescription description;
-	if (type == Type::Point)
+	if (type == Type::Position)
 	{
 		description.elementsType = GL_FLOAT;
-		description.elementsNumber = 2;
+		description.elementsNumber = 3;
 		description.sizeInBytes = description.elementsNumber * sizeof(float);
 		description.shouldNormalize = false;
 	}
-	if (type == Type::TextureCoordinate)
+	else if (type == Type::Normal)
 	{
 		description.elementsType = GL_FLOAT;
-		description.elementsNumber = 2;
+		description.elementsNumber = 3;
 		description.sizeInBytes = description.elementsNumber * sizeof(float);
 		description.shouldNormalize = false;
 	}
-	if (type == Type::Color)
+	else if (type == Type::Color)
 	{
 		description.elementsType = GL_FLOAT;
 		description.elementsNumber = 4;
+		description.sizeInBytes = description.elementsNumber * sizeof(float);
+		description.shouldNormalize = false;
+	}
+	else if (type == Type::TextureCoordinate)
+	{
+		description.elementsType = GL_FLOAT;
+		description.elementsNumber = 2;
 		description.sizeInBytes = description.elementsNumber * sizeof(float);
 		description.shouldNormalize = false;
 	}

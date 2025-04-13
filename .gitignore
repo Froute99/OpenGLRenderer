@@ -1,4 +1,6 @@
 .vs
-.user
-x64
+*.user
 /build
+external/
+*.fbx
+imgui_sample.png

@@ -16,7 +16,8 @@ class [[nodiscard]] VerticesDescription
 public:
 	enum class Type
 	{
-		Point,
+		Position,
+		Normal,
 		Color,
 		TextureCoordinate
 	};
@@ -32,6 +33,7 @@ public:
 	void AddType(Type type) noexcept;
 	const std::vector<Type>& GetTypes() const noexcept;
 
+	VerticesDescription() = default;
 	VerticesDescription(std::initializer_list<Type> fields) noexcept;
 
 	unsigned GetVertexSize() const noexcept;

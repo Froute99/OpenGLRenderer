@@ -10,8 +10,8 @@
 
 #pragma once
 #include <vector>
-#include "vec2.hpp"
-#include "Color4f.hpp"
+#include <Math/vec2.hpp>
+#include "Color4f.h"
 
 enum class ShapePattern
 {
@@ -22,7 +22,7 @@ enum class ShapePattern
 	Quads
 };
 
-class [[nodiscard]]Mesh
+class [[nodiscard]] Mesh
 {
 public:
 	void AddPoint(vec2<float> point);

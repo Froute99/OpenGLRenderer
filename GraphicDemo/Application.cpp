@@ -11,11 +11,14 @@
 #include <iostream>
 #include "glfw3.h"
 #include "Application.h"
-#include "ShapeDrawingDemo.hpp"
-#include "TextureDrawingDemo.hpp"
-#include "AnimationDemo.hpp"
-#include "TransformParentDemo.hpp"
+#include "PhongShadingDemo.h"
+#include "TextureDrawingDemo.h"
+#include "AnimationDemo.h"
+#include "TransformParentDemo.h"
 #include "ComputeShaderDemo.h"
+#include "PBRdemo.h"
+#include "TexturedPBRDemo.h"
+#include "TestStage.h"
 
 bool Application::IsRunning() const
 {
@@ -33,15 +36,16 @@ void Application::Initialize()
 	{
 		return;
 	}
-	window.ToggleVSync(false);
+	window.ToggleVSync(true);
 	isRunning = true;
 
-	demo[COMPUTESHADERDEMO] = std::make_unique<ComputeShaderDemo>(window);
-
-	//demo[SHAPEDRAWING] = std::make_unique<ShapeDrawingDemo>(window);
-	//demo[TEXTUREDRAWING] = std::make_unique<TextureDrawingDemo>(window);
+	demo[PHONGSHADING] = std::make_unique<PhongShadingDemo>(window);
+	//demo[TEST] = std::make_unique<TestStage>(window);
+	//demo[PBR] = std::make_unique<PBRDemo>(window);
+	//demo[TEXTUREDPBR] = std::make_unique<TexturedPBRDemo>(window);
 	//demo[ANIMATION] = std::make_unique<AnimationDemo>(window);
 	//demo[TRANSFORMPARENTDEMO] = std::make_unique<TransformParentDemo>(window);
+	//demo[COMPUTESHADERDEMO] = std::make_unique<ComputeShaderDemo>(window);
 }
 
 void Application::Update(float dt)

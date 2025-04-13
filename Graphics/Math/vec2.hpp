@@ -1,9 +1,9 @@
 /*
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *	File_name: vec2.hpp
- *	
+ *
  *	Custom math library for vec2
- *	
+ *
  *	Fall 2019
  *	Sep.20 2019
  */
@@ -115,50 +115,53 @@ constexpr bool operator!=(const vec2<T>& v1, const vec2<T>& v2) noexcept
 	return true;
 }
 
-template <typename T>
-constexpr T dot_product(const vec2<T>& v1, const vec2<T>& v2) noexcept
+namespace Vector2
 {
-	return v1.x * v2.x + v1.y * v2.y;
-}
+	template <typename T>
+	constexpr T dot_product(const vec2<T>& v1, const vec2<T>& v2) noexcept
+	{
+		return v1.x * v2.x + v1.y * v2.y;
+	}
 
-template <typename T>
-constexpr T magnitude_squared(const vec2<T>& v) noexcept
-{
-	return dot_product(v, v);
-}
+	template <typename T>
+	constexpr T magnitude_squared(const vec2<T>& v) noexcept
+	{
+		return dot_product(v, v);
+	}
 
-template <typename T>
-constexpr T magnitude(const vec2<T>& v) noexcept
-{
-	return (T)sqrt(magnitude_squared(v));
-}
+	template <typename T>
+	constexpr T magnitude(const vec2<T>& v) noexcept
+	{
+		return (T)sqrt(magnitude_squared(v));
+	}
 
-template <typename T>
-constexpr T distance_between(const vec2<T>& v1, const vec2<T>& v2) noexcept
-{
-	return sqrt(magnitude_squared(v1 - v2));
-	//return magnitude(v1 - v2);
-}
+	template <typename T>
+	constexpr T distance_between(const vec2<T>& v1, const vec2<T>& v2) noexcept
+	{
+		return sqrt(magnitude_squared(v1 - v2));
+		//return magnitude(v1 - v2);
+	}
 
-template <typename T>
-constexpr T angle_between(const vec2<T>& v1, const vec2<T>& v2) noexcept
-{
-	assert(magnitude(v1) != 0 && magnitude(v2) != 0);
-	return acos(dot_product(v1, v2) / magnitude(v1) * magnitude(v2));
-}
+	template <typename T>
+	constexpr T angle_between(const vec2<T>& v1, const vec2<T>& v2) noexcept
+	{
+		assert(magnitude(v1) != 0 && magnitude(v2) != 0);
+		return acos(dot_product(v1, v2) / magnitude(v1) * magnitude(v2));
+	}
 
-template <typename T>
-constexpr vec2<T> rotate_by(const float& angle_in_radians, const vec2<T>& v) noexcept
-{
-	float cos_value = cos(angle_in_radians);
-	float sin_value = sin(angle_in_radians);
-	return vec2<T>{ cos_value* v.x - sin_value * v.y, sin_value* v.x + cos_value * v.y };
-}
+	template <typename T>
+	constexpr vec2<T> rotate_by(const float& angle_in_radians, const vec2<T>& v) noexcept
+	{
+		float cos_value = cos(angle_in_radians);
+		float sin_value = sin(angle_in_radians);
+		return vec2<T>{ cos_value* v.x - sin_value * v.y, sin_value* v.x + cos_value * v.y };
+	}
 
-template <typename T>
-constexpr vec2<T> normalize(const vec2<T>& v) noexcept
-{
-	T mag = magnitude(v);
-	assert(mag != 0);
-	return v / mag;
+	template <typename T>
+	constexpr vec2<T> normalize(const vec2<T>& v) noexcept
+	{
+		T mag = magnitude(v);
+		assert(mag != 0);
+		return v / mag;
+	}
 }

@@ -9,7 +9,7 @@
  */
 
 #include <cassert>
-#include "Image.hpp"
+#include "Image.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -31,9 +31,8 @@ void Image::ResizePixelSize(int image_width, int image_height) noexcept
 
 bool Image::LoadFrom(const std::filesystem::path& source) noexcept
 {
-	int channel;
 	stbi_set_flip_vertically_on_load(true);
-	unsigned char* image = stbi_load(source.generic_string().c_str(), &width, &height, &channel, 4);
+	unsigned char* image = stbi_load(source.generic_string().c_str(), &width, &height, &channel, 0);
 
 	if (image != nullptr)
 	{
@@ -54,16 +53,6 @@ void Image::SaveToPNG(const std::filesystem::path& file_path) const noexcept
 	{
 		stbi_write_png(file_path.generic_string().c_str(), width, height, 4, GetPixelPointer(), 0);
 	}
-}
-
-int Image::GetWidth() const noexcept
-{
-	return width;
-}
-
-int Image::GetHeight() const noexcept
-{
-	return height;
 }
 
 ColorInChar* Image::GetPixelPointer() noexcept

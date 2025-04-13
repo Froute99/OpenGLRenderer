@@ -94,12 +94,12 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>GLEW_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\glfw3\include;$(SolutionDir)external\glew\include;$(SolutionDir)external\stbi;$(SolutionDir)Graphics\Graphics;$(SolutionDir)Graphics\Math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Graphics;$(SolutionDir)include\GL\glfw3;$(SolutionDir)include\GL\glew;$(SolutionDir)include\stbi;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)external\glfw3\lib\$(Platform)\;$(SolutionDir)external\glew\lib\$(Platform)\;$(SolutionDir)build\lib\Graphics\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;Graphics.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)external\glfw3\$(Platform)\;$(SolutionDir)external\glew\$(Platform)\;$(SolutionDir)build\lib\Graphics\$(Platform)\$(Configuration)\;$(SolutionDir)external\assimp\$(Platform)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;Graphics.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -110,14 +110,14 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\glfw3\include;$(SolutionDir)external\glew\include;$(SolutionDir)external\stbi;$(SolutionDir)Graphics\Graphics;$(SolutionDir)Graphics\Math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Graphics;$(SolutionDir)include\GL\glfw3;$(SolutionDir)include\GL\glew;$(SolutionDir)include\stbi;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <PreprocessorDefinitions>GLEW_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)external\glfw3\lib\$(Platform)\;$(SolutionDir)external\glew\lib\$(Platform)\;$(SolutionDir)build\lib\Graphics\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;Graphics.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)external\glfw3\$(Platform)\;$(SolutionDir)external\glew\$(Platform)\;$(SolutionDir)build\lib\Graphics\$(Platform)\$(Configuration)\;$(SolutionDir)external\assimp\$(Platform)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;Graphics.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -130,7 +130,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\glfw3\include;$(SolutionDir)external\glew\include;$(SolutionDir)external\stbi;$(SolutionDir)Graphics\Graphics;$(SolutionDir)Graphics\Math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Graphics;$(SolutionDir)include\GL\glfw3;$(SolutionDir)include\GL\glew;$(SolutionDir)include\stbi;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <PreprocessorDefinitions>GLEW_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -138,8 +138,8 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)external\glfw3\lib\$(Platform)\;$(SolutionDir)external\glew\lib\$(Platform)\;$(SolutionDir)build\lib\Graphics\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;Graphics.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)external\glfw3\$(Platform)\;$(SolutionDir)external\glew\$(Platform)\;$(SolutionDir)build\lib\Graphics\$(Platform)\$(Configuration)\;$(SolutionDir)external\assimp\$(Platform)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;Graphics.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -152,7 +152,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)external\glfw3\include;$(SolutionDir)external\glew\include;$(SolutionDir)external\stbi;$(SolutionDir)Graphics\Graphics;$(SolutionDir)Graphics\Math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Graphics;$(SolutionDir)include\GL\glfw3;$(SolutionDir)include\GL\glew;$(SolutionDir)include\stbi;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <PreprocessorDefinitions>GLEW_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -160,8 +160,8 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)external\glfw3\lib\$(Platform)\;$(SolutionDir)external\glew\lib\$(Platform)\;$(SolutionDir)build\lib\Graphics\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;Graphics.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)external\glfw3\$(Platform)\;$(SolutionDir)external\glew\$(Platform)\;$(SolutionDir)build\lib\Graphics\$(Platform)\$(Configuration)\;$(SolutionDir)external\assimp\$(Platform)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;Graphics.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -170,19 +170,30 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="ComputeShaderDemo.cpp" />
     <ClCompile Include="Demo.cpp" />
-    <ClCompile Include="ShapeDrawingDemo.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="PBRdemo.cpp" />
+    <ClCompile Include="PhongShadingDemo.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="TestStage.cpp" />
+    <ClCompile Include="TexturedPBRDemo.cpp" />
     <ClCompile Include="TextureDrawingDemo.cpp" />
     <ClCompile Include="TransformParentDemo.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AnimationDemo.hpp" />
+    <ClInclude Include="AnimationDemo.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="ComputeShaderDemo.h" />
-    <ClInclude Include="Demo.hpp" />
-    <ClInclude Include="ShapeDrawingDemo.hpp" />
-    <ClInclude Include="TextureDrawingDemo.hpp" />
-    <ClInclude Include="TransformParentDemo.hpp" />
+    <ClInclude Include="Demo.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Object.h" />
+    <ClInclude Include="PBRdemo.h" />
+    <ClInclude Include="PhongShadingDemo.h" />
+    <ClInclude Include="Skybox.h" />
+    <ClInclude Include="TestStage.h" />
+    <ClInclude Include="TexturedPBRDemo.h" />
+    <ClInclude Include="TextureDrawingDemo.h" />
+    <ClInclude Include="TransformParentDemo.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Graphics\Graphics.vcxproj">

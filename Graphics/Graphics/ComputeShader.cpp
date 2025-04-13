@@ -1,9 +1,9 @@
 #include "ComputeShader.h"
-#include "GL\glew.h"
+#include "Shader.h"
+#include "PATH.h"
 #include <iostream>
 #include <fstream>
-#include "Shader.h"
-#include "PATH.hpp"
+#include <glew.h>
 
 void ComputeShader::Initialize(unsigned int x, unsigned int y)
 {
