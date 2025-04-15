@@ -42,52 +42,40 @@ Mesh3D* MESH::BuildCube(float size, vec3<float> color)
 
 Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 {
-	// counter-clockwise, thumb direction is the forward
-	// this cube supposed as the front face(near plane of the cube in your thinking!)
-	// is configured with four vertices. Left upper one is v0, counter clockwise v1, v2, v3
-	// parrelel to the +z direction, v4, v5, v6, v7
-	// with 4 vertices, one plane of the cube is consists, i need 24 vertices for total.
+	// right-handed coordinate system. CCW winding.
+	// In the right-handed coordinate system, -Z is far from the screen.
 
 	Mesh3D* cube = new Mesh3D();
 
-	vec3<float> center;
 	float		halfLength = size / 2.f;
-	float		r = center.x + halfLength; // right
-	float		l = center.x - halfLength; // left
-	float		t = center.y + halfLength; // top
-	float		b = center.y - halfLength; // bottom
-	float		f = center.z + halfLength; // far (bigger z coordinate)
-	float		n = center.z - halfLength; // near (smaller z coordinate)
+	vec3<float> v0(+halfLength, +halfLength, +halfLength);
+	vec3<float> v1(-halfLength, +halfLength, +halfLength);
+	vec3<float> v2(-halfLength, -halfLength, +halfLength);
+	vec3<float> v3(+halfLength, -halfLength, +halfLength);
 
-	vec3<float> v0 = { r, t, n };
-	vec3<float> v1 = { l, t, n };
-	vec3<float> v2 = { l, b, n };
-	vec3<float> v3 = { r, b, n };
-
-	vec3<float> v4 = { r, t, f };
-	vec3<float> v5 = { l, t, f };
-	vec3<float> v6 = { l, b, f };
-	vec3<float> v7 = { r, b, f };
+	vec3<float> v4(+halfLength, +halfLength, -halfLength);
+	vec3<float> v5(-halfLength, +halfLength, -halfLength);
+	vec3<float> v6(-halfLength, -halfLength, -halfLength);
+	vec3<float> v7(+halfLength, -halfLength, -halfLength);
 
 	// front face
 	cube->AddPoint(v0);
-	cube->AddPoint(v2);
 	cube->AddPoint(v1);
+	cube->AddPoint(v2);
 	cube->AddPoint(v3);
 
-	cube->AddNormal({ 0.f, 0.f, -1.f });
-	cube->AddNormal({ 0.f, 0.f, -1.f });
-	cube->AddNormal({ 0.f, 0.f, -1.f });
-	cube->AddNormal({ 0.f, 0.f, -1.f });
+	cube->AddNormal({ 0.f, 0.f, 1.f });
+	cube->AddNormal({ 0.f, 0.f, 1.f });
+	cube->AddNormal({ 0.f, 0.f, 1.f });
+	cube->AddNormal({ 0.f, 0.f, 1.f });
 
-	// indices are also ccw, need to change into cw
 	cube->AddIndices({ 0, 1, 2 });
-	cube->AddIndices({ 0, 3, 1 });
+	cube->AddIndices({ 2, 3, 0 });
 
 	// right face
 	cube->AddPoint(v4);
-	cube->AddPoint(v3);
 	cube->AddPoint(v0);
+	cube->AddPoint(v3);
 	cube->AddPoint(v7);
 
 	cube->AddNormal({ 1.f, 0.f, 0.f });
@@ -96,12 +84,12 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	cube->AddNormal({ 1.f, 0.f, 0.f });
 
 	cube->AddIndices({ 4, 5, 6 });
-	cube->AddIndices({ 4, 7, 5 });
+	cube->AddIndices({ 6, 7, 4 });
 
 	// up face
 	cube->AddPoint(v4);
-	cube->AddPoint(v1);
 	cube->AddPoint(v5);
+	cube->AddPoint(v1);
 	cube->AddPoint(v0);
 
 	cube->AddNormal({ 0.f, 1.f, 0.f });
@@ -110,12 +98,12 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	cube->AddNormal({ 0.f, 1.f, 0.f });
 
 	cube->AddIndices({ 8, 9, 10 });
-	cube->AddIndices({ 8, 11, 9 });
+	cube->AddIndices({ 10, 11, 8 });
 
 	// left face
 	cube->AddPoint(v1);
-	cube->AddPoint(v6);
 	cube->AddPoint(v5);
+	cube->AddPoint(v6);
 	cube->AddPoint(v2);
 
 	cube->AddNormal({ -1.f, 0.f, 0.f });
@@ -124,13 +112,13 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	cube->AddNormal({ -1.f, 0.f, 0.f });
 
 	cube->AddIndices({ 12, 13, 14 });
-	cube->AddIndices({ 12, 15, 13 });
+	cube->AddIndices({ 14, 15, 12 });
 
 	// bottom face
-	cube->AddPoint(v3);
-	cube->AddPoint(v6);
-	cube->AddPoint(v2);
-	cube->AddPoint(v7);
+	cube->AddPoint(v3); // r, b, n
+	cube->AddPoint(v2); // l, b, n
+	cube->AddPoint(v6); // l, b, f
+	cube->AddPoint(v7); // r, b, f
 
 	cube->AddNormal({ 0.f, -1.f, 0.f });
 	cube->AddNormal({ 0.f, -1.f, 0.f });
@@ -138,21 +126,21 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	cube->AddNormal({ 0.f, -1.f, 0.f });
 
 	cube->AddIndices({ 16, 17, 18 });
-	cube->AddIndices({ 16, 19, 17 });
+	cube->AddIndices({ 18, 19, 16 });
 
 	// back face
 	cube->AddPoint(v5);
-	cube->AddPoint(v7);
 	cube->AddPoint(v4);
+	cube->AddPoint(v7);
 	cube->AddPoint(v6);
 
-	cube->AddNormal({ 0.f, 0.f, 1.f });
-	cube->AddNormal({ 0.f, 0.f, 1.f });
-	cube->AddNormal({ 0.f, 0.f, 1.f });
-	cube->AddNormal({ 0.f, 0.f, 1.f });
+	cube->AddNormal({ 0.f, 0.f, -1.f });
+	cube->AddNormal({ 0.f, 0.f, -1.f });
+	cube->AddNormal({ 0.f, 0.f, -1.f });
+	cube->AddNormal({ 0.f, 0.f, -1.f });
 
 	cube->AddIndices({ 20, 21, 22 });
-	cube->AddIndices({ 20, 23, 21 });
+	cube->AddIndices({ 22, 23, 20 });
 
 	return cube;
 }

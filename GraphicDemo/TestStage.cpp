@@ -44,16 +44,18 @@ void TestStage::Initialize()
 	glDepthMask(GL_TRUE);
 
 	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CW);
+	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 
 	cube = GameObject::CreateCube({ 0, 0, -5 }, { 0, 0, 0 }, 1);
 	//const std::string& filename = "../assets/Models/backpack.obj";
 	//cube = GameObject::LoadMeshFromFile(filename);
 
+	cube->Rotate({ 0.f, -0.6f, 0.f });
+
 	objectColor = { 1.0f, 0.5f, 0.31f };
 
-	lightPos = { 0.0f, 2.45f, -4.50f };
+	lightPos = { 3.0f, 0.00f, -5.00f };
 	lightColor = { 1.0f, 1.0f, 1.0f };
 
 	// uniform variable location

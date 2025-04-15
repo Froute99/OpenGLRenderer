@@ -22,7 +22,7 @@ public:
 	void		SetEyePosition(vec3<float> newPos) noexcept { eye = newPos; }
 	vec3<float> GetUp() const noexcept { return up; }
 	vec3<float> GetRight() const noexcept { return right; }
-	
+
 
 	//void ResetUp(vec2<float> camera_up = { 0, 1 }) noexcept;
 

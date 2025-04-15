@@ -6,7 +6,7 @@ in vec3 fragPos;
 // in vec2 TexCoords;
 
 uniform vec3 objectColor;
-uniform vec3 lightPosition;
+uniform vec3 lightPos;
 uniform vec3 lightColor;
 
 void main()
@@ -15,7 +15,7 @@ void main()
 	vec3 ambient = ambientStrength * lightColor;
 
 	vec3 norm = normalize(vertexNormal);
-	vec3 lightDir = normalize(lightPosition - fragPos);
+	vec3 lightDir = normalize(lightPos - fragPos);
 
 	float diff = max(dot(norm, lightDir), 0.0);
 	vec3 diffuse = diff * lightColor;

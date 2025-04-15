@@ -21,14 +21,14 @@ class Application : public SimpleEventHandler
 public:
 	enum DEMOINDEX
 	{
-		PHONGSHADING,
+		//PHONGSHADING,
 		//PBR,
 		//TEXTUREDPBR,
 		//TEXTUREDRAWING,
 		//ANIMATION,
 		//TRANSFORMPARENTDEMO,
 		//COMPUTESHADERDEMO,
-		//TEST,
+		TEST,
 		DEMOSIZE
 	};
 
