@@ -10,7 +10,7 @@ uniform sampler2D albedoMap;
 uniform sampler2D metallicMap;
 uniform sampler2D roughnessMap;
 uniform sampler2D normalMap;
-uniform sampler2D aoMap;
+// uniform sampler2D aoMap;
 
 // lights
 // uniform vec3 lightPositions[4];
@@ -85,11 +85,11 @@ vec3 FresnelSchlick(float cosTheta, vec3 F0)
 
 void main()
 {
-    // vec3  albedo    = pow(texture(albedoMap, TexCoords).rgb, vec3(2.2));
-    vec3  albedo    = texture(albedoMap, TexCoords).rgb;
+    vec3  albedo    = texture(albedoMap, TexCoords).rgb;    // guaranteed 
     float metallic  = texture(metallicMap, TexCoords).r;
     float roughness = texture(roughnessMap, TexCoords).r;
-    float ao = texture(aoMap, TexCoords).r;
+    // float ao = texture(aoMap, TexCoords).r;
+    float ao = 0.1;
 
     vec3 N = getNormalFromMap();
     vec3 V = normalize(camPos - WorldPos);
