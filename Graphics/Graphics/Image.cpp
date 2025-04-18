@@ -32,7 +32,7 @@ void Image::ResizePixelSize(int image_width, int image_height) noexcept
 bool Image::LoadFrom(const std::filesystem::path& source) noexcept
 {
 	stbi_set_flip_vertically_on_load(true);
-	unsigned char* image = stbi_load(source.generic_string().c_str(), &width, &height, &channel, 0);
+	unsigned char* image = stbi_load(source.generic_string().c_str(), &width, &height, &channel, 4);
 
 	if (image != nullptr)
 	{

@@ -25,7 +25,7 @@ void TexturedPBRDemo::Initialize()
 	glDepthMask(GL_TRUE);
 
 	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CW);
+	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 
 	//// floating point framebuffer
@@ -65,7 +65,7 @@ void TexturedPBRDemo::Initialize()
 	//backpack->Move({ 0.f, 0.f, -5.0f });
 
 	sphere = GameObject::CreateSphere({ 0, 0, 0 });
-	sphere->Move({ 0.f, 0.f, -50.f });
+	sphere->Move({ 0.f, 0.f, -5.f });
 
 	uniformModelLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "model");
 	uniformViewLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "view");
@@ -83,15 +83,10 @@ void TexturedPBRDemo::Initialize()
 	roughnessMap = new Texture();
 	aoMap = new Texture();
 
-	albedoMap->LoadFromPath("../assets/Models/rustediron2_basecolor.png");
+	albedoMap->LoadFromPath("../assets/Models/rustediron2_basecolor.png", true);
 	metallicMap->LoadFromPath("../assets/Models/rustediron2_metallic.png");
 	roughnessMap->LoadFromPath("../assets/Models/rustediron2_roughness.png");
 	normalMap->LoadFromPath("../assets/Models/rustediron2_normal.png");
-	//albedoMap->LoadFromPath("../assets/Models/diffuse.jpg");
-	//metallicMap->LoadFromPath("../assets/Models/specular.jpg");
-	//roughnessMap->LoadFromPath("../assets/Models/roughness.jpg");
-	//normalMap->LoadFromPath("../assets/Models/normal.png");
-	//aoMap->LoadFromPath("../assets/Models/ao.jpg");
 
 	lightPosLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "lightPositions");
 	lightColLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "lightColors");
@@ -232,17 +227,25 @@ void TexturedPBRDemo::Update(float /*dt*/)
 		// materials
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, albedoMap->GetTexturehandle());
+		glUniform1i(albedoMapLocation, 0);
+
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, metallicMap->GetTexturehandle());
+		glUniform1i(metallicMapLocation, 1);
+
 		glActiveTexture(GL_TEXTURE2);
 		glBindTexture(GL_TEXTURE_2D, roughnessMap->GetTexturehandle());
+		glUniform1i(roughnessMapLocation, 2);
+
 		glActiveTexture(GL_TEXTURE3);
 		glBindTexture(GL_TEXTURE_2D, normalMap->GetTexturehandle());
+		glUniform1i(normalMapLocation, 3);
+
 		glActiveTexture(GL_TEXTURE4);
 		glBindTexture(GL_TEXTURE_2D, aoMap->GetTexturehandle());
+		glUniform1i(aoMapLocation, 4);
 
 		sphere->Draw();
-		//backpack->Draw();
 	}
 	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 

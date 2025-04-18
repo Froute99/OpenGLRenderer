@@ -23,27 +23,45 @@ Texture::Texture(Image& image)
  The original one was little bit wasting memory and performance because
  it assumes all image has 4 component.
  Now this is exactly fit to size of image file. */
-bool Texture::LoadFromPath(const std::filesystem::path& image_path) noexcept
+bool Texture::LoadFromPath(const std::filesystem::path& image_path, bool useSRGB) noexcept
 {
 	if (!std::filesystem::exists(image_path))
 	{
 		return false;
 	}
 
+	if (GetTexturehandle() != 0)
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glDeleteTextures(1, &textureHandle);
+	}
+
+	glGenTextures(1, &textureHandle);
+
 	int channel, width, height;
 	stbi_set_flip_vertically_on_load(true);
 	unsigned char* image = stbi_load(image_path.generic_string().c_str(), &width, &height, &channel, 0);
-
+	
 	GLenum format = GL_RGBA;
+	GLenum internalFormat = GL_RGBA;
 	if (channel == 1)
+	{
 		format = GL_RED;
+		internalFormat = GL_RED;
+	}
 	else if (channel == 3)
+	{
 		format = GL_RGB;
+		internalFormat = useSRGB ? GL_SRGB : GL_RGB;
+	}
 	else if (channel == 4)
+	{
 		format = GL_RGBA;
+		internalFormat = useSRGB ? GL_SRGB_ALPHA : GL_RGBA;
+	}
 
 	glBindTexture(GL_TEXTURE_2D, textureHandle);
-	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, image);
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, image);
 
 	glGenerateMipmap(GL_TEXTURE_2D);
 
@@ -52,12 +70,12 @@ bool Texture::LoadFromPath(const std::filesystem::path& image_path) noexcept
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-
 	stbi_image_free(image);
 
 	return true;
 }
 
+// Deprecated. Clean up sometime later.
 bool Texture::LoadFromImage(const Image& image) noexcept
 {
 	if (GetTexturehandle() != 0)
