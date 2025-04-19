@@ -145,25 +145,26 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	return cube;
 }
 
+/* This method create sphere by merging two hemisphere
+ * Hemispheres which look from top(eye +Y to -Y)
+ * Each loop makes a circle has vertices of SEGMENTS
+ *
+ * Indices consist like this:
+ * (in 16 16 segments sphere)
+ * 0    *    17
+ * 1   ***   18
+ *    *****
+ * 2 ******* 19
+ *
+ * Top Right Left = CCW winding
+ * 0 1 17, 17 1 18
+ * 1 2 18, 18 2 19
+ *
+ * So, this sphere drawing
+ */
 Mesh3D* MESH::BuildSphere()
 {
-	/* This method create sphere by completing two hemisphere
-	 * Hemisphere which look from top(eye +Y to -Y)
-	 * Each loop makes a circle has vertices of SEGMENTS
-	 * 
-	 * Indices consist like this:
-	 * (in 16 16 segments sphere)
-	 * 0    *    17
-	 * 1   ***   18
-	 *    *****
-	 * 2 ******* 19
-	 * 
-	 * Not sure, but trinangle strip and CCW winding will draw triangle like this
-	 * 0 1 17, 17 1 18
-	 * 1 2 18, 18 2 19
-	 * 
-	 * So, this sphere drawing 
-	 */
+
 	Mesh3D* sphere = new Mesh3D();
 	sphere->SetShapePattern(ShapePattern::TriangleStrip);
 
@@ -181,14 +182,12 @@ Mesh3D* MESH::BuildSphere()
 			float z = std::sin(xSegment * ANGLE::two_pi) * std::sin(ySegment * ANGLE::pi);
 
 			sphere->AddPoint({ x, y, z });
-			//std::cout << x << ", " << y << ", " << z << std::endl;
 			sphere->AddNormal({ x, y, z });
 			sphere->AddTexCoord({ xSegment, ySegment });
 		}
 	}
 
-	//std::cout << "===================================\n";
-
+	// Indices
 	bool oddRow = false;
 	for (unsigned int y = 0; y < Y_SEGMENTS; ++y)
 	{
@@ -198,7 +197,6 @@ Mesh3D* MESH::BuildSphere()
 			{
 				sphere->AddIndex(y * (X_SEGMENTS + 1) + x);
 				sphere->AddIndex((y + 1) * (X_SEGMENTS + 1) + x);
-				//std::cout << y * (X_SEGMENTS + 1) + x << ", " << (y + 1) * (X_SEGMENTS + 1) + x << std::endl;
 			}
 		}
 		else

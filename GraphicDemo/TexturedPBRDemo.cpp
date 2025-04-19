@@ -1,11 +1,10 @@
 
 #include "TexturedPBRDemo.h"
 #include "GameObject.h"
-#include <glew.h>			  // glUniform
-#include <iostream>			  // error logging
-#include <Graphics/Draw.h>	  // rendering objects
-#include <Graphics/PATH.h>	  // path for shaders
-#include <Graphics/Texture.h> // for HDR framebuffer
+#include <iostream>				// error logging
+#include <Graphics/Draw.h>		// rendering objects
+#include <Graphics/PATH.h>		// path for shaders
+//#include <Graphics/Texture.h>	// for HDR framebuffer // already in the header
 
 // imguis
 #include <imgui/imgui.h>
@@ -15,18 +14,11 @@
 // stbi
 #include "stb_image.h"
 
+#include <glew.h>				// glUniform
 void TexturedPBRDemo::Initialize()
 {
 	pbrShader.LoadShaderFrom("../assets/shaders/PBR_Textured.vert", "../assets/shaders/PBR_Textured.frag");
 	hdrShader.LoadShaderFrom("../assets/shaders/HDR.vert", "../assets/shaders/HDR.frag");
-
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
-	glDepthMask(GL_TRUE);
-
-	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CCW);
-	glCullFace(GL_BACK);
 
 	//// floating point framebuffer
 	//glGenFramebuffers(1, &hdrFBO);
@@ -67,16 +59,6 @@ void TexturedPBRDemo::Initialize()
 	sphere = GameObject::CreateSphere({ 0, 0, 0 });
 	sphere->Move({ 0.f, 0.f, -5.f });
 
-	uniformModelLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "model");
-	uniformViewLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "view");
-	uniformProjectionLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "projection");
-
-	albedoMapLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "albedoMap");
-	metallicMapLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "metallicMap");
-	roughnessMapLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "roughnessMap");
-	normalMapLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "normalMap");
-	aoMapLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "aoMap");
-
 	albedoMap = new Texture();
 	normalMap = new Texture();
 	metallicMap = new Texture();
@@ -88,23 +70,8 @@ void TexturedPBRDemo::Initialize()
 	roughnessMap->LoadFromPath("../assets/Models/rustediron2_roughness.png");
 	normalMap->LoadFromPath("../assets/Models/rustediron2_normal.png");
 
-	lightPosLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "lightPositions");
-	lightColLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "lightColors");
-	camPosLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "camPos");
-
-	//gammaLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "gammaCorrection");
-
-	if (lightPosLocation == -1)
-	{
-		std::cout << "There's no uniform variable named \"lightPositions\"" << std::endl;
-	}
-	if (lightColLocation == -1)
-	{
-		std::cout << "There's no uniform variable named \"lightColors\"" << std::endl;
-	}
-
 	lightPos = { 0.34f, 0.20f, -4.00f };
-	lightCol = { 1.f };
+	lightColor = { 1.f };
 
 	//lightPos[0] = { 0.00f, 0.4f, 4.0f };
 	//lightPos[1] = { 0.25f, 0.4f, 4.0f };
@@ -210,40 +177,24 @@ void TexturedPBRDemo::Update(float /*dt*/)
 		const mat4<float>& Model = sphere->GetModelToWorld();
 		const mat4<float>& View = camera.BuildViewMatrix();
 		const mat4<float>& Projection = view.BuildProjectionMatrix();
-		glUniformMatrix4fv(uniformModelLocation, 1, GL_FALSE, &Model.elements[0][0]);
-		glUniformMatrix4fv(uniformViewLocation, 1, GL_FALSE, &View.elements[0][0]);
-		glUniformMatrix4fv(uniformProjectionLocation, 1, GL_FALSE, &Projection.elements[0][0]);
+		pbrShader.SendUniformVariable("model", Model);
+		pbrShader.SendUniformVariable("view", View);
+		pbrShader.SendUniformVariable("projection", Projection);
 
 		// lights
-		glUniform3fv(lightPosLocation, 1, &lightPos.x);
-		glUniform3fv(lightColLocation, 1, &lightCol.x);
-
-		//glUniform1f(gammaLocation, gamma); // whether perform a gamma correction or not
+		pbrShader.SendUniformVariable("lightPositions", lightPos);
+		pbrShader.SendUniformVariable("lightColors", lightColor);
 
 		// camera position
 		vec3<float> camPos = camera.GetEyePosition();
-		glUniform3fv(camPosLocation, 1, &camPos.x);
+		pbrShader.SendUniformVariable("camPos", camPos);
 
 		// materials
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, albedoMap->GetTexturehandle());
-		glUniform1i(albedoMapLocation, 0);
-
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, metallicMap->GetTexturehandle());
-		glUniform1i(metallicMapLocation, 1);
-
-		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, roughnessMap->GetTexturehandle());
-		glUniform1i(roughnessMapLocation, 2);
-
-		glActiveTexture(GL_TEXTURE3);
-		glBindTexture(GL_TEXTURE_2D, normalMap->GetTexturehandle());
-		glUniform1i(normalMapLocation, 3);
-
-		glActiveTexture(GL_TEXTURE4);
-		glBindTexture(GL_TEXTURE_2D, aoMap->GetTexturehandle());
-		glUniform1i(aoMapLocation, 4);
+		pbrShader.BindTexture("albedoMap", 0, albedoMap->GetTexturehandle());
+		pbrShader.BindTexture("metallicMap", 1, metallicMap->GetTexturehandle());
+		pbrShader.BindTexture("roughnessMap", 2, roughnessMap->GetTexturehandle());
+		pbrShader.BindTexture("normalMap", 3, normalMap->GetTexturehandle());
+		pbrShader.BindTexture("aoMap", 4, aoMap->GetTexturehandle());
 
 		sphere->Draw();
 	}
@@ -368,7 +319,7 @@ void TexturedPBRDemo::ImguiHelper()
 
 		ImGui::NewLine();
 		ImGui::DragFloat3("Light Position", &lightPos.x, 0.02f);
-		ImGui::ColorEdit3("Light Color", &lightCol.x);
+		ImGui::ColorEdit3("Light Color", &lightColor.x);
 
 		ImGui::NewLine();
 

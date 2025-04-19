@@ -41,14 +41,6 @@ void PhongShadingDemo::Initialize()
 	skyboxShader.LoadShaderFrom(PATH::skyboxVS, PATH::skyboxFS);
 	hdrShader.LoadShaderFrom("../assets/shaders/HDR.vert", "../assets/shaders/HDR.frag");
 
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
-	glDepthMask(GL_TRUE);
-
-	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CCW);
-	glCullFace(GL_BACK);
-
 	const std::string& filename = "../assets/Models/backpack.obj";
 	backpack = GameObject::LoadMeshFromFile(filename);
 

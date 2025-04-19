@@ -25,7 +25,20 @@ public:
 
 	constexpr vec3(T repeated_value) noexcept
 		: x(repeated_value), y(repeated_value), z(repeated_value) {}
+
 	T x, y, z;
+
+	T& operator[](int row) noexcept
+	{
+		assert(0 <= row && row <= 3);
+		return *(&x + row);
+	}
+
+	constexpr const T& operator[](int row) const noexcept
+	{
+		assert(0 <= row && row <= 3);
+		return *(&x + row);
+	}
 };
 
 template <typename T>

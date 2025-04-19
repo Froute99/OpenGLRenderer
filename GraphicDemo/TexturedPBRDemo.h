@@ -1,6 +1,5 @@
 
 #pragma once
-
 #include "Demo.h"
 #include <Graphics/Shader.h>
 #include <Graphics/Texture.h>
@@ -33,31 +32,14 @@ private:
 	GameObject* backpack;
 	GameObject* sphere;
 
-	unsigned int uniformModelLocation;
-	unsigned int uniformViewLocation;
-	unsigned int uniformProjectionLocation;
+	Texture* albedoMap;
+	Texture* normalMap;
+	Texture* roughnessMap;
+	Texture* aoMap;
+	Texture* metallicMap;
 
-	unsigned int albedoMapLocation;
-	Texture*	 albedoMap;
-
-	unsigned int normalMapLocation;
-	Texture*	 normalMap;
-
-	unsigned int roughnessMapLocation;
-	Texture*	 roughnessMap;
-
-	unsigned int aoMapLocation;
-	Texture*	 aoMap;
-
-	unsigned int metallicMapLocation;
-	Texture*	 metallicMap;
-
-	unsigned int lightPosLocation;
-	unsigned int lightColLocation;
-	//vec3<float>	 lightPos[4];
-	//vec3<float>	 lightCol[4];
 	vec3<float> lightPos;
-	vec3<float> lightCol;
+	vec3<float> lightColor;
 
 	unsigned int camPosLocation;
 

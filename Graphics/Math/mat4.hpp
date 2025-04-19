@@ -118,6 +118,18 @@ public:
 		assert(0 <= row && row <= 3);
 		return elements[col][row];
 	}
+
+	vec4<T>& operator[](int col) noexcept
+	{
+		assert(0 <= col && col <= 3);
+		return column[col];
+	}
+
+	constexpr const vec4<T>& operator[](int col) const noexcept
+	{
+		assert(0 <= col && col <= 3);
+		return column[col];
+	}
 };
 
 template <typename T>

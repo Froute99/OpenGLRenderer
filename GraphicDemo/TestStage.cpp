@@ -39,14 +39,6 @@ void TestStage::Initialize()
 {
 	shader.LoadShaderFrom(PATH::shape_vert, PATH::shape_frag);
 
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
-	glDepthMask(GL_TRUE);
-
-	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CCW);
-	glCullFace(GL_BACK);
-
 	cube = GameObject::CreateCube({ 0, 0, -5 }, { 0, 0, 0 }, 1);
 	//const std::string& filename = "../assets/Models/backpack.obj";
 	//cube = GameObject::LoadMeshFromFile(filename);

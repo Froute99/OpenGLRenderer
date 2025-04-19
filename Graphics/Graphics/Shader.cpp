@@ -115,13 +115,18 @@ void Shader::UseNothing()
 	glUseProgram(0);
 }
 
-void Shader::SendUniformVariable(const char* variable_name, const int& variable) const noexcept
+/* Be careful that glGetUniformLocation returns "int" type value.
+ * According to khronos documentation: This function returns -1
+ * if name does not correspond to an active uniform variable in program,
+ * if name starts with the reserved prefix "gl_",
+ * or if name is associated with an atomic counter or a named uniform block. */
+void Shader::SendUniformVariable(const char* variable_name, const int variable) const noexcept
 {
 	const int location = glGetUniformLocation(handleToShader, variable_name);
 	glUniform1i(location, variable);
 }
 
-void Shader::SendUniformVariable(const char* variable_name, const float& variable) const noexcept
+void Shader::SendUniformVariable(const char* variable_name, const float variable) const noexcept
 {
 	const int location = glGetUniformLocation(handleToShader, variable_name);
 	glUniform1f(location, variable);
@@ -130,10 +135,25 @@ void Shader::SendUniformVariable(const char* variable_name, const float& variabl
 void Shader::SendUniformVariable(const char* variable_name, const mat3<float>& matrix) const noexcept
 {
 	const int location = glGetUniformLocation(handleToShader, variable_name);
-	float matrix3[] = {
-		matrix.elements[0][0], matrix.elements[0][1], matrix.elements[0][2],
-		matrix.elements[1][0], matrix.elements[1][1], matrix.elements[1][2],
-		matrix.elements[2][0], matrix.elements[2][1], matrix.elements[2][2]
-	};
-	glUniformMatrix3fv(location, 1, false, matrix3);
+	glUniformMatrix3fv(location, 1, false, &matrix[0][0]);
+}
+
+void Shader::SendUniformVariable(const char* name, const vec3<float>& v) const noexcept
+{
+	const int location = glGetUniformLocation(handleToShader, name);
+	glUniform3fv(location, 1, &v.x);
+}
+
+void Shader::SendUniformVariable(const char* name, const mat4<float>& m) const noexcept
+{
+	const int location = glGetUniformLocation(handleToShader, name);
+	glUniformMatrix4fv(location, 1, GL_FALSE, &m[0][0]);
+}
+
+void Shader::BindTexture(const char* uniformName, const int value, const unsigned int textureHandle) const noexcept
+{
+	const int location = glGetUniformLocation(handleToShader, uniformName);
+	glActiveTexture(GL_TEXTURE0 + value);
+	glBindTexture(GL_TEXTURE_2D, textureHandle);
+	glUniform1i(location, value);
 }

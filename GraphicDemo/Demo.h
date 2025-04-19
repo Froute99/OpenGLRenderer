@@ -18,8 +18,8 @@ class Demo : public SimpleEventHandler
 {
 public:
 	explicit Demo(OpenGLWindow& window)
-		: width(window.GetWindowWidth()), height(window.GetWindowHeight()) {}
-	virtual void Initialize() = 0;
+		: width(window.GetWindowWidth()), height(window.GetWindowHeight()) { Initialize(); }
+	virtual void Initialize();
 	virtual void Update(float dt) = 0;
 
 	virtual void ResetCamera() = 0;

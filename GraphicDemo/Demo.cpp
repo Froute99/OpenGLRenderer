@@ -10,6 +10,18 @@
 
 #include "Demo.h"
 #include <Graphics/Draw.h>
+#include <glew.h> // glUniform
+
+void Demo::Initialize()
+{
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+	glDepthMask(GL_TRUE);
+
+	glEnable(GL_CULL_FACE);
+	glFrontFace(GL_CCW);
+	glCullFace(GL_BACK);
+}
 
 void Demo::HandleResizeEvent(const int& new_width, const int& new_height)
 {

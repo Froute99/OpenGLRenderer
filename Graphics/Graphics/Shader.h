@@ -10,7 +10,9 @@
 
 #pragma once
 #include <filesystem>
+#include <Math/vec3.hpp>
 #include <Math/mat3.hpp>
+#include <Math/mat4.hpp>
 
 namespace ShaderHelper
 {
@@ -31,9 +33,13 @@ public:
 	static void UseShader(const Shader& shader);
 	static void UseNothing();
 
-	void SendUniformVariable(const char* variable_name, const int& variable) const noexcept;
-	void SendUniformVariable(const char* variable_name, const float& variable) const noexcept;
+	void SendUniformVariable(const char* variable_name, const int variable) const noexcept;
+	void SendUniformVariable(const char* variable_name, const float variable) const noexcept;
 	void SendUniformVariable(const char* variable_name, const mat3<float>& matrix) const noexcept;
+	void SendUniformVariable(const char* name, const vec3<float>& v) const noexcept;
+	void SendUniformVariable(const char* name, const mat4<float>& m) const noexcept;
+	void BindTexture(const char* uniformName, const int value, const unsigned int textureHandle) const noexcept;
+
 private:
 	unsigned int handleToShader = 0;
 };

@@ -70,7 +70,7 @@ public:
 
 	union
 	{
-		T elements[3][3];
+		T		elements[3][3];
 		vec3<T> column[3];
 	};
 	constexpr T operator() (int col, int row) const noexcept
@@ -86,6 +86,18 @@ public:
 		assert(0 <= row && row <= 2);
 		return elements[col][row];
 	}
+
+	vec3<T>& operator[](int col) noexcept
+	{
+		assert(0 <= col && col <= 2);
+		return column[col];
+	}
+
+	constexpr const vec3<T>& operator[](int col) const noexcept
+	{
+		assert(0 <= col && col <= 2);
+		return column[col];
+	}
 };
 
 template <typename T>
@@ -96,8 +108,9 @@ mat3<T> operator*(const mat3<T>& m1, const mat3<T>& m2) noexcept
 	{
 		for (int j = 0; j <= 2; ++j)
 		{
-			m.elements[i][j] =   m1.elements[0][j] * m2.elements[i][0]
-				+ m1.elements[1][j] * m2.elements[i][1] 
+			m.elements[i][j] =
+				  m1.elements[0][j] * m2.elements[i][0]
+				+ m1.elements[1][j] * m2.elements[i][1]
 				+ m1.elements[2][j] * m2.elements[i][2];
 		}
 	}

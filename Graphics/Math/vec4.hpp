@@ -26,6 +26,18 @@ public:
 		: x(v.x), y(v.y), z(v.z), w(w) {}
 
 	T x, y, z, w;
+
+	T& operator[](int row) noexcept
+	{
+		assert(0 <= row && row <= 3);
+		return *(&x + row);
+	}
+
+	constexpr const T& operator[](int row) const noexcept
+	{
+		assert(0 <= row && row <= 3);
+		return *(&x + row);
+	}
 };
 
 template <typename T>
