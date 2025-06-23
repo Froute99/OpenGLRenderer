@@ -4,6 +4,7 @@
 #include "Demo.h"
 #include <Graphics/Shader.h>
 #include <Graphics/Texture.h>
+#include <EnvironmentMap.h>
 
 class GameObject;
 
@@ -32,28 +33,15 @@ private:
 
 	GameObject* sphere;
 
-	unsigned int uniformModelLocation;
-	unsigned int uniformViewLocation;
-	unsigned int uniformProjectionLocation;
-
-	unsigned int sphereColorLocation;
 	vec3<float>	 sphereColor;
-
-	unsigned int roughnessLocation;
 	float		 roughness;
-
-	unsigned int aoLocation;
 	float		 ambientOcclusion;
-
-	unsigned int metallicLocation;
 	float		 metallic;
 
 	unsigned int lightPosLocation;
 	unsigned int lightColLocation;
 	vec3<float>	 lightPos[4];
 	vec3<float>	 lightCol[4];
-
-	unsigned int camPosLocation;
 
 	Shader		 hdrShader;
 	unsigned int hdrFBO;	  // framebuffer object handle for HDR
@@ -64,6 +52,10 @@ private:
 	void RenderQuad();
 	unsigned int quadVAO = 0;
 	unsigned int quadVBO;
+
+	EnvironmentMap envMap{ GetScreenWidth(), GetScreenHeight() };
+
+	bool shouldIrradiance = true;
 
 	int				  surfaceIndex = 0;
 	const char* const surfacesList[6] = { "Plastic", "Glass", "Diamond", "Iron", "Copper", "Gold" };

@@ -5,6 +5,10 @@ in vec2 TexCoords;
 
 out vec4 FragColor;
 
+uniform samplerCube irradianceMap;
+uniform samplerCube prefilterMap;
+uniform sampler2D brdfLUT;
+
 // material parameters
 uniform vec3 albedo;
 uniform float roughness;
@@ -16,8 +20,6 @@ uniform vec3 lightPositions[4];
 uniform vec3 lightColors[4];
 
 uniform vec3 camPos;
-
-uniform float gammaCorrection;
 
 const float PI = 3.14159265359;
 
@@ -62,10 +64,16 @@ vec3 FresnelSchlick(float cosTheta, vec3 F0)
     return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
 
+vec3 FresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
+{
+    return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
+}
+
 void main()
 {
-    vec3 N = normalize(Normal);
+    vec3 N = normalize(Normal);     // == halfvector
     vec3 V = normalize(camPos - WorldPos);
+    vec3 R = reflect(-V, N);
 
     // F0 represent base reflectivity, and you might confused with albedo. In here, not the real world,
     // "albedo" represent color of object while "base reflectivity" represent how much lights reflected. (I guess two things are same thing in real world)
@@ -101,19 +109,34 @@ void main()
         vec3 kD = vec3(1.0) - kS;       // By the energy conservation, kD = 1.0 - kS.
 
         // metalness is very similar to specular, so the coefficient of diffuse light multiplied by 1 - metallic
-        kD *= 1.0 - max(metallic, 0.001);   // to prevent pure metal become absolutly dark
+        // kD *= 1.0 - max(metallic, 0.001);   // to prevent pure metal become absolutly dark
+        kD *= 1.0 - metallic;
 
         // add to outgoing radiance Lo
         Lo += (kD * albedo / PI + specular) * radiance * NdotL;  // note that we already multiplied the BRDF by the Fresnel (kS) so we won't multiply by kS again
     }
 
-    // this ambient light will be changed when IBL is implemented.
-    vec3 ambient = vec3(0.03) * albedo * ao;
+    vec3 F = FresnelSchlickRoughness(max(dot(N, V), 0.0), F0, roughness);
+    // vec3 kS = FresnelSchlick(max(dot(N, V), 0.0), F0);
+
+    vec3 kS = F;
+    vec3 kD = 1.0 - kS;
+    kD *= 1.0 - metallic;
+
+    vec3 irradiance = texture(irradianceMap, N).rgb;
+    vec3 diffuse = irradiance * albedo;
+
+    const float MAX_REFLECTION_LOD = 4.0;
+    vec3 prefilteredColor = textureLod(prefilterMap, R, roughness * MAX_REFLECTION_LOD).rgb;
+    vec2 brdf = texture(brdfLUT, vec2(max(dot(N, V), 0.0), roughness)).rg;  // brdf integral results
+    vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
+
+    vec3 ambient = (kD * diffuse + specular) * ao;
 
     vec3 color = ambient + Lo;
 
     // HDR tonemapping
-    color = color / (color + vec3(1.0));
+    // color = color / (color + vec3(1.0));
  
     // gamma correct
     color = pow(color, vec3(1.0 / 2.2));

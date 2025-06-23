@@ -4,6 +4,8 @@
 - 기간: 2019.03.26 - 2019.12.8
 - 인원: 1인 개발
 
+resources download: (google drive)
+
 # Table of Contents
 [1. Pipeline](#pipeline)  
 [2. Classes Info.](#classes)

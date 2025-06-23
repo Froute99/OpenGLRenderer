@@ -33,7 +33,7 @@ public:
 	void AddType(Type type) noexcept;
 	const std::vector<Type>& GetTypes() const noexcept;
 
-	VerticesDescription() = default;
+	VerticesDescription() { types = {Type::Position, Type::Normal, Type::TextureCoordinate}; };
 	VerticesDescription(std::initializer_list<Type> fields) noexcept;
 
 	unsigned GetVertexSize() const noexcept;

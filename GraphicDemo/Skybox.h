@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#include <Graphics/Vertices.h>
 #include <vector>
 
 class Skybox : public Object
@@ -12,6 +13,7 @@ public:
 private:
 	std::vector<std::string> cubemapPaths;
 	unsigned int			 cubemapTextureID;
+
 	unsigned int			 skyboxVAO;
 	unsigned int			 skyboxVBO;
 

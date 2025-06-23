@@ -5,6 +5,8 @@ in vec2 TexCoords;
 
 out vec4 FragColor;
 
+uniform samplerCube irradianceMap;
+
 // material parameters
 uniform sampler2D albedoMap;
 uniform sampler2D metallicMap;
@@ -13,10 +15,10 @@ uniform sampler2D normalMap;
 // uniform sampler2D aoMap;
 
 // lights
-// uniform vec3 lightPositions[4];
-// uniform vec3 lightColors[4];
 uniform vec3 lightPositions;
 uniform vec3 lightColors;
+
+uniform bool shouldIrradiance;
 
 uniform vec3 camPos;
 
@@ -83,6 +85,11 @@ vec3 FresnelSchlick(float cosTheta, vec3 F0)
     return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
 
+vec3 FresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
+{
+    return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
+} 
+
 void main()
 {
     vec3  albedo    = texture(albedoMap, TexCoords).rgb;    // guaranteed 
@@ -138,8 +145,19 @@ void main()
         Lo += (kD * albedo / PI + specular) * radiance * NdotL;  // note that we already multiplied the BRDF by the Fresnel (kS) so we won't multiply by kS again
     }
 
-    // this ambient light will be changed when IBL is implemented.
-    vec3 ambient = vec3(0.03) * albedo * ao;
+
+    vec3 F = FresnelSchlickRoughness(max(dot(N, V), 0.0), F0, roughness);
+    vec3 kS = F;
+    vec3 kD = 1.0 - kS;
+
+    vec3 irradiance = texture(irradianceMap, N).rgb;
+    vec3 diffuse = irradiance * albedo;
+    
+    vec3 ambient = (kD * diffuse) * ao;
+    if (!shouldIrradiance)
+    {
+        ambient = vec3(0.03) * albedo * ao;
+    }
 
     vec3 color = ambient + Lo;
 

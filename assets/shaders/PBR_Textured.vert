@@ -19,5 +19,6 @@ void main()
     Normal = mat3(transpose(inverse(model))) * aNormal;
     TexCoords = aTexCoords;
 
+    // column-major matrices multiply.
     gl_Position =  projection * view * vec4(WorldPos, 1.0);
 }

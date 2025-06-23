@@ -60,8 +60,9 @@ void Camera::MoveY(float distance) noexcept
 
 void Camera::MoveZ(float distance) noexcept
 {
-	vec3<float> frontUnit = Vector3::normalize(Vector3::cross_product(right, up));
-	vec3<float> amount = distance * frontUnit;
+	vec3<float> front = Vector3::normalize(target - eye);
+	//vec3<float> frontUnit = Vector3::normalize(Vector3::cross_product(right, up));
+	vec3<float> amount = distance * front;
 	eye += amount;
 	target += amount;
 }

@@ -14,6 +14,7 @@
 class Mesh;
 class Mesh3D;
 
+// modify name to VertexUplodaer, uploading mesh information to video memory
 class [[nodiscard]] VertexObject
 {
 public:

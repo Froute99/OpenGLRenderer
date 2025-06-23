@@ -3,6 +3,7 @@
 #include "Demo.h"
 #include <Graphics/Shader.h>
 #include <Graphics/Texture.h>
+#include <EnvironmentMap.h>
 
 class GameObject;
 
@@ -58,8 +59,10 @@ private:
 	unsigned int quadVBO;
 
 	// IBL (Diffuse)
-	Shader equirectangularMappingShader;
+	EnvironmentMap envMap{ GetScreenWidth(), GetScreenHeight() };
 
 	vec3<float> rotationOffset{ 0.f };
+
+	bool shouldIrradiance = true;
 
 };
