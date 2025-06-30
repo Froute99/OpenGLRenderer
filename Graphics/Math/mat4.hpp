@@ -345,12 +345,12 @@ namespace Matrix4
 	{
 		T tangent = tan(fovYinRadians / static_cast<T>(2));
 
-		mat4<T> result(0.0);
-		result.elements[0][0] = static_cast<T>(1) / (aspect * tangent);
-		result.elements[1][1] = static_cast<T>(1) / (tangent);
-		result.elements[2][2] = -(zFar + zNear) / (zFar - zNear);
-		result.elements[2][3] = -static_cast<T>(1);
-		result.elements[3][2] = -static_cast<T>(2) * (zFar * zNear) / (zFar - zNear);
+		mat4<T> result;
+		result[0][0] = static_cast<T>(1) / (aspect * tangent);
+		result[1][1] = static_cast<T>(1) / (tangent);
+		result[2][2] = -(zFar + zNear) / (zFar - zNear);
+		result[2][3] = -static_cast<T>(1);
+		result[3][2] = -static_cast<T>(2) * (zFar * zNear) / (zFar - zNear);
 
 		return result;
 	}

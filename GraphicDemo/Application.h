@@ -16,7 +16,7 @@
 #include "Demo.h"
 #include <array>
 
-class Application : public SimpleEventHandler
+class Application : public EventHandler
 {
 public:
 	enum DEMOINDEX
@@ -44,7 +44,7 @@ public:
 	void HandleScrollEvent(float scroll_amount) override;
 	void HandleMousePositionEvent(float xpos, float ypos) override;
 	void HandleMouseEvent(MouseButton button) override;
-	void HandleResizeEvent(const int& width, const int& height) override;
+	void HandleResizeEvent(const int width, const int height) override;
 	void HandleWindowClose() override;
 	void HandleFocusEvent(bool focused) override;
 

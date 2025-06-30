@@ -132,7 +132,7 @@ void TextureDrawingDemo::HandleKeyPress(KeyboardButton button)
 	}
 }
 
-void TextureDrawingDemo::HandleResizeEvent(const int& new_width, const int& new_height)
+void TextureDrawingDemo::HandleResizeEvent(const int new_width, const int new_height)
 {
 	Demo::HandleResizeEvent(new_width, new_height);
 }

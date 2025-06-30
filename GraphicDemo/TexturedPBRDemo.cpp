@@ -152,7 +152,7 @@ void TexturedPBRDemo::ResetCamera()
 {
 }
 
-void TexturedPBRDemo::HandleResizeEvent(const int& new_width, const int& new_height)
+void TexturedPBRDemo::HandleResizeEvent(const int new_width, const int new_height)
 {
 	new_width;
 	new_height;

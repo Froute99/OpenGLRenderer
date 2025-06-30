@@ -63,7 +63,7 @@ void PBRDemo::Initialize()
 	//sphere = GameObject::LoadMeshFromFile(spherePath);
 	sphere = GameObject::CreateSphere({ 0, 0, 0 });
 	sphere->SetObjectType(ObjectType::NonTextured);
-	sphere->Move({ 0.0f, 0.0f, -5.0f });
+	sphere->Move({ 0.5f, 0.0f, -1.5f });
 
 	lightPosLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "lightPositions");
 	lightColLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "lightColors");
@@ -83,81 +83,66 @@ void PBRDemo::Initialize()
 	}
 
 	sphereColor = vec3<float>(1.f, 0.f, 0.f);
-	roughness = 0.8f;
+	roughness = 0.1f;
 	ambientOcclusion = 0.1f;
 	metallic = 0.01f;
 
-	lightPos[0] = { 0.00f, 0.4f, -4.0f };
-	lightPos[1] = { 0.25f, 0.4f, -4.0f };
-	lightPos[2] = { 0.50f, 0.4f, -4.0f };
-	lightPos[3] = { 0.75f, 0.4f, -4.0f };
+	lightPos[0] = { 1.36f, 0.52f, -0.4f };
+	lightPos[1] = { 0.f };
+	lightPos[2] = { 0.f };
+	lightPos[3] = { 0.f };
 
-	lightCol[0] = { 1.0f, 1.0f, 1.0f };
-	lightCol[1] = { 1.0f, 1.0f, 1.0f };
-	lightCol[2] = { 1.0f, 1.0f, 1.0f };
-	lightCol[3] = { 1.0f, 1.0f, 1.0f };
+	lightCol[0] = { 1.f };
+	lightCol[1] = { 0.f };
+	lightCol[2] = { 0.f };
+	lightCol[3] = { 0.f };
 
 }
 
-void PBRDemo::Update(float /*dt*/)
+void PBRDemo::Update(float dt)
 {
-	camera.MoveX(moveSpeed.x);
-	camera.MoveY(moveSpeed.y);
-	camera.MoveZ(moveSpeed.z);
-
+	Demo::Update(dt);
 	Draw::StartDrawing();
 
-	//glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
-	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		Shader::UseShader(pbrShader);
+	Shader::UseShader(pbrShader);
 
-		const mat4<float>& Model = sphere->GetModelToWorld();
-		const mat4<float>& View = camera.BuildViewMatrix();
-		const mat4<float>& Projection = view.BuildProjectionMatrix();
+	const mat4<float>& Model = sphere->GetModelToWorld();
+	const mat4<float>& View = camera.BuildViewMatrix();
+	const mat4<float>& Projection = view.BuildProjectionMatrix();
 
-		// This uniform sending bunch should be moved to class method or kind of helper function
-		pbrShader.SendUniformVariable("model", Model);
-		pbrShader.SendUniformVariable("view", View);
-		pbrShader.SendUniformVariable("projection", Projection);
+	// This uniform sending bunch should be moved to class method or kind of helper function
+	pbrShader.SendUniformVariable("model", Model);
+	pbrShader.SendUniformVariable("view", View);
+	pbrShader.SendUniformVariable("projection", Projection);
 
-		pbrShader.SendUniformVariable("albedo", sphereColor);
-		pbrShader.SendUniformVariable("roughness", roughness);
-		pbrShader.SendUniformVariable("ao", ambientOcclusion);
-		pbrShader.SendUniformVariable("metallic", metallic);
+	pbrShader.SendUniformVariable("albedo", sphereColor);
+	pbrShader.SendUniformVariable("roughness", roughness);
+	pbrShader.SendUniformVariable("ao", ambientOcclusion);
+	pbrShader.SendUniformVariable("metallic", metallic);
 
-		// lights
-		glUniform3fv(lightPosLocation, 4, &lightPos[0].x);
-		glUniform3fv(lightColLocation, 4, &lightCol[0].x);
+	// lights
+	glUniform3fv(lightPosLocation, 4, &lightPos[0].x);
+	glUniform3fv(lightColLocation, 4, &lightCol[0].x);
 
-		// uniform vec3 camPos;
-		pbrShader.SendUniformVariable("camPos", camera.GetEyePosition());
+	// uniform vec3 camPos;
+	pbrShader.SendUniformVariable("camPos", camera.GetEyePosition());
 
-		pbrShader.SendUniformVariable("irradianceMap", 0);
-		pbrShader.SendUniformVariable("prefilterMap", 1);
-		pbrShader.SendUniformVariable("brdfLUT", 2);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, envMap.GetIrradianceMapHandle());
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, envMap.GetPrefilterMapHandle());
-		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, envMap.GetBRDFLUTTextureHandle());
+	pbrShader.SendUniformVariable("irradianceMap", 0);
+	pbrShader.SendUniformVariable("prefilterMap", 1);
+	pbrShader.SendUniformVariable("brdfLUT", 2);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, envMap.GetIrradianceMapHandle());
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, envMap.GetPrefilterMapHandle());
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, envMap.GetBRDFLUTTextureHandle());
 
-		sphere->Draw();
-	}
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	sphere->Draw();
 
 
-	envMap.Render(Matrix4::CutOffTranslation(camera.BuildViewMatrix()));
-
-	//glClear(GL_COLOR_BUFFER_BIT);
-	//Shader::UseShader(hdrShader);
-	//glActiveTexture(GL_TEXTURE0);
-	//glBindTexture(GL_TEXTURE_2D, colorBuffer);
-	//glUniform1i(glGetUniformLocation(hdrShader.GetHandleToShader(), "hdr"), hdr);
-	//glUniform1f(glGetUniformLocation(hdrShader.GetHandleToShader(), "exposure"), exposure);	
-	//RenderQuad();
+	envMap.Render(Matrix4::CutOffTranslation(camera.BuildViewMatrix()), Projection);
 
 	Draw::FinishDrawing();
 
@@ -170,10 +155,9 @@ void PBRDemo::ResetCamera()
 
 }
 
-void PBRDemo::HandleResizeEvent(const int& new_width, const int& new_height)
+void PBRDemo::HandleResizeEvent(const int new_width, const int new_height)
 {
-	new_width;
-	new_height;
+	Demo::HandleResizeEvent(new_width, new_height);
 }
 
 void PBRDemo::HandleKeyPress(KeyboardButton button)
@@ -181,22 +165,22 @@ void PBRDemo::HandleKeyPress(KeyboardButton button)
 	switch (button)
 	{
 		case KeyboardButton::W:
-			moveSpeed.z = 0.1f;
+			cameraMovement.z = 0.1f;
 			break;
 		case KeyboardButton::A:
-			moveSpeed.x = -0.1f;
+			cameraMovement.x = -0.1f;
 			break;
 		case KeyboardButton::S:
-			moveSpeed.z = -0.1f;
+			cameraMovement.z = -0.1f;
 			break;
 		case KeyboardButton::D:
-			moveSpeed.x = 0.1f;
+			cameraMovement.x = 0.1f;
 			break;
 		case KeyboardButton::Q:
-			moveSpeed.y = 0.1f;
+			cameraMovement.y = -0.1f;
 			break;
 		case KeyboardButton::E:
-			moveSpeed.y = -0.1f;
+			cameraMovement.y = 0.1f;
 			break;
 	}
 }
@@ -206,22 +190,22 @@ void PBRDemo::HandleKeyRelease(KeyboardButton button)
 	switch (button)
 	{
 		case KeyboardButton::W:
-			moveSpeed.z = 0.0f;
+			cameraMovement.z = 0.0f;
 			break;
 		case KeyboardButton::A:
-			moveSpeed.x = 0.0f;
+			cameraMovement.x = 0.0f;
 			break;
 		case KeyboardButton::S:
-			moveSpeed.z = 0.0f;
+			cameraMovement.z = 0.0f;
 			break;
 		case KeyboardButton::D:
-			moveSpeed.x = 0.0f;
+			cameraMovement.x = 0.0f;
 			break;
 		case KeyboardButton::Q:
-			moveSpeed.y = 0.0f;
+			cameraMovement.y = 0.0f;
 			break;
 		case KeyboardButton::E:
-			moveSpeed.y = 0.0f;
+			cameraMovement.y = 0.0f;
 			break;
 	}
 }
@@ -234,6 +218,11 @@ void PBRDemo::HandleScrollEvent(float scroll_amount)
 void PBRDemo::HandleFocusEvent(bool focused)
 {
 	focused;
+}
+
+void PBRDemo::HandleMousePositionEvent(float x, float y)
+{
+	Demo::HandleMousePositionEvent(x, y);
 }
 
 void PBRDemo::ImguiHelper()

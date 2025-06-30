@@ -27,7 +27,7 @@ public:
 	void ResetCamera() override final;
 
 	void HandleKeyPress(KeyboardButton button) override final;
-	void HandleResizeEvent(const int& new_width, const int& new_height) override final;
+	void HandleResizeEvent(const int new_width, const int new_height) override final;
 	void HandleMousePositionEvent(float xpos, float ypos) override final;
 	void HandleMouseEvent(MouseButton button) override final;
 	void HandleFocusEvent(bool focused) override final;

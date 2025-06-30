@@ -144,7 +144,7 @@
     <ClInclude Include="imgui\imstb_textedit.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="EnvironmentMap.h" />
+    <ClInclude Include="IBL.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\Camera.cpp">
@@ -225,6 +225,6 @@
     <ClCompile Include="imgui\imgui_tables.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="EnvironmentMap.cpp" />
+    <ClCompile Include="IBL.cpp" />
   </ItemGroup>
 </Project>

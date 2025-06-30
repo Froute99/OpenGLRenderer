@@ -169,7 +169,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="EnvironmentMap.h" />
+    <ClInclude Include="IBL.h" />
     <ClInclude Include="Graphics\BitmapFont.h" />
     <ClInclude Include="Graphics\ComputeShader.h" />
     <ClInclude Include="Graphics\Draw.h" />
@@ -209,7 +209,7 @@
     <ClInclude Include="Math\vec4.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EnvironmentMap.cpp" />
+    <ClCompile Include="IBL.cpp" />
     <ClCompile Include="Graphics\BitmapFont.cpp" />
     <ClCompile Include="Graphics\ComputeShader.cpp" />
     <ClCompile Include="Graphics\Draw.cpp" />

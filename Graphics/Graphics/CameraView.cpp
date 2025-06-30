@@ -18,7 +18,7 @@ CameraView::CameraView(float newFOV, float newNear)
 
 void CameraView::SetViewSize(int width, int height) noexcept
 {
-	aspectRatio = (float)height / (float)width;
+	aspectRatio = (float)width / (float)height;
 	projectionMatrix = BuildProjectionMatrix();
 }
 
@@ -31,7 +31,6 @@ void CameraView::SetZoom(float newZoom) noexcept
 mat4<float> CameraView::BuildProjectionMatrix() const noexcept
 {
 	return Matrix4::GeneralProjectionMatrix(ANGLE::DegreeToRadian(fov), aspectRatio, near, far);
-
 	//return Matrix4::InfiniteProjectionMatrix(ANGLE::DegreeToRadian(fov), aspectRatio, near);
 	
 	//mat4<float> projection(

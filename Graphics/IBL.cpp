@@ -7,7 +7,7 @@
  *	2025. 04. 28
  */
 
-#include "EnvironmentMap.h"
+#include "IBL.h"
 #include "glew.h"
 #include "stb_image.h"
 #include "Graphics/Mesh3D.h"
@@ -211,7 +211,7 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 	return true;
 }
 
-void EnvironmentMap::Render(const mat4<float>& view)
+void EnvironmentMap::Render(const mat4<float>& view, const mat4<float>& projection)
 {
 	// Mapping equirectangular to cubemap in shader (refer my calculation in paper note)
 	//Shader::UseShader(equirectangularMappingShader);
@@ -237,6 +237,7 @@ void EnvironmentMap::Render(const mat4<float>& view)
 	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	Shader::UseShader(skyboxShader);
 	skyboxShader.SendUniformVariable("view", view);
+	skyboxShader.SendUniformVariable("projection", projection);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
 	RenderCube();

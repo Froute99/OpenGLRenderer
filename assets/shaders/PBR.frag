@@ -79,7 +79,7 @@ void main()
     // "albedo" represent color of object while "base reflectivity" represent how much lights reflected. (I guess two things are same thing in real world)
     // In case of non-conductor, use 0.04 as F0, but if it is a metal. Using F0 as an albedo.
     vec3 F0 = vec3(0.04);
-    if (metallic > 0.5) F0 = albedo;
+    // if (metallic > 0.5) F0 = albedo;
     F0 = mix(F0, albedo, metallic);     // linear interpolation using the last value as an "alpha"
 
     // reflectance equation

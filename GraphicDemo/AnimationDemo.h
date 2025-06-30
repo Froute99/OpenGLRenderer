@@ -27,7 +27,7 @@ public:
 
 	void ResetCamera() override final;
 
-	void HandleResizeEvent(const int& new_width, const int& new_height) override final;
+	void HandleResizeEvent(const int new_width, const int new_height) override final;
 	void HandleFocusEvent(bool focused) override;
 private:
 	mat3<float> cameraToNDC;

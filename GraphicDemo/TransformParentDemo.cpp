@@ -106,7 +106,7 @@ void TransformParentDemo::HandleKeyPress(KeyboardButton button)
 	}
 }
 
-void TransformParentDemo::HandleResizeEvent(const int& new_width, const int& new_height)
+void TransformParentDemo::HandleResizeEvent(const int new_width, const int new_height)
 {
 	Demo::HandleResizeEvent(new_width, new_height);
 }

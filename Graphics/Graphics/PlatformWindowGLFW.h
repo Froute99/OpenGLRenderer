@@ -29,6 +29,8 @@ public:
 	void SetWindowIcon() const noexcept;
 	int GetWindowWidth() const noexcept;
 	int GetWindowHeight() const noexcept;
+	void ToggleMouseCursor() noexcept;
+	bool GetMouseLock() const noexcept;
 
 	void SetWindowWidth(int new_width) noexcept;
 	void SetWindowHeight(int new_height) noexcept;
@@ -39,4 +41,5 @@ private:
 	int windowSize[2] = { 0,0 };
 	int sizeBackup[2] = { 0,0 };
 	int posBackup[2] = { 0,0 };
+	bool shouldShowMouse = true;
 };

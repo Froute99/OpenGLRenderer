@@ -12,7 +12,7 @@ public:
 	EnvironmentMap(const int screenWidth, const int screenHeight)
 		: screenWidth(screenWidth), screenHeight(screenHeight) {}
 	bool CanLoad(const char* path, const mat4<float>& projection);
-	void Render(const mat4<float>& view);
+	void Render(const mat4<float>& view, const mat4<float>& projection);
 
 	unsigned int GetIrradianceMapHandle() noexcept { return irradianceMap; }
 	unsigned int GetPrefilterMapHandle() noexcept { return prefilterMap; }

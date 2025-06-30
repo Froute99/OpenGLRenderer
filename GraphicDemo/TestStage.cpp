@@ -99,7 +99,7 @@ void TestStage::Update(float /*dt*/)
 	// Skybox
 	// ==================================
 
-	envMap.Render(Matrix4::CutOffTranslation(camera.BuildViewMatrix()));
+	//envMap.Render(Matrix4::CutOffTranslation(camera.BuildViewMatrix()));
 
 	Draw::FinishDrawing();
 
@@ -112,7 +112,7 @@ void TestStage::ResetCamera()
 	// camera.ResetUp();
 }
 
-void TestStage::HandleResizeEvent(const int& new_width, const int& new_height)
+void TestStage::HandleResizeEvent(const int new_width, const int new_height)
 {
 	Demo::HandleResizeEvent(new_width, new_height);
 }

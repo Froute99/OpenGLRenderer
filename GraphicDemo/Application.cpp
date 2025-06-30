@@ -37,6 +37,7 @@ void Application::Initialize()
 		return;
 	}
 	window.ToggleVSync(true);
+	window.ToggleMouse();
 	isRunning = true;
 
 	//demo[PHONGSHADING] = std::make_unique<PhongShadingDemo>(window);
@@ -50,7 +51,7 @@ void Application::Initialize()
 
 void Application::Update(float dt)
 {
-	view.SetViewSize(window.GetWindowWidth(), window.GetWindowHeight());
+	//view.SetViewSize(window.GetWindowWidth(), window.GetWindowHeight());
 	
 	demo[demoIndex]->Update(dt);
 
@@ -77,6 +78,8 @@ void Application::HandleKeyPress(KeyboardButton button)
 	case KeyboardButton::V:
 		window.ToggleVSync(!window.IsVSyncOn());
 		break;
+	case KeyboardButton::T:
+		window.ToggleMouse();
 	case KeyboardButton::Page_Up:
 		demo[demoIndex]->ResetCamera();
 		++demoIndex;
@@ -110,6 +113,8 @@ void Application::HandleScrollEvent(float scroll_amount)
 }
 void Application::HandleMousePositionEvent(float xpos, float ypos)
 {
+	if (window.GetMouseLock() == true)
+		return;
 	demo[demoIndex]->HandleMousePositionEvent(xpos, ypos);
 }
 
@@ -118,7 +123,7 @@ void Application::HandleMouseEvent(MouseButton button)
 	demo[demoIndex]->HandleMouseEvent(button);
 }
 
-void Application::HandleResizeEvent(const int& new_width, const int& new_height)
+void Application::HandleResizeEvent(const int new_width, const int new_height)
 {
 	window.SetWindowWidth(new_width);
 	window.SetWindowHeight(new_height);
