@@ -30,7 +30,10 @@ public:
 private:
 	Shader pbrShader;
 
-	GameObject* sphere;
+	// Material Preset
+
+	GameObject* sphere1;
+	GameObject* sphere2;
 
 	vec3<float>	 sphereColor;
 	float		 roughness;

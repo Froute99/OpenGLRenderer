@@ -16,54 +16,14 @@
 void PBRDemo::Initialize()
 {
 	pbrShader.LoadShaderFrom("../assets/shaders/PBR.vert", "../assets/shaders/PBR.frag");
-	//hdrShader.LoadShaderFrom("../assets/shaders/HDR.vert", "../assets/shaders/HDR.frag");
 
-	//glEnable(GL_DEPTH_TEST);
-	//glDepthFunc(GL_LESS);
-	//glDepthMask(GL_TRUE);
-	//glEnable(GL_FRAMEBUFFER_SRGB);
+	sphere1 = GameObject::CreateSphere({ 0, 0, 0 });
+	sphere1->SetObjectType(ObjectType::NonTextured);
+	sphere1->Move({ 0.f, 0.f, -4.f });
 
-	//glEnable(GL_CULL_FACE);
-	//glFrontFace(GL_CW);
-	//glCullFace(GL_BACK);
-
-	//// floating point framebuffer
-	//glGenFramebuffers(1, &hdrFBO);
-	//glGenTextures(1, &colorBuffer);
-	//glBindTexture(GL_TEXTURE_2D, colorBuffer);
-	//// mind that the internal format is GL_FLOAT
-	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetScreenWidth(), GetScreenHeight(), 0, GL_RGBA, GL_FLOAT, NULL);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);	
-	//glBindTexture(GL_TEXTURE_2D, 0);
-
-	//unsigned int rboDepth;
-	//glGenRenderbuffers(1, &rboDepth);
-	//glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
-	//glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, GetScreenWidth(), GetScreenHeight());
-
-	//glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
-	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBuffer, 0);
-	//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
-	//if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	//{
-	//	std::cout << "Framebuffer not completed. Requirements are written in the code as a comment. Check them." << std::endl;
-	//	/* 
-	//		We have to attach at least one buffer (color, depth or stencil buffer).
-	//		There should be at least one color attachment.
-	//		All attachments should be complete as well (reserved memory).
-	//		Each buffer should have the same number of samples.
-	//	*/
-	//}
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	//const std::string& spherePath = "../assets/sphere.fbx";
-	//sphere = GameObject::LoadMeshFromFile(spherePath);
-	sphere = GameObject::CreateSphere({ 0, 0, 0 });
-	sphere->SetObjectType(ObjectType::NonTextured);
-	sphere->Move({ 0.5f, 0.0f, -1.5f });
+	sphere2 = GameObject::CreateSphere({ 0, 0, 0 });
+	sphere2->SetObjectType(ObjectType::NonTextured);
+	sphere2->Move({ 2.5f, 0.f, -4.f });
 
 	lightPosLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "lightPositions");
 	lightColLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "lightColors");
@@ -85,14 +45,14 @@ void PBRDemo::Initialize()
 	sphereColor = vec3<float>(1.f, 0.f, 0.f);
 	roughness = 0.1f;
 	ambientOcclusion = 0.1f;
-	metallic = 0.01f;
+	metallic = 0.8f;
 
-	lightPos[0] = { 1.36f, 0.52f, -0.4f };
+	lightPos[0] = { 3.6f, 0.55f, -0.4f };
 	lightPos[1] = { 0.f };
 	lightPos[2] = { 0.f };
 	lightPos[3] = { 0.f };
 
-	lightCol[0] = { 1.f };
+	lightCol[0] = { 10.f };
 	lightCol[1] = { 0.f };
 	lightCol[2] = { 0.f };
 	lightCol[3] = { 0.f };
@@ -107,8 +67,19 @@ void PBRDemo::Update(float dt)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	Shader::UseShader(pbrShader);
+	pbrShader.SendUniformVariable("irradianceMap", 0);
+	pbrShader.SendUniformVariable("prefilterMap", 1);
+	pbrShader.SendUniformVariable("brdfLUT", 2);
 
-	const mat4<float>& Model = sphere->GetModelToWorld();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, envMap.GetIrradianceMapHandle());
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, envMap.GetPrefilterMapHandle());
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, envMap.GetBRDFLUTTextureHandle());
+
+
+	mat4<float> Model = sphere1->GetModelToWorld();
 	const mat4<float>& View = camera.BuildViewMatrix();
 	const mat4<float>& Projection = view.BuildProjectionMatrix();
 
@@ -122,25 +93,26 @@ void PBRDemo::Update(float dt)
 	pbrShader.SendUniformVariable("ao", ambientOcclusion);
 	pbrShader.SendUniformVariable("metallic", metallic);
 
+	sphere1->Draw();
+
+	Model = sphere2->GetModelToWorld();
+	pbrShader.SendUniformVariable("model", Model);
+
+	vec3<float> sphereColor2 = { 0.f, 1.f, 0.f };
+	float		roughness2 = 0.8f;
+	float		metallic2 = 0.1f;
+	pbrShader.SendUniformVariable("albedo", sphereColor2);
+	pbrShader.SendUniformVariable("roughness", roughness2);
+	pbrShader.SendUniformVariable("ao", ambientOcclusion);
+	pbrShader.SendUniformVariable("metallic", metallic2);
+
+	sphere2->Draw();
+
 	// lights
 	glUniform3fv(lightPosLocation, 4, &lightPos[0].x);
 	glUniform3fv(lightColLocation, 4, &lightCol[0].x);
 
-	// uniform vec3 camPos;
 	pbrShader.SendUniformVariable("camPos", camera.GetEyePosition());
-
-	pbrShader.SendUniformVariable("irradianceMap", 0);
-	pbrShader.SendUniformVariable("prefilterMap", 1);
-	pbrShader.SendUniformVariable("brdfLUT", 2);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, envMap.GetIrradianceMapHandle());
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, envMap.GetPrefilterMapHandle());
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, envMap.GetBRDFLUTTextureHandle());
-
-	sphere->Draw();
-
 
 	envMap.Render(Matrix4::CutOffTranslation(camera.BuildViewMatrix()), Projection);
 
