@@ -43,9 +43,9 @@ void Application::Initialize()
 	//demo[PHONGSHADING] = std::make_unique<PhongShadingDemo>(window);
 	//demo[TEST] = std::make_unique<TestStage>(window);
 	demo[PBR] = std::make_unique<PBRDemo>(window);
-	//demo[TEXTUREDPBR] = std::make_unique<TexturedPBRDemo>(window);
+	demo[TEXTUREDPBR] = std::make_unique<TexturedPBRDemo>(window);
 	//demo[ANIMATION] = std::make_unique<AnimationDemo>(window);
-	//demo[TRANSFORMPARENTDEMO] = std::make_unique<TransformParentDemo>(window);
+	demo[TRANSFORMPARENTDEMO] = std::make_unique<TransformParentDemo>(window);
 	//demo[COMPUTESHADERDEMO] = std::make_unique<ComputeShaderDemo>(window);
 }
 
@@ -80,6 +80,7 @@ void Application::HandleKeyPress(KeyboardButton button)
 		break;
 	case KeyboardButton::T:
 		window.ToggleMouse();
+		break;
 	case KeyboardButton::Page_Up:
 		demo[demoIndex]->ResetCamera();
 		++demoIndex;

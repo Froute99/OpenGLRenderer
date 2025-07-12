@@ -29,21 +29,28 @@ public:
 
 private:
 	Shader pbrShader;
+	Shader texturedShader;
 
 	// Material Preset
 
 	GameObject* sphere1;
 	GameObject* sphere2;
+	GameObject* ironSphere;
+
+	Texture* albedoMap;
+	Texture* metallicMap;
+	Texture* roughnessMap;
+	Texture* normalMap;
+	//Texture* aoMap;
 
 	vec3<float>	 sphereColor;
 	float		 roughness;
 	float		 ambientOcclusion;
 	float		 metallic;
 
-	unsigned int lightPosLocation;
-	unsigned int lightColLocation;
-	vec3<float>	 lightPos[4];
-	vec3<float>	 lightCol[4];
+	vec3<float> lightPosition;
+	vec3<float> lightColor;
+	float		 lightIntensity;
 
 	Shader		 hdrShader;
 	unsigned int hdrFBO;	  // framebuffer object handle for HDR
@@ -57,8 +64,6 @@ private:
 
 	EnvironmentMap envMap{ GetScreenWidth(), GetScreenHeight() };
 
-	bool shouldIrradiance = true;
-
-	int				  surfaceIndex = 0;
 	const char* const surfacesList[6] = { "Plastic", "Glass", "Diamond", "Iron", "Copper", "Gold" };
+	int				  surfaceIndex = 0;
 };

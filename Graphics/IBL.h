@@ -14,9 +14,9 @@ public:
 	bool CanLoad(const char* path, const mat4<float>& projection);
 	void Render(const mat4<float>& view, const mat4<float>& projection);
 
-	unsigned int GetIrradianceMapHandle() noexcept { return irradianceMap; }
-	unsigned int GetPrefilterMapHandle() noexcept { return prefilterMap; }
-	unsigned int GetBRDFLUTTextureHandle() noexcept { return brdfLUTTexture; }
+	unsigned int GetIrradianceMapHandle() const noexcept { return irradianceMap; }
+	unsigned int GetPrefilterMapHandle() const noexcept { return prefilterMap; }
+	unsigned int GetBRDFLUTTextureHandle() const noexcept { return brdfLUTTexture; }
 
 	void RenderCube();
 	void RenderQuad();

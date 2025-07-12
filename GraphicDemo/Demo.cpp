@@ -10,8 +10,8 @@
 
 #include "Demo.h"
 #include <Graphics/Draw.h>
-#include <glew.h> // glUniform
 #include <math/Angle.hpp>
+#include <glew.h>
 
 void Demo::Initialize()
 {

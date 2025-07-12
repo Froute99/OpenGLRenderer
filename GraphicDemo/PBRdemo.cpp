@@ -12,10 +12,12 @@
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
 
+void MappingIBLTextures(const Shader* shader, const EnvironmentMap* envMap);
 
 void PBRDemo::Initialize()
 {
 	pbrShader.LoadShaderFrom("../assets/shaders/PBR.vert", "../assets/shaders/PBR.frag");
+	texturedShader.LoadShaderFrom("../assets/shaders/PBR_Textured.vert", "../assets/shaders/PBR_Textured.frag");
 
 	sphere1 = GameObject::CreateSphere({ 0, 0, 0 });
 	sphere1->SetObjectType(ObjectType::NonTextured);
@@ -25,17 +27,19 @@ void PBRDemo::Initialize()
 	sphere2->SetObjectType(ObjectType::NonTextured);
 	sphere2->Move({ 2.5f, 0.f, -4.f });
 
-	lightPosLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "lightPositions");
-	lightColLocation = glGetUniformLocation(pbrShader.GetHandleToShader(), "lightColors");
+	ironSphere = GameObject::CreateSphere({ 0, 0, 0 });
+	ironSphere->Move({ -2.5f, 0.f, -4.f });
 
-	if (lightPosLocation == -1)
-	{
-		std::cout << "There's no uniform variable named \"lightPositions\"" << std::endl;
-	}
-	if (lightColLocation == -1)
-	{
-		std::cout << "There's no uniform variable named \"lightColors\"" << std::endl;
-	}
+	albedoMap = new Texture();
+	metallicMap = new Texture();
+	roughnessMap = new Texture();
+	normalMap = new Texture();
+	//aoMap = new Texture();
+
+	albedoMap->LoadFromPath("../assets/Models/rustediron2_basecolor.png", true);
+	metallicMap->LoadFromPath("../assets/Models/rustediron2_metallic.png");
+	roughnessMap->LoadFromPath("../assets/Models/rustediron2_roughness.png");
+	normalMap->LoadFromPath("../assets/Models/rustediron2_normal.png");
 
 	if (!envMap.CanLoad("../assets/newport_loft.hdr", view.BuildProjectionMatrix()))
 	{
@@ -47,16 +51,9 @@ void PBRDemo::Initialize()
 	ambientOcclusion = 0.1f;
 	metallic = 0.8f;
 
-	lightPos[0] = { 3.6f, 0.55f, -0.4f };
-	lightPos[1] = { 0.f };
-	lightPos[2] = { 0.f };
-	lightPos[3] = { 0.f };
-
-	lightCol[0] = { 10.f };
-	lightCol[1] = { 0.f };
-	lightCol[2] = { 0.f };
-	lightCol[3] = { 0.f };
-
+	lightPosition = { 3.6f, 0.55f, -0.4f };
+	lightColor = { 1.f };
+	lightIntensity = 10.f;
 }
 
 void PBRDemo::Update(float dt)
@@ -67,17 +64,17 @@ void PBRDemo::Update(float dt)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	Shader::UseShader(pbrShader);
-	pbrShader.SendUniformVariable("irradianceMap", 0);
-	pbrShader.SendUniformVariable("prefilterMap", 1);
-	pbrShader.SendUniformVariable("brdfLUT", 2);
+	MappingIBLTextures(&pbrShader, &envMap);
+	//pbrShader.SendUniformVariable("irradianceMap", 0);
+	//pbrShader.SendUniformVariable("prefilterMap", 1);
+	//pbrShader.SendUniformVariable("brdfLUT", 2);
 
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, envMap.GetIrradianceMapHandle());
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, envMap.GetPrefilterMapHandle());
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, envMap.GetBRDFLUTTextureHandle());
-
+	//glActiveTexture(GL_TEXTURE0);
+	//glBindTexture(GL_TEXTURE_CUBE_MAP, envMap.GetIrradianceMapHandle());
+	//glActiveTexture(GL_TEXTURE1);
+	//glBindTexture(GL_TEXTURE_CUBE_MAP, envMap.GetPrefilterMapHandle());
+	//glActiveTexture(GL_TEXTURE2);
+	//glBindTexture(GL_TEXTURE_2D, envMap.GetBRDFLUTTextureHandle());
 
 	mat4<float> Model = sphere1->GetModelToWorld();
 	const mat4<float>& View = camera.BuildViewMatrix();
@@ -93,6 +90,12 @@ void PBRDemo::Update(float dt)
 	pbrShader.SendUniformVariable("ao", ambientOcclusion);
 	pbrShader.SendUniformVariable("metallic", metallic);
 
+	// lights
+	pbrShader.SendUniformVariable("lightPositions", lightPosition);
+	pbrShader.SendUniformVariable("lightColors", lightColor);
+	pbrShader.SendUniformVariable("lightIntensity", lightIntensity);
+	pbrShader.SendUniformVariable("camPos", camera.GetEyePosition());
+
 	sphere1->Draw();
 
 	Model = sphere2->GetModelToWorld();
@@ -106,13 +109,32 @@ void PBRDemo::Update(float dt)
 	pbrShader.SendUniformVariable("ao", ambientOcclusion);
 	pbrShader.SendUniformVariable("metallic", metallic2);
 
+	// lights
+	pbrShader.SendUniformVariable("lightPositions", lightPosition);
+	pbrShader.SendUniformVariable("lightColors", lightColor);
+	pbrShader.SendUniformVariable("lightIntensity", lightIntensity);
+	pbrShader.SendUniformVariable("camPos", camera.GetEyePosition());
+
 	sphere2->Draw();
 
-	// lights
-	glUniform3fv(lightPosLocation, 4, &lightPos[0].x);
-	glUniform3fv(lightColLocation, 4, &lightCol[0].x);
+	Shader::UseShader(texturedShader);
+	MappingIBLTextures(&texturedShader, &envMap);
+	texturedShader.BindTexture("albedoMap", 3, albedoMap->GetTexturehandle());
+	texturedShader.BindTexture("metallicMap", 4, metallicMap->GetTexturehandle());
+	texturedShader.BindTexture("roughnessMap", 5, roughnessMap->GetTexturehandle());
+	texturedShader.BindTexture("normalMap", 6, normalMap->GetTexturehandle());
 
-	pbrShader.SendUniformVariable("camPos", camera.GetEyePosition());
+	Model = ironSphere->GetModelToWorld();
+	texturedShader.SendUniformVariable("model", Model);
+	texturedShader.SendUniformVariable("view", View);
+	texturedShader.SendUniformVariable("projection", Projection);
+
+	// lights
+	texturedShader.SendUniformVariable("lightPositions", lightPosition);
+	texturedShader.SendUniformVariable("lightColors", lightColor);
+	texturedShader.SendUniformVariable("camPos", camera.GetEyePosition());
+
+	ironSphere->Draw();
 
 	envMap.Render(Matrix4::CutOffTranslation(camera.BuildViewMatrix()), Projection);
 
@@ -251,17 +273,8 @@ void PBRDemo::ImguiHelper()
 		ImGui::SetWindowCollapsed(false);
 
 		ImGui::NewLine();
-		ImGui::DragFloat3("Light 1 Position", &lightPos[0].x, 0.02f);
-		ImGui::ColorEdit3("Light 1 Color", &lightCol[0].x);
-
-		ImGui::DragFloat3("Light 2 Position", &lightPos[1].x, 0.02f);
-		ImGui::ColorEdit3("Light 2 Color", &lightCol[1].x);
-
-		ImGui::DragFloat3("Light 3 Position", &lightPos[2].x, 0.02f);
-		ImGui::ColorEdit3("Light 3 Color", &lightCol[2].x);
-
-		ImGui::DragFloat3("Light 4 Position", &lightPos[3].x, 0.02f);
-		ImGui::ColorEdit3("Light 4 Color", &lightCol[3].x);
+		ImGui::DragFloat3("Light 1 Position", &lightPosition.x, 0.02f);
+		ImGui::ColorEdit3("Light 1 Color", &lightColor.x);
 	}
 
 	ImGui::Render();
@@ -294,4 +307,18 @@ void PBRDemo::RenderQuad()
 	glBindVertexArray(quadVAO);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	glBindVertexArray(0);
+}
+
+void MappingIBLTextures(const Shader* shader, const EnvironmentMap* envMap)
+{
+	shader->SendUniformVariable("irradianceMap", 0);
+	shader->SendUniformVariable("prefilterMap", 1);
+	shader->SendUniformVariable("brdfLUT", 2);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, envMap->GetIrradianceMapHandle());
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, envMap->GetPrefilterMapHandle());
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, envMap->GetBRDFLUTTextureHandle());
 }

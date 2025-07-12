@@ -16,8 +16,9 @@ uniform float ao;
 uniform float metallic;
 
 // lights
-uniform vec3 lightPositions[4];
-uniform vec3 lightColors[4];
+uniform vec3 lightPositions;
+uniform vec3 lightColors;
+uniform float lightIntensity;
 
 uniform vec3 camPos;
 
@@ -40,7 +41,9 @@ float DistributionGGX(vec3 N, vec3 H, float roughness)
 // schlick-beckmann model + smith model = schlick-ggx model
 float GeometrySchlickBeckmann(float NdotX, float roughness)     // X is either V or L
 {
-    float k = (roughness * roughness) / 2;
+    float r = (roughness + 1.0);
+    float k = (r * r) / 8.0;
+    //float k = (roughness * roughness) / 2;
 
     float nom   = NdotX;
     float denom = NdotX * (1.0 - k) + k;
@@ -83,14 +86,14 @@ void main()
 
     // reflectance equation
     vec3 Lo = vec3(0.0);
-    for (int i = 0; i < 4; ++i) 
+    // for (int i = 0; i < 4; ++i)
     {
         // calculate per-light radiance
-        vec3 L = normalize(lightPositions[i] - WorldPos);
+        vec3 L = normalize(lightPositions - WorldPos);
         vec3 H = normalize(V + L);
-        float distance = length(lightPositions[i] - WorldPos);
+        float distance = length(lightPositions - WorldPos);
         float attenuation = 1.0 / (distance * distance);
-        vec3 radiance = lightColors[i] * attenuation;
+        vec3 radiance = lightColors * lightIntensity * attenuation;
 
         // Cook-Torrance BRDF
         float D = DistributionGGX(N, H, roughness);
