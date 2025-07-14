@@ -3,7 +3,7 @@
 #include "Demo.h"
 #include <Graphics/Shader.h>
 #include <Graphics/Texture.h>
-#include <IBL.h>
+#include <Graphics/IBL.h>
 
 class GameObject;
 

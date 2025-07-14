@@ -11,7 +11,7 @@
 #pragma once
 #include "Demo.h"
 #include <Graphics/Shader.h>
-#include <IBL.h>
+#include <Graphics/IBL.h>
 
 class Object;
 class GameObject;

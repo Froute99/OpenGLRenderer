@@ -1,10 +1,10 @@
 
 #pragma once
-
 #include "Demo.h"
 #include <Graphics/Shader.h>
 #include <Graphics/Texture.h>
-#include <IBL.h>
+#include <Graphics/IBL.h>
+#include <Graphics/UBO.h>
 
 class GameObject;
 
@@ -66,4 +66,7 @@ private:
 
 	const char* const surfacesList[6] = { "Plastic", "Glass", "Diamond", "Iron", "Copper", "Gold" };
 	int				  surfaceIndex = 0;
+
+	unsigned int ubo;
+	UBO			 test{ 128 };
 };

@@ -38,5 +38,4 @@ mat4<float> CameraView::BuildProjectionMatrix() const noexcept
 	//	0.0f, 1.0f / tangent, 0.0f, 0.0f,
 	//	0.0f, 0.0f, 1.0f, 1.0f,
 	//	0.0f, 0.0f, -2.f * near, 0.0f);
-
 }
