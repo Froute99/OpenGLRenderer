@@ -15,12 +15,13 @@ uniform float roughness;
 uniform float ao;
 uniform float metallic;
 
-// lights
-uniform vec3 lightPositions;
-uniform vec3 lightColors;
-uniform float lightIntensity;
-
-uniform vec3 camPos;
+layout (std140) uniform Lights
+{
+    uniform vec3 lightPositions;
+    uniform vec3 lightColors;
+    uniform float lightIntensity;
+    uniform vec3 camPos;
+};
 
 const float PI = 3.14159265359;
 

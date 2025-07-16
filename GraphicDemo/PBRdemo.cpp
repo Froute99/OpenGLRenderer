@@ -17,19 +17,23 @@ void MappingIBLTextures(const Shader* shader, const EnvironmentMap* envMap);
 
 void PBRDemo::Initialize()
 {
+	if (!envMap.CanLoad("../assets/newport_loft.hdr", view.BuildProjectionMatrix()))
+	{
+		std::cout << "Failed to load env map\n";
+	}
 	pbrShader.LoadShaderFrom("../assets/shaders/PBR.vert", "../assets/shaders/PBR.frag");
-	texturedShader.LoadShaderFrom("../assets/shaders/PBR_Textured.vert", "../assets/shaders/PBR_Textured.frag");
+	//texturedShader.LoadShaderFrom("../assets/shaders/PBR_Textured.vert", "../assets/shaders/PBR_Textured.frag");
 
 	sphere1 = GameObject::CreateSphere({ 0, 0, 0 });
 	sphere1->SetObjectType(ObjectType::NonTextured);
 	sphere1->Move({ 0.f, 0.f, -4.f });
 
-	sphere2 = GameObject::CreateSphere({ 0, 0, 0 });
-	sphere2->SetObjectType(ObjectType::NonTextured);
-	sphere2->Move({ 2.5f, 0.f, -4.f });
+	//sphere2 = GameObject::CreateSphere({ 0, 0, 0 });
+	//sphere2->SetObjectType(ObjectType::NonTextured);
+	//sphere2->Move({ 2.5f, 0.f, -4.f });
 
-	ironSphere = GameObject::CreateSphere({ 0, 0, 0 });
-	ironSphere->Move({ -2.5f, 0.f, -4.f });
+	//ironSphere = GameObject::CreateSphere({ 0, 0, 0 });
+	//ironSphere->Move({ -2.5f, 0.f, -4.f });
 
 	albedoMap = new Texture();
 	metallicMap = new Texture();
@@ -42,13 +46,9 @@ void PBRDemo::Initialize()
 	roughnessMap->LoadFromPath("../assets/Models/rustediron2_roughness.png");
 	normalMap->LoadFromPath("../assets/Models/rustediron2_normal.png");
 
-	if (!envMap.CanLoad("../assets/newport_loft.hdr", view.BuildProjectionMatrix()))
-	{
-		std::cout << "Failed to load env map\n";
-	}
-
-	test.BindTo(pbrShader.GetHandleToShader(), "Matrices");
-	test.BindTo(texturedShader.GetHandleToShader(), "Matrices");
+	matricesBlock.BindTo(pbrShader.GetHandleToShader(), "Matrices");
+	//matricesBlock.BindTo(texturedShader.GetHandleToShader(), "Matrices");
+	lightsBlock.BindTo(pbrShader.GetHandleToShader(), "Lights");
 
 	sphereColor = vec3<float>(1.f, 0.f, 0.f);
 	roughness = 0.1f;
@@ -65,10 +65,16 @@ void PBRDemo::Update(float dt)
 	Demo::Update(dt);
 	Draw::StartDrawing();
 
+	const vec3<float>& camPos = camera.GetEyePosition();
+	lightsBlock.WriteData(0, 12, &lightPosition[0]);
+	lightsBlock.WriteData(16, 12, &lightColor[0]);
+	lightsBlock.WriteData(28, 4, &lightIntensity);
+	lightsBlock.WriteData(32, 12, &camPos[0]);
+
 	const mat4<float>& View = camera.BuildViewMatrix();
 	const mat4<float>& Projection = view.BuildProjectionMatrix();
-	test.WriteData(64, &View[0][0]);
-	test.WriteData(64, &Projection[0][0]);
+	matricesBlock.WriteData(0, 64, &View);
+	matricesBlock.WriteData(64, 64, &Projection);
 
 	Shader::UseShader(pbrShader);
 	MappingIBLTextures(&pbrShader, &envMap);
@@ -87,7 +93,7 @@ void PBRDemo::Update(float dt)
 	pbrShader.SendUniformVariable("lightPositions", lightPosition);
 	pbrShader.SendUniformVariable("lightColors", lightColor);
 	pbrShader.SendUniformVariable("lightIntensity", lightIntensity);
-	pbrShader.SendUniformVariable("camPos", camera.GetEyePosition());
+	pbrShader.SendUniformVariable("camPos", camPos);
 
 	sphere1->Draw();
 

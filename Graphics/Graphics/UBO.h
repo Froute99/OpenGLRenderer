@@ -16,12 +16,12 @@ class UBO
 {
 public:
 	UBO(int size);
-	void BindTo(const unsigned int shaderHandle, const char* uniformName) noexcept;
-	void WriteData(unsigned int size, const void* data);
+	void BindTo(const unsigned int shaderHandle, const char* blockName) noexcept;
+	void WriteData(unsigned int offset, unsigned int size, const void* data);
 
-//private:
+private:
 	unsigned int handle;
 	unsigned int bindingPoint = 0;
-	unsigned int offset = 0;
+	//unsigned int offset = 0;
 
 };

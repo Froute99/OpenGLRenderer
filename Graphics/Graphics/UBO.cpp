@@ -21,13 +21,14 @@ UBO::UBO(int size)
 	glBindBufferBase(GL_UNIFORM_BUFFER, bindingPoint, handle);
 }
 
-void UBO::BindTo(const unsigned int shaderHandle, const char* uniformName) noexcept
+void UBO::BindTo(const unsigned int shaderHandle, const char* blockName) noexcept
 {
-	unsigned int blockIndex = glGetUniformBlockIndex(shaderHandle, uniformName);
+	unsigned int blockIndex = glGetUniformBlockIndex(shaderHandle, blockName);
 	glUniformBlockBinding(shaderHandle, blockIndex, bindingPoint);
+	std::cout << blockName << " index is " << blockIndex << ", binded to point " << bindingPoint << std::endl;
 }
 
-void UBO::WriteData(unsigned int size, const void* data)
+void UBO::WriteData(unsigned int offset, unsigned int size, const void* data)
 {
 	glBindBuffer(GL_UNIFORM_BUFFER, handle);
 	glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data);
