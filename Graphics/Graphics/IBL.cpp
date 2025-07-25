@@ -203,6 +203,7 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 
 	Shader::UseShader(skyboxShader);
 	skyboxShader.SendUniformVariable("skybox", 0);
+	//skyboxShader.SendUniformVariable("view", captureViews[5]);
 	skyboxShader.SendUniformVariable("projection", projection);
 
 	//mesh = MESH::BuildCube(1.0f);

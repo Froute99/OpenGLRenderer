@@ -31,8 +31,16 @@ void UBO::BindTo(const unsigned int shaderHandle, const char* blockName) noexcep
 void UBO::WriteData(unsigned int offset, unsigned int size, const void* data)
 {
 	glBindBuffer(GL_UNIFORM_BUFFER, handle);
-	glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data);
+	char* buffer = reinterpret_cast<char*>(glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY));
+	if (buffer == nullptr)
+	{
+		GLenum errCode = glGetError();
+		const unsigned char* errMsg = glewGetErrorString(errCode);
+		std::cout << "Was nullptr " << errMsg << ", " << errCode << std::endl;
+	}
+	memcpy(buffer + offset, data, size);
+	glUnmapBuffer(GL_UNIFORM_BUFFER);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-	offset += size;
+	//offset += size;
 }

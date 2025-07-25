@@ -4,7 +4,7 @@
 #include <glew.h>		// glUniform
 #include <Graphics/Draw.h>	// rendering objects
 #include <Graphics/PATH.h>	// path for shaders
-#include <Graphics/Texture.h>		// for HDR framebuffer
+#include <Graphics/Texture.h>		// textures
 
 // imguis
 #include <imgui/imgui.h>
@@ -17,11 +17,11 @@ void MappingIBLTextures(const Shader* shader, const EnvironmentMap* envMap);
 
 void PBRDemo::Initialize()
 {
+	pbrShader.LoadShaderFrom("../assets/shaders/PBR.vert", "../assets/shaders/PBR.frag");
 	if (!envMap.CanLoad("../assets/newport_loft.hdr", view.BuildProjectionMatrix()))
 	{
 		std::cout << "Failed to load env map\n";
 	}
-	pbrShader.LoadShaderFrom("../assets/shaders/PBR.vert", "../assets/shaders/PBR.frag");
 	//texturedShader.LoadShaderFrom("../assets/shaders/PBR_Textured.vert", "../assets/shaders/PBR_Textured.frag");
 
 	sphere1 = GameObject::CreateSphere({ 0, 0, 0 });

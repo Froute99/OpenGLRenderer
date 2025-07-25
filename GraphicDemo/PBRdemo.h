@@ -2,11 +2,11 @@
 #pragma once
 #include "Demo.h"
 #include <Graphics/Shader.h>
-#include <Graphics/Texture.h>
 #include <Graphics/IBL.h>
 #include <Graphics/UBO.h>
 
 class GameObject;
+class Texture;
 
 class PBRDemo : public Demo
 {

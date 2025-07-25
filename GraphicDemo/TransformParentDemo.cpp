@@ -10,82 +10,93 @@
 
 #include "TransformParentDemo.h"
 #include <Graphics/Draw.h>
-#include <Graphics/PATH.h>
-#include <Math/Angle.hpp>
+#include "GameObject.h"
 #include <iostream>
-
-namespace
-{
-	//Image From: http://www.pngall.com/sword-png/download/1376
-	const std::filesystem::path& sword1_png = "../assets/sword1.png";
-
-	const std::filesystem::path& slash1_png = "../assets/slash1.png";
-	const std::filesystem::path& slash2_png = "../assets/slash2.png";
-}
+#include <glew.h>
 
 void TransformParentDemo::Initialize()
 {
-	shader.LoadShaderFrom(PATH::texture_vert, PATH::texture_frag);
+	shader.LoadShaderFrom("../assets/shaders/texture.vert", "../assets/shaders/texture.frag");
 
-	//const Mesh& rectangle = MESH::create_rectangle({ 0.0f }, { 100.0f });
+	camera.SetEyePosition({ 0.f, 5.f, 30.f });
 
-	//sword1.shader = shader;
-	//sword1.vertices.InitializeWithMeshAndLayout(rectangle, layout);
-	//sword1.texture.LoadFromPath(sword1_png);
-	//sword1Transform.SetScale(2.0f);
-	//rotation = ANGLE::pi / 4.0f;
+	// SUN
+	sun = GameObject::CreateSphere({ 0 });
+	sun->Move({ 0.f, 0.f, 0.f });
+	sun->Rotate({ 3.141592f, 0.f, 0.f });
+	sun->Scale(10.f);
 
-	//slash1.shader = shader;
-	//slash1.vertices.InitializeWithMeshAndLayout(rectangle, layout);
-	//slash1.texture.LoadFromPath(slash1_png);
-	//slash1Transform.SetParent(&sword1Transform);
-	//slash1Transform.SetScale(0.2f);
-	//slash1Transform.SetTranslation({ 27.0f, -25.0f });
+	sunAlbedo = new Texture();
+	sunAlbedo->LoadFromPath("../assets/Models/Image_24.png", false);
 
-	//slash2.shader = shader;
-	//slash2.vertices.InitializeWithMeshAndLayout(rectangle, layout);
-	//slash2.texture.LoadFromPath(slash2_png);
-	//slash2Transform.SetParent(&sword1Transform);
-	//slash2Transform.SetScale(1.5f);
-	//slash2Transform.SetRotation(ANGLE::pi / 4.0f);
-	//slash2Transform.SetTranslation({ -10.0f, 20.0f });
-	
+	// EARTH
+	earth = GameObject::CreateSphere({ 0 });
+	earth->GetTransform()->SetParent(sun->GetTransform());
+	earth->Move({ 5.f, 0.f, 0.f });
+	earth->Rotate({ 3.141592f, 0.f, 0.f });
+	earth->Scale(0.1f);
+
+	earthAlbedo = new Texture();
+	earthAlbedo->LoadFromPath("../assets/Models/Image_14.png", false);
+
+	// MOON
+	moon = GameObject::CreateSphere({ 0 });
+	moon->GetTransform()->SetParent(earth->GetTransform());
+	moon->Move({ 7.f, 0.f, 0.f });
+	//moon->Rotate({ 3.141592f, 0.f, 0.f });
+	moon->Scale(0.7f);
+	moonAlbedo = new Texture();
+	moonAlbedo->LoadFromPath("../assets/Models/moon.png");
+
+	matricesBlock.BindTo(shader.GetHandleToShader(), "Matrices");
+
+	lightPosition = sun->GetTransform()->GetTranslation();
+	lightColor = { 10.f };
+
 	//view.SetViewSize(width, height);
 	//cameraToNDC = view.GetCameraToNDCTransform() * camera.WorldToCamera();
-	std::cout << "\t====================================\n";
-	std::cout << "\tPress Q, E to rotate the sword\n";
-	std::cout << "\tClick left mouse button to slash\n";
-	std::cout << "\t====================================\n";
 }
 
 void TransformParentDemo::Update(float dt)
 {
-	std::cout << "\r" << dt;
-	if (!isFocused)
-	{
-		Draw::StartDrawing();
-		return;
-	}
-	slashRotation += dt;
+	//if (!isFocused)
+	Demo::Update(dt);
 	Draw::StartDrawing();
 
-	//rotation += rotationSpeed * dt;
-	//sword1Transform.SetRotation(rotation);
-	//sword1Transform.SetTranslation(mousePosition);
-	//sword1.ndc = cameraToNDC * sword1Transform.GetModelToWorld();
-	//Draw::draw(sword1);
+	sun->Rotate({ 0.f, 0.001f, 0.f });
+	earth->Rotate({ 0.f, 0.01f, 0.f });
+	//moon->Rotate({ 0.f, 0.01f, 0.f });
 
-	//slash1Transform.SetRotation(slashRotation * 5.0f);
-	//slash1.ndc = cameraToNDC * slash1Transform.GetModelToWorld();
-	//Draw::draw(slash1);
+	const mat4<float>& View = camera.BuildViewMatrix();
+	const mat4<float>& Projection = view.BuildProjectionMatrix();
 
-	//if (isClicked)
-	//{
-	//	slash2.ndc = cameraToNDC * slash2Transform.GetModelToWorld();
-	//	Draw::draw(slash2);
-	//}
-	
-	Draw::FinishDrawing();	
+	matricesBlock.WriteData(0, 64, &View);
+	matricesBlock.WriteData(64, 64, &Projection);
+
+	Shader::UseShader(shader);
+	mat4<float> Model = sun->GetModelToWorld();
+
+	shader.SendUniformVariable("model", Model);
+	shader.SendUniformVariable("lightPosition", lightPosition);
+	shader.SendUniformVariable("lightColor", lightColor);
+	shader.BindTexture("textureDiffuse", 0, sunAlbedo->GetTexturehandle());
+	sun->Draw();
+
+	Model = sun->GetModelToWorld() * earth->GetModelToWorld();
+	shader.SendUniformVariable("model", Model);
+	shader.SendUniformVariable("lightPosition", lightPosition);
+	shader.SendUniformVariable("lightColor", lightColor);
+	shader.BindTexture("textureDiffuse", 0, earthAlbedo->GetTexturehandle());
+	earth->Draw();
+
+	Model = sun->GetModelToWorld() * earth->GetModelToWorld() * moon->GetModelToWorld();
+	shader.SendUniformVariable("model", Model);
+	shader.SendUniformVariable("lightPosition", lightPosition);
+	shader.SendUniformVariable("lightColor", lightColor);
+	shader.BindTexture("textureDiffuse", 0, moonAlbedo->GetTexturehandle());
+	moon->Draw();
+
+	Draw::FinishDrawing();
 }
 
 void TransformParentDemo::ResetCamera()
@@ -97,12 +108,49 @@ void TransformParentDemo::HandleKeyPress(KeyboardButton button)
 {
 	switch (button)
 	{
-	case KeyboardButton::Q:
-		rotationSpeed = 1.0f;
-		break;
-	case KeyboardButton::E:
-		rotationSpeed = -1.0f;
-		break;
+		case KeyboardButton::W:
+			cameraMovement.z = 0.1f;
+			break;
+		case KeyboardButton::A:
+			cameraMovement.x = -0.1f;
+			break;
+		case KeyboardButton::S:
+			cameraMovement.z = -0.1f;
+			break;
+		case KeyboardButton::D:
+			cameraMovement.x = 0.1f;
+			break;
+		case KeyboardButton::Q:
+			cameraMovement.y = -0.1f;
+			break;
+		case KeyboardButton::E:
+			cameraMovement.y = 0.1f;
+			break;
+	}
+}
+
+void TransformParentDemo::HandleKeyRelease(KeyboardButton button)
+{
+	switch (button)
+	{
+		case KeyboardButton::W:
+			cameraMovement.z = 0.0f;
+			break;
+		case KeyboardButton::A:
+			cameraMovement.x = 0.0f;
+			break;
+		case KeyboardButton::S:
+			cameraMovement.z = 0.0f;
+			break;
+		case KeyboardButton::D:
+			cameraMovement.x = 0.0f;
+			break;
+		case KeyboardButton::Q:
+			cameraMovement.y = 0.0f;
+			break;
+		case KeyboardButton::E:
+			cameraMovement.y = 0.0f;
+			break;
 	}
 }
 
@@ -113,21 +161,12 @@ void TransformParentDemo::HandleResizeEvent(const int new_width, const int new_h
 
 void TransformParentDemo::HandleMousePositionEvent(float xpos, float ypos)
 {
-	mousePosition.x = xpos - float(width) / 2.0f;
-	mousePosition.y = -ypos + float(height) / 2.0f;
+
 }
 
 void TransformParentDemo::HandleMouseEvent(MouseButton button)
 {
-	switch (button)
-	{
-	case MouseButton::LEFT_PRESS:
-		isClicked = true;
-		break;
-	case MouseButton::LEFT_RELEASE:
-		isClicked = false;
-		break;
-	}
+
 }
 
 void TransformParentDemo::HandleFocusEvent(bool focused)

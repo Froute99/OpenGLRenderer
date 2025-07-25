@@ -89,8 +89,8 @@ int VertexObject::GetVerticesCount() const noexcept
 
 void VertexObject::WriteMeshDataToVertexBuffer3D(const Mesh3D& mesh) const noexcept
 {
-	char* buffer = reinterpret_cast<char*>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	char* buffer = reinterpret_cast<char*>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
 	unsigned offset = 0;
 
 	vec3<float> point;

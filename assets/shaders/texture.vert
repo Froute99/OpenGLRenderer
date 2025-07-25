@@ -8,8 +8,11 @@ out vec3 vertexNormal;
 out vec2 TexCoords;
 
 uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
+layout (std140) uniform Matrices
+{
+    uniform mat4 view;
+    uniform mat4 projection;
+};
 
 void main()
 {

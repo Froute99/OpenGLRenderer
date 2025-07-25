@@ -18,6 +18,9 @@ public:
 	UBO(int size);
 	void BindTo(const unsigned int shaderHandle, const char* blockName) noexcept;
 	void WriteData(unsigned int offset, unsigned int size, const void* data);
+	
+	// For debug
+	unsigned int GetHandle() const noexcept { return handle; }
 
 private:
 	unsigned int handle;

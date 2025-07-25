@@ -5,3 +5,4 @@ external/
 *.fbx
 imgui_sample.png
 *.hdr
+assets/Models

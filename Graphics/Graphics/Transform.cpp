@@ -25,5 +25,7 @@ mat4<float> Transform::BuildModelMatrix() const noexcept
 	mat4<float> R = Matrix4::build_rotation_euler(rotation);
 	mat4<float> S = Matrix4::build_scaling(scale);
 
+
+
 	return T * R * S;
 }
