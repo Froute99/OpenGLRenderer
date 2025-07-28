@@ -31,7 +31,7 @@ void TransformParentDemo::Initialize()
 
 	// EARTH
 	earth = GameObject::CreateSphere({ 0 });
-	earth->GetTransform()->SetParent(sun->GetTransform());
+	earth->SetParent(sun);
 	earth->Move({ 5.f, 0.f, 0.f });
 	earth->Rotate({ 3.141592f, 0.f, 0.f });
 	earth->Scale(0.1f);
@@ -41,7 +41,7 @@ void TransformParentDemo::Initialize()
 
 	// MOON
 	moon = GameObject::CreateSphere({ 0 });
-	moon->GetTransform()->SetParent(earth->GetTransform());
+	moon->SetParent(earth);
 	moon->Move({ 7.f, 0.f, 0.f });
 	//moon->Rotate({ 3.141592f, 0.f, 0.f });
 	moon->Scale(0.7f);
@@ -82,14 +82,16 @@ void TransformParentDemo::Update(float dt)
 	shader.BindTexture("textureDiffuse", 0, sunAlbedo->GetTexturehandle());
 	sun->Draw();
 
-	Model = sun->GetModelToWorld() * earth->GetModelToWorld();
+	//Model = sun->GetModelToWorld() * earth->GetModelToWorld();
+	Model = earth->GetModelToWorld();
 	shader.SendUniformVariable("model", Model);
 	shader.SendUniformVariable("lightPosition", lightPosition);
 	shader.SendUniformVariable("lightColor", lightColor);
 	shader.BindTexture("textureDiffuse", 0, earthAlbedo->GetTexturehandle());
 	earth->Draw();
 
-	Model = sun->GetModelToWorld() * earth->GetModelToWorld() * moon->GetModelToWorld();
+	//Model = sun->GetModelToWorld() * earth->GetModelToWorld() * moon->GetModelToWorld();
+	Model = moon->GetModelToWorld();
 	shader.SendUniformVariable("model", Model);
 	shader.SendUniformVariable("lightPosition", lightPosition);
 	shader.SendUniformVariable("lightColor", lightColor);

@@ -39,7 +39,7 @@ public:
 	void SetRotation(float x, float y, float z) noexcept { rotation = { x,y,z }; }
 
 	const Transform* GetParent() const noexcept { return parent; }
-	void SetParent(Transform * transform_parent) noexcept { parent = transform_parent; }
+	void SetParent(Transform* transform_parent) noexcept { parent = transform_parent; }
 
 	mat4<float> BuildModelMatrix() const noexcept;
 

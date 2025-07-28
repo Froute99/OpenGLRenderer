@@ -45,7 +45,7 @@ void Application::Initialize()
 	demo[PBR] = std::make_unique<PBRDemo>(window);
 	//demo[TEXTUREDPBR] = std::make_unique<TexturedPBRDemo>(window);
 	//demo[ANIMATION] = std::make_unique<AnimationDemo>(window);
-	//demo[TRANSFORMPARENTDEMO] = std::make_unique<TransformParentDemo>(window);
+	demo[TRANSFORMPARENTDEMO] = std::make_unique<TransformParentDemo>(window);
 	//demo[COMPUTESHADERDEMO] = std::make_unique<ComputeShaderDemo>(window);
 }
 

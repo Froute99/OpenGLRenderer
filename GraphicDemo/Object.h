@@ -14,6 +14,8 @@ public:
 	void Rotate(const vec3<float>& v) noexcept { transform.SetRotation(transform.GetRotation() + v); }
 	void Scale(const float s) noexcept { transform.SetScale({ s, s, s }); }
 
+	void SetParent(Object* parent) noexcept { transform.SetParent(parent->GetTransform()); }
+
 private:
 	Transform transform;
 
