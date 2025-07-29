@@ -43,7 +43,7 @@ void TransformParentDemo::Initialize()
 	moon = GameObject::CreateSphere({ 0 });
 	moon->SetParent(earth);
 	moon->Move({ 7.f, 0.f, 0.f });
-	//moon->Rotate({ 3.141592f, 0.f, 0.f });
+	moon->Rotate({ 3.141592f, 0.f, 0.f });
 	moon->Scale(0.7f);
 	moonAlbedo = new Texture();
 	moonAlbedo->LoadFromPath("../assets/Models/moon.png");
@@ -82,7 +82,6 @@ void TransformParentDemo::Update(float dt)
 	shader.BindTexture("textureDiffuse", 0, sunAlbedo->GetTexturehandle());
 	sun->Draw();
 
-	//Model = sun->GetModelToWorld() * earth->GetModelToWorld();
 	Model = earth->GetModelToWorld();
 	shader.SendUniformVariable("model", Model);
 	shader.SendUniformVariable("lightPosition", lightPosition);
@@ -90,7 +89,6 @@ void TransformParentDemo::Update(float dt)
 	shader.BindTexture("textureDiffuse", 0, earthAlbedo->GetTexturehandle());
 	earth->Draw();
 
-	//Model = sun->GetModelToWorld() * earth->GetModelToWorld() * moon->GetModelToWorld();
 	Model = moon->GetModelToWorld();
 	shader.SendUniformVariable("model", Model);
 	shader.SendUniformVariable("lightPosition", lightPosition);

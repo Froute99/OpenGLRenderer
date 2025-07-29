@@ -13,8 +13,6 @@
 
 #include <iostream>		// error logging
 
-void MappingIBLTextures(const Shader* shader, const EnvironmentMap* envMap);
-
 void PBRDemo::Initialize()
 {
 	pbrShader.LoadShaderFrom("../assets/shaders/PBR.vert", "../assets/shaders/PBR.frag");
@@ -22,18 +20,18 @@ void PBRDemo::Initialize()
 	{
 		std::cout << "Failed to load env map\n";
 	}
-	//texturedShader.LoadShaderFrom("../assets/shaders/PBR_Textured.vert", "../assets/shaders/PBR_Textured.frag");
+	texturedShader.LoadShaderFrom("../assets/shaders/PBR_Textured.vert", "../assets/shaders/PBR_Textured.frag");
 
 	sphere1 = GameObject::CreateSphere({ 0, 0, 0 });
 	sphere1->SetObjectType(ObjectType::NonTextured);
 	sphere1->Move({ 0.f, 0.f, -4.f });
 
-	//sphere2 = GameObject::CreateSphere({ 0, 0, 0 });
-	//sphere2->SetObjectType(ObjectType::NonTextured);
-	//sphere2->Move({ 2.5f, 0.f, -4.f });
+	sphere2 = GameObject::CreateSphere({ 0, 0, 0 });
+	sphere2->SetObjectType(ObjectType::NonTextured);
+	sphere2->Move({ 2.5f, 0.f, -4.f });
 
-	//ironSphere = GameObject::CreateSphere({ 0, 0, 0 });
-	//ironSphere->Move({ -2.5f, 0.f, -4.f });
+	ironSphere = GameObject::CreateSphere({ 0, 0, 0 });
+	ironSphere->Move({ -2.5f, 0.f, -4.f });
 
 	albedoMap = new Texture();
 	metallicMap = new Texture();
@@ -47,7 +45,7 @@ void PBRDemo::Initialize()
 	normalMap->LoadFromPath("../assets/Models/rustediron2_normal.png");
 
 	matricesBlock.BindTo(pbrShader.GetHandleToShader(), "Matrices");
-	//matricesBlock.BindTo(texturedShader.GetHandleToShader(), "Matrices");
+	matricesBlock.BindTo(texturedShader.GetHandleToShader(), "Matrices");
 	lightsBlock.BindTo(pbrShader.GetHandleToShader(), "Lights");
 
 	sphereColor = vec3<float>(1.f, 0.f, 0.f);
@@ -77,7 +75,7 @@ void PBRDemo::Update(float dt)
 	matricesBlock.WriteData(64, 64, &Projection);
 
 	Shader::UseShader(pbrShader);
-	MappingIBLTextures(&pbrShader, &envMap);
+	envMap.BindIBLTexture(pbrShader);
 
 	mat4<float> Model = sphere1->GetModelToWorld();
 	pbrShader.SendUniformVariable("model", Model);
@@ -97,39 +95,39 @@ void PBRDemo::Update(float dt)
 
 	sphere1->Draw();
 
-	//Model = sphere2->GetModelToWorld();
-	//pbrShader.SendUniformVariable("model", Model);
+	Model = sphere2->GetModelToWorld();
+	pbrShader.SendUniformVariable("model", Model);
 
-	//float		roughness2 = 0.8f;
-	//float		metallic2 = 0.1f;
-	//pbrShader.SendUniformVariable("roughness", roughness2);
-	//pbrShader.SendUniformVariable("ao", ambientOcclusion);
-	//pbrShader.SendUniformVariable("metallic", metallic2);
+	float		roughness2 = 0.8f;
+	float		metallic2 = 0.1f;
+	pbrShader.SendUniformVariable("roughness", roughness2);
+	pbrShader.SendUniformVariable("ao", ambientOcclusion);
+	pbrShader.SendUniformVariable("metallic", metallic2);
 
-	//// lights
-	//pbrShader.SendUniformVariable("lightPositions", lightPosition);
-	//pbrShader.SendUniformVariable("lightColors", lightColor);
-	//pbrShader.SendUniformVariable("lightIntensity", lightIntensity);
-	//pbrShader.SendUniformVariable("camPos", camera.GetEyePosition());
+	// lights
+	pbrShader.SendUniformVariable("lightPositions", lightPosition);
+	pbrShader.SendUniformVariable("lightColors", lightColor);
+	pbrShader.SendUniformVariable("lightIntensity", lightIntensity);
+	pbrShader.SendUniformVariable("camPos", camera.GetEyePosition());
 
-	//sphere2->Draw();
+	sphere2->Draw();
 
-	//Shader::UseShader(texturedShader);
-	//MappingIBLTextures(&texturedShader, &envMap);
-	//texturedShader.BindTexture("albedoMap", 3, albedoMap->GetTexturehandle());
-	//texturedShader.BindTexture("metallicMap", 4, metallicMap->GetTexturehandle());
-	//texturedShader.BindTexture("roughnessMap", 5, roughnessMap->GetTexturehandle());
-	//texturedShader.BindTexture("normalMap", 6, normalMap->GetTexturehandle());
+	Shader::UseShader(texturedShader);
+	envMap.BindIBLTexture(texturedShader);
+	texturedShader.BindTexture("albedoMap", 3, albedoMap->GetTexturehandle());
+	texturedShader.BindTexture("metallicMap", 4, metallicMap->GetTexturehandle());
+	texturedShader.BindTexture("roughnessMap", 5, roughnessMap->GetTexturehandle());
+	texturedShader.BindTexture("normalMap", 6, normalMap->GetTexturehandle());
 
-	//Model = ironSphere->GetModelToWorld();
-	//texturedShader.SendUniformVariable("model", Model);
+	Model = ironSphere->GetModelToWorld();
+	texturedShader.SendUniformVariable("model", Model);
 
-	//// lights
-	//texturedShader.SendUniformVariable("lightPositions", lightPosition);
-	//texturedShader.SendUniformVariable("lightColors", lightColor);
-	//texturedShader.SendUniformVariable("camPos", camera.GetEyePosition());
+	// lights
+	texturedShader.SendUniformVariable("lightPositions", lightPosition);
+	texturedShader.SendUniformVariable("lightColors", lightColor);
+	texturedShader.SendUniformVariable("camPos", camera.GetEyePosition());
 
-	//ironSphere->Draw();
+	ironSphere->Draw();
 
 	envMap.Render(Matrix4::CutOffTranslation(View), Projection);
 
@@ -304,16 +302,3 @@ void PBRDemo::RenderQuad()
 	glBindVertexArray(0);
 }
 
-void MappingIBLTextures(const Shader* shader, const EnvironmentMap* envMap)
-{
-	shader->SendUniformVariable("irradianceMap", 0);
-	shader->SendUniformVariable("prefilterMap", 1);
-	shader->SendUniformVariable("brdfLUT", 2);
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, envMap->GetIrradianceMapHandle());
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, envMap->GetPrefilterMapHandle());
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, envMap->GetBRDFLUTTextureHandle());
-}

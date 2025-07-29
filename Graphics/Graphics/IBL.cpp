@@ -321,3 +321,17 @@ void EnvironmentMap::RenderQuad()
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	glBindVertexArray(0);
 }
+
+void EnvironmentMap::BindIBLTexture(const Shader& shader)
+{
+	shader.SendUniformVariable("irradianceMap", 0);
+	shader.SendUniformVariable("perfilterMap", 1);
+	shader.SendUniformVariable("brdfLUT", 2);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, prefilterMap);
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, brdfLUTTexture);
+}

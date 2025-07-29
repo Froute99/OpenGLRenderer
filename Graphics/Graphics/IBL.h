@@ -21,6 +21,8 @@ public:
 	void RenderCube();
 	void RenderQuad();
 
+	void BindIBLTexture(const Shader& shader);
+
 private:
 	int screenWidth, screenHeight;
 
