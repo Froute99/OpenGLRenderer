@@ -178,7 +178,7 @@
     <ClCompile Include="TestStage.cpp" />
     <ClCompile Include="TexturedPBRDemo.cpp" />
     <ClCompile Include="TextureDrawingDemo.cpp" />
-    <ClCompile Include="TransformParentDemo.cpp" />
+    <ClCompile Include="TransformHierarchyDemo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationDemo.h" />
@@ -193,7 +193,7 @@
     <ClInclude Include="TestStage.h" />
     <ClInclude Include="TexturedPBRDemo.h" />
     <ClInclude Include="TextureDrawingDemo.h" />
-    <ClInclude Include="TransformParentDemo.h" />
+    <ClInclude Include="TransformHierarchyDemo.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Graphics\Graphics.vcxproj">

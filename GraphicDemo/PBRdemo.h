@@ -50,7 +50,7 @@ private:
 
 	vec3<float> lightPosition;
 	vec3<float> lightColor;
-	float		 lightIntensity;
+	float		lightIntensity;
 
 	Shader		 hdrShader;
 	unsigned int hdrFBO;	  // framebuffer object handle for HDR

@@ -76,6 +76,16 @@ void PBRDemo::Update(float dt)
 
 	Shader::UseShader(pbrShader);
 	envMap.BindIBLTexture(pbrShader);
+	//pbrShader.SendUniformVariable("irradianceMap", 0);
+	//pbrShader.SendUniformVariable("prefilterMap", 1);
+	//pbrShader.SendUniformVariable("brdfLUT", 2);
+
+	//glActiveTexture(GL_TEXTURE0);
+	//glBindTexture(GL_TEXTURE_CUBE_MAP, envMap.GetIrradianceMapHandle());
+	//glActiveTexture(GL_TEXTURE1);
+	//glBindTexture(GL_TEXTURE_CUBE_MAP, envMap.GetPrefilterMapHandle());
+	//glActiveTexture(GL_TEXTURE2);
+	//glBindTexture(GL_TEXTURE_2D, envMap.GetBRDFLUTTextureHandle());
 
 	mat4<float> Model = sphere1->GetModelToWorld();
 	pbrShader.SendUniformVariable("model", Model);

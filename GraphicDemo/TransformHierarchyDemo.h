@@ -1,7 +1,7 @@
 /********************************************************
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *	
- *	File_name: TransformParentDemo.hpp
+ *	File_name: TransformHierarchyDemo.hpp
  *	
  *	Transform Set Parent Test
  *	
@@ -16,10 +16,10 @@
 class GameObject;
 class Texture;
 
-class TransformParentDemo : public Demo
+class TransformHierarchyDemo : public Demo
 {
 public:
-	explicit TransformParentDemo(OpenGLWindow& window) : Demo(window) { Initialize(); }
+	explicit TransformHierarchyDemo(OpenGLWindow& window) : Demo(window) { Initialize(); }
 
 	void Initialize() override final;
 	void Update(float dt) override final;
@@ -32,6 +32,8 @@ public:
 	void HandleMousePositionEvent(float xpos, float ypos) override final;
 	void HandleMouseEvent(MouseButton button) override final;
 	void HandleFocusEvent(bool focused) override final;
+
+	void ImguiHelper();
 
 private:
 	Shader shader;
@@ -51,4 +53,10 @@ private:
 	UBO matricesBlock{ 128 };
 
 	//mat3<float> cameraToNDC;
+
+	vec3<float> sunPosition;
+	vec3<float> earthPosition;
+	vec3<float> moonPosition;
+	bool		anyChange = false;
+
 };

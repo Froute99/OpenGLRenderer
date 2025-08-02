@@ -203,7 +203,7 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 
 	Shader::UseShader(skyboxShader);
 	skyboxShader.SendUniformVariable("skybox", 0);
-	//skyboxShader.SendUniformVariable("view", captureViews[5]);
+	skyboxShader.SendUniformVariable("view", captureViews[5]);
 	skyboxShader.SendUniformVariable("projection", projection);
 
 	//mesh = MESH::BuildCube(1.0f);
@@ -325,7 +325,7 @@ void EnvironmentMap::RenderQuad()
 void EnvironmentMap::BindIBLTexture(const Shader& shader)
 {
 	shader.SendUniformVariable("irradianceMap", 0);
-	shader.SendUniformVariable("perfilterMap", 1);
+	shader.SendUniformVariable("prefilterMap", 1);
 	shader.SendUniformVariable("brdfLUT", 2);
 
 	glActiveTexture(GL_TEXTURE0);

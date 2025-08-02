@@ -1,28 +1,36 @@
 /********************************************************
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *	
- *	File_name: TransformParentDemo.cpp
+ *	File_name: TransformHierarchyDemo.cpp
  *	
  *	Transform Set Parent Test
  *	
  *	Dec.07 2019
  *******************************************************/
 
-#include "TransformParentDemo.h"
+#include "TransformHierarchyDemo.h"
 #include <Graphics/Draw.h>
 #include "GameObject.h"
 #include <iostream>
 #include <glew.h>
 
-void TransformParentDemo::Initialize()
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_glfw.h>
+#include <imgui/imgui_impl_opengl3.h>
+
+void TransformHierarchyDemo::Initialize()
 {
 	shader.LoadShaderFrom("../assets/shaders/texture.vert", "../assets/shaders/texture.frag");
 
 	camera.SetEyePosition({ 0.f, 5.f, 30.f });
 
+	sunPosition = { 0.f, 0.f, 0.f };
+	earthPosition = { 5.f, 0.f, 0.f };
+	moonPosition = { 7.f, 0.f, 0.f };
+
 	// SUN
 	sun = GameObject::CreateSphere({ 0 });
-	sun->Move({ 0.f, 0.f, 0.f });
+	sun->Move(sunPosition);
 	sun->Rotate({ 3.141592f, 0.f, 0.f });
 	sun->Scale(10.f);
 
@@ -32,7 +40,7 @@ void TransformParentDemo::Initialize()
 	// EARTH
 	earth = GameObject::CreateSphere({ 0 });
 	earth->SetParent(sun);
-	earth->Move({ 5.f, 0.f, 0.f });
+	earth->Move(earthPosition);
 	earth->Rotate({ 3.141592f, 0.f, 0.f });
 	earth->Scale(0.1f);
 
@@ -42,7 +50,7 @@ void TransformParentDemo::Initialize()
 	// MOON
 	moon = GameObject::CreateSphere({ 0 });
 	moon->SetParent(earth);
-	moon->Move({ 7.f, 0.f, 0.f });
+	moon->Move(moonPosition);
 	moon->Rotate({ 3.141592f, 0.f, 0.f });
 	moon->Scale(0.7f);
 	moonAlbedo = new Texture();
@@ -57,15 +65,23 @@ void TransformParentDemo::Initialize()
 	//cameraToNDC = view.GetCameraToNDCTransform() * camera.WorldToCamera();
 }
 
-void TransformParentDemo::Update(float dt)
+void TransformHierarchyDemo::Update(float dt)
 {
 	//if (!isFocused)
 	Demo::Update(dt);
 	Draw::StartDrawing();
 
+	if (anyChange)
+	{
+		sun->GetTransform()->SetTranslation(sunPosition);
+		earth->GetTransform()->SetTranslation(earthPosition);
+		moon->GetTransform()->SetTranslation(moonPosition);
+		anyChange = false;
+	}
+
 	sun->Rotate({ 0.f, 0.001f, 0.f });
 	earth->Rotate({ 0.f, 0.01f, 0.f });
-	//moon->Rotate({ 0.f, 0.01f, 0.f });
+	moon->Rotate({ 0.f, 0.01f, 0.f });
 
 	const mat4<float>& View = camera.BuildViewMatrix();
 	const mat4<float>& Projection = view.BuildProjectionMatrix();
@@ -97,14 +113,17 @@ void TransformParentDemo::Update(float dt)
 	moon->Draw();
 
 	Draw::FinishDrawing();
+
+	ImguiHelper();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void TransformParentDemo::ResetCamera()
+void TransformHierarchyDemo::ResetCamera()
 {
 	//camera.ResetUp();
 }
 
-void TransformParentDemo::HandleKeyPress(KeyboardButton button)
+void TransformHierarchyDemo::HandleKeyPress(KeyboardButton button)
 {
 	switch (button)
 	{
@@ -129,7 +148,7 @@ void TransformParentDemo::HandleKeyPress(KeyboardButton button)
 	}
 }
 
-void TransformParentDemo::HandleKeyRelease(KeyboardButton button)
+void TransformHierarchyDemo::HandleKeyRelease(KeyboardButton button)
 {
 	switch (button)
 	{
@@ -154,22 +173,53 @@ void TransformParentDemo::HandleKeyRelease(KeyboardButton button)
 	}
 }
 
-void TransformParentDemo::HandleResizeEvent(const int new_width, const int new_height)
+void TransformHierarchyDemo::HandleResizeEvent(const int new_width, const int new_height)
 {
 	Demo::HandleResizeEvent(new_width, new_height);
 }
 
-void TransformParentDemo::HandleMousePositionEvent(float xpos, float ypos)
+void TransformHierarchyDemo::HandleMousePositionEvent(float xpos, float ypos)
 {
 
 }
 
-void TransformParentDemo::HandleMouseEvent(MouseButton button)
+void TransformHierarchyDemo::HandleMouseEvent(MouseButton button)
 {
 
 }
 
-void TransformParentDemo::HandleFocusEvent(bool focused)
+void TransformHierarchyDemo::HandleFocusEvent(bool focused)
 {
 	Demo::HandleFocusEvent(focused);
+}
+
+void TransformHierarchyDemo::ImguiHelper()
+{
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+
+	ImGui::NewFrame();
+
+	// Global
+	ImGui::Begin("Global");
+	ImGui::SetWindowCollapsed(false);
+
+	ImGui::Text("Transform Hierarchy Demo");
+
+	ImGui::End();
+
+	// Object Property
+	ImGuiWindowFlags flags = ImGuiWindowFlags_NoResize;
+	ImGui::Begin("PBR Properties", NULL, flags);
+	ImGui::SetWindowCollapsed(false);
+	ImGui::SetWindowSize({ 300, 150 });
+
+	ImGui::NewLine();
+	anyChange = anyChange || ImGui::DragFloat3("Sun", &sunPosition.x, 0.1f);
+	anyChange = anyChange || ImGui::DragFloat3("Earth", &earthPosition.x, 0.1f);
+	anyChange = anyChange || ImGui::DragFloat3("Moon", &moonPosition.x, 0.1f);
+
+	ImGui::End();
+
+	ImGui::Render();
 }

@@ -14,7 +14,7 @@
 #include "PhongShadingDemo.h"
 #include "TextureDrawingDemo.h"
 #include "AnimationDemo.h"
-#include "TransformParentDemo.h"
+#include "TransformHierarchyDemo.h"
 #include "ComputeShaderDemo.h"
 #include "PBRdemo.h"
 #include "TexturedPBRDemo.h"
@@ -45,7 +45,7 @@ void Application::Initialize()
 	demo[PBR] = std::make_unique<PBRDemo>(window);
 	//demo[TEXTUREDPBR] = std::make_unique<TexturedPBRDemo>(window);
 	//demo[ANIMATION] = std::make_unique<AnimationDemo>(window);
-	demo[TRANSFORMPARENTDEMO] = std::make_unique<TransformParentDemo>(window);
+	demo[HIERARCHY_DEMO] = std::make_unique<TransformHierarchyDemo>(window);
 	//demo[COMPUTESHADERDEMO] = std::make_unique<ComputeShaderDemo>(window);
 }
 
