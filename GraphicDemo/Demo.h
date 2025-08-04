@@ -20,7 +20,9 @@ public:
 	explicit Demo(OpenGLWindow& window)
 		: width(window.GetWindowWidth()), height(window.GetWindowHeight()) { Initialize(); }
 	virtual void Initialize();
-	virtual void Update(float dt);
+	virtual void Update(float /*dt*/) = 0;
+	void UpdateWrapper(float dt);
+	virtual void DrawGUI() = 0;
 
 	virtual void ResetCamera() = 0;
 

@@ -25,7 +25,7 @@ public:
 	void HandleFocusEvent(bool focused) override final;
 	void HandleMousePositionEvent(float x, float y) override;
 
-	void ImguiHelper();
+	void DrawGUI() override;
 
 private:
 	Shader pbrShader;

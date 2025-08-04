@@ -12,6 +12,7 @@
 #include <Graphics/Draw.h>
 #include <math/Angle.hpp>
 #include <glew.h>
+#include <iostream>
 
 void Demo::Initialize()
 {
@@ -19,11 +20,22 @@ void Demo::Initialize()
 	glDepthFunc(GL_LEQUAL);
 }
 
-void Demo::Update(float /*dt*/)
+//void Demo::Update(float /*dt*/)
+//{
+//	//camera.MoveX(cameraMovement.x);
+//	//camera.MoveY(cameraMovement.y);
+//	//camera.MoveZ(cameraMovement.z);
+//}
+
+void Demo::UpdateWrapper(float dt)
 {
 	camera.MoveX(cameraMovement.x);
 	camera.MoveY(cameraMovement.y);
 	camera.MoveZ(cameraMovement.z);
+	Draw::StartDrawing();
+	Update(dt);
+	Draw::FinishDrawing();
+	DrawGUI();
 }
 
 void Demo::HandleKeyPress(KeyboardButton key)

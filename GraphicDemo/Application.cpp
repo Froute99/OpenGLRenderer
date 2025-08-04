@@ -42,7 +42,7 @@ void Application::Initialize()
 
 	//demo[PHONGSHADING] = std::make_unique<PhongShadingDemo>(window);
 	//demo[TEST] = std::make_unique<TestStage>(window);
-	demo[PBR] = std::make_unique<PBRDemo>(window);
+	//demo[PBR] = std::make_unique<PBRDemo>(window);
 	//demo[TEXTUREDPBR] = std::make_unique<TexturedPBRDemo>(window);
 	//demo[ANIMATION] = std::make_unique<AnimationDemo>(window);
 	demo[HIERARCHY_DEMO] = std::make_unique<TransformHierarchyDemo>(window);
@@ -53,7 +53,7 @@ void Application::Update(float dt)
 {
 	//view.SetViewSize(window.GetWindowWidth(), window.GetWindowHeight());
 	
-	demo[demoIndex]->Update(dt);
+	demo[demoIndex]->UpdateWrapper(dt);
 
 	window.SwapBuffers();
 	window.PollEvents();

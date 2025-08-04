@@ -33,7 +33,7 @@ public:
 	void HandleMouseEvent(MouseButton button) override final;
 	void HandleFocusEvent(bool focused) override final;
 
-	void ImguiHelper();
+	void DrawGUI() override;
 
 private:
 	Shader shader;

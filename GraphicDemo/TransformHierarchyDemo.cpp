@@ -65,11 +65,11 @@ void TransformHierarchyDemo::Initialize()
 	//cameraToNDC = view.GetCameraToNDCTransform() * camera.WorldToCamera();
 }
 
-void TransformHierarchyDemo::Update(float dt)
+void TransformHierarchyDemo::Update(float /*dt*/)
 {
 	//if (!isFocused)
-	Demo::Update(dt);
-	Draw::StartDrawing();
+	//Demo::Update(dt);
+	//Draw::StartDrawing();
 
 	if (anyChange)
 	{
@@ -93,7 +93,7 @@ void TransformHierarchyDemo::Update(float dt)
 	mat4<float> Model = sun->GetModelToWorld();
 
 	shader.SendUniformVariable("model", Model);
-	shader.SendUniformVariable("lightPosition", lightPosition);
+	shader.SendUniformVariable("lightPosition", sun->GetTransform()->GetTranslation());
 	shader.SendUniformVariable("lightColor", lightColor);
 	shader.BindTexture("textureDiffuse", 0, sunAlbedo->GetTexturehandle());
 	sun->Draw();
@@ -111,11 +111,6 @@ void TransformHierarchyDemo::Update(float dt)
 	shader.SendUniformVariable("lightColor", lightColor);
 	shader.BindTexture("textureDiffuse", 0, moonAlbedo->GetTexturehandle());
 	moon->Draw();
-
-	Draw::FinishDrawing();
-
-	ImguiHelper();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void TransformHierarchyDemo::ResetCamera()
@@ -193,7 +188,7 @@ void TransformHierarchyDemo::HandleFocusEvent(bool focused)
 	Demo::HandleFocusEvent(focused);
 }
 
-void TransformHierarchyDemo::ImguiHelper()
+void TransformHierarchyDemo::DrawGUI()
 {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
@@ -222,4 +217,5 @@ void TransformHierarchyDemo::ImguiHelper()
 	ImGui::End();
 
 	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

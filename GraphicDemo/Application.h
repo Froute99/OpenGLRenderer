@@ -22,7 +22,7 @@ public:
 	enum DEMOINDEX
 	{
 		//PHONGSHADING,
-		PBR,
+		//PBR,
 		//TEXTUREDPBR,
 		//TEXTUREDRAWING,
 		//ANIMATION,

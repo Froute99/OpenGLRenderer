@@ -58,11 +58,8 @@ void PBRDemo::Initialize()
 	lightIntensity = 10.f;
 }
 
-void PBRDemo::Update(float dt)
+void PBRDemo::Update(float /*dt*/)
 {
-	Demo::Update(dt);
-	Draw::StartDrawing();
-
 	const vec3<float>& camPos = camera.GetEyePosition();
 	lightsBlock.WriteData(0, 12, &lightPosition[0]);
 	lightsBlock.WriteData(16, 12, &lightColor[0]);
@@ -140,11 +137,6 @@ void PBRDemo::Update(float dt)
 	ironSphere->Draw();
 
 	envMap.Render(Matrix4::CutOffTranslation(View), Projection);
-
-	Draw::FinishDrawing();
-
-	ImguiHelper();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void PBRDemo::ResetCamera()
@@ -222,7 +214,7 @@ void PBRDemo::HandleMousePositionEvent(float x, float y)
 	Demo::HandleMousePositionEvent(x, y);
 }
 
-void PBRDemo::ImguiHelper()
+void PBRDemo::DrawGUI()
 {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
@@ -281,6 +273,7 @@ void PBRDemo::ImguiHelper()
 	}
 
 	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void PBRDemo::RenderQuad()
