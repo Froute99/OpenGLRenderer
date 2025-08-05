@@ -21,7 +21,7 @@ public:
 		: width(window.GetWindowWidth()), height(window.GetWindowHeight()) { Initialize(); }
 	virtual void Initialize();
 	virtual void Update(float /*dt*/) = 0;
-	void UpdateWrapper(float dt);
+	void UpdateWrapper(float dt) noexcept;
 	virtual void DrawGUI() = 0;
 
 	virtual void ResetCamera() = 0;

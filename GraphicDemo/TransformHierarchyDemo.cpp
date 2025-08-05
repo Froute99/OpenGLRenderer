@@ -200,6 +200,12 @@ void TransformHierarchyDemo::DrawGUI()
 	ImGui::SetWindowCollapsed(false);
 
 	ImGui::Text("Transform Hierarchy Demo");
+	ImGui::Text("Solar System");
+	ImGui::NewLine();
+	ImGui::Text("Controls:");
+	ImGui::Text("WASD - Move around");
+	ImGui::Text("QE - Go up and down");
+	ImGui::Text("Page up & down - Convert current showing demo stage");
 
 	ImGui::End();
 

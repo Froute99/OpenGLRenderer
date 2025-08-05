@@ -227,6 +227,13 @@ void PBRDemo::DrawGUI()
 		ImGui::SetWindowCollapsed(false);
 
 		ImGui::Text("PBR Demo");
+		ImGui::Text("Multiple materials");
+		ImGui::NewLine();
+		ImGui::Text("Controls:");
+		ImGui::Text("Mouse movement - Look around");
+		ImGui::Text("WASD - Move around");
+		ImGui::Text("QE - Go up and down");
+		ImGui::Text("Page up & down - Convert current showing demo stage");
 
 		ImGui::End();
 	}

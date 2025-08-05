@@ -27,7 +27,7 @@ void Demo::Initialize()
 //	//camera.MoveZ(cameraMovement.z);
 //}
 
-void Demo::UpdateWrapper(float dt)
+void Demo::UpdateWrapper(float dt) noexcept
 {
 	camera.MoveX(cameraMovement.x);
 	camera.MoveY(cameraMovement.y);
