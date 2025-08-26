@@ -33,7 +33,7 @@ public:
 	void HandleScrollEvent(float scroll_amount) override final;
 	void HandleFocusEvent(bool focused) override final;
 
-	void ImguiHelper();
+	void DrawGUI() override;
 
 private:
 	vec3<float> moveSpeed;

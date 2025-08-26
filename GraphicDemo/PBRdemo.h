@@ -31,8 +31,6 @@ private:
 	Shader pbrShader;
 	Shader texturedShader;
 
-	// Material Preset
-
 	GameObject* sphere1;
 	GameObject* sphere2;
 	GameObject* ironSphere;

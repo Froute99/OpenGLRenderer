@@ -32,6 +32,7 @@ public:
 
 	// Perspective
 	mat4<float> BuildProjectionMatrix() const noexcept;
+	const mat4<float>& GetProjectionMatrix() const noexcept;
 
 private:
 	mat4<float> projectionMatrix;

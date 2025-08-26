@@ -32,10 +32,4 @@ mat4<float> CameraView::BuildProjectionMatrix() const noexcept
 {
 	return Matrix4::GeneralProjectionMatrix(ANGLE::DegreeToRadian(fov), aspectRatio, near, far);
 	//return Matrix4::InfiniteProjectionMatrix(ANGLE::DegreeToRadian(fov), aspectRatio, near);
-	
-	//mat4<float> projection(
-	//	1.0f / (aspectRatio * tangent), 0.0f, 0.0f, 0.0f,
-	//	0.0f, 1.0f / tangent, 0.0f, 0.0f,
-	//	0.0f, 0.0f, 1.0f, 1.0f,
-	//	0.0f, 0.0f, -2.f * near, 0.0f);
 }

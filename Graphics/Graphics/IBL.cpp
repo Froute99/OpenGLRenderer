@@ -14,6 +14,7 @@
 #include "stb_image.h"
 #include <iostream>
 #include <fstream>
+#include <Math/Angle.hpp>
 
 bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 {
@@ -63,6 +64,7 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+	mat4<float> captureProjection = Matrix4::GeneralProjectionMatrix(ANGLE::pi / 2.f, 1.0f, 0.1f, 1000.f);
 	mat4<float> captureViews[] = {
 		Matrix4::BuildLookAt(vec3<float>(0.0f, 0.0f, 0.0f), vec3<float>(1.0f, 0.0f, 0.0f), vec3<float>(0.0f, -1.0f, 0.0f)),
 		Matrix4::BuildLookAt(vec3<float>(0.0f, 0.0f, 0.0f), vec3<float>(-1.0f, 0.0f, 0.0f), vec3<float>(0.0f, -1.0f, 0.0f)),
@@ -75,7 +77,7 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 	/* HDR image to Cubemap */
 	Shader::UseShader(equirectangularMappingShader);
 	equirectangularMappingShader.SendUniformVariable("equirectangularMap", 0);
-	equirectangularMappingShader.SendUniformVariable("projection", projection);
+	equirectangularMappingShader.SendUniformVariable("projection", captureProjection);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
@@ -113,7 +115,7 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 
 	Shader::UseShader(irradianceShader);
 	irradianceShader.SendUniformVariable("environmentMap", 0);
-	irradianceShader.SendUniformVariable("projection", projection);
+	irradianceShader.SendUniformVariable("projection", captureProjection);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
 
@@ -146,7 +148,7 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 
 	Shader::UseShader(prefilterShader);
 	prefilterShader.SendUniformVariable("environmentMap", 0);
-	prefilterShader.SendUniformVariable("projection", projection);
+	prefilterShader.SendUniformVariable("projection", captureProjection);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
 
@@ -199,12 +201,11 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	glViewport(0, 0, screenWidth, screenHeight);
-
 	Shader::UseShader(skyboxShader);
 	skyboxShader.SendUniformVariable("skybox", 0);
 	skyboxShader.SendUniformVariable("view", captureViews[5]);
 	skyboxShader.SendUniformVariable("projection", projection);
+	glViewport(0, 0, screenWidth, screenHeight);
 
 	//mesh = MESH::BuildCube(1.0f);
 

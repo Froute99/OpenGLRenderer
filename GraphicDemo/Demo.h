@@ -48,7 +48,7 @@ protected:
 	Camera	   camera;
 	CameraView view;
 	vec3<float> cameraMovement;
-	float		mousePast[2] = { 500.f, 500.f };
+	float		mousePast[2];
 	
 	int	 width;
 	int	 height;

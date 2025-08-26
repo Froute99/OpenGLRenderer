@@ -110,12 +110,6 @@ void PhongShadingDemo::Update(float dt)
 
 	// std::cout << "\r" << dt;
 
-	camera.MoveX(moveSpeed.x);
-	camera.MoveY(moveSpeed.y);
-	camera.MoveZ(moveSpeed.z);
-
-	Draw::StartDrawing();
-
 	//glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -168,11 +162,6 @@ void PhongShadingDemo::Update(float dt)
 	//glUniform1i(glGetUniformLocation(hdrShader.GetHandleToShader(), "hdr"), hdr);
 	//glUniform1f(glGetUniformLocation(hdrShader.GetHandleToShader(), "exposure"), exposure);
 	//RenderQuad();
-
-	Draw::FinishDrawing();
-
-	ImguiHelper();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void PhongShadingDemo::ResetCamera()
@@ -249,7 +238,7 @@ void PhongShadingDemo::HandleFocusEvent(bool focused)
 	Demo::HandleFocusEvent(focused);
 }
 
-void PhongShadingDemo::ImguiHelper()
+void PhongShadingDemo::DrawGUI()
 {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();

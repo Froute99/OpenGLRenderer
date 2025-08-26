@@ -92,13 +92,6 @@ void TexturedPBRDemo::Update(float dt)
 		frameCount = 0;
 	}
 
-
-	camera.MoveX(moveSpeed.x);
-	camera.MoveY(moveSpeed.y);
-	camera.MoveZ(moveSpeed.z);
-
-	Draw::StartDrawing();
-
 	//glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
 	{
 		Shader::UseShader(pbrShader);
@@ -141,11 +134,6 @@ void TexturedPBRDemo::Update(float dt)
 	//glUniform1i(glGetUniformLocation(hdrShader.GetHandleToShader(), "hdr"), hdr);
 	//glUniform1f(glGetUniformLocation(hdrShader.GetHandleToShader(), "exposure"), exposure);
 	//RenderQuad();
-
-	Draw::FinishDrawing();
-
-	ImguiHelper();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void TexturedPBRDemo::ResetCamera()
@@ -218,7 +206,7 @@ void TexturedPBRDemo::HandleFocusEvent(bool focused)
 	focused;
 }
 
-void TexturedPBRDemo::ImguiHelper()
+void TexturedPBRDemo::DrawGUI()
 {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();

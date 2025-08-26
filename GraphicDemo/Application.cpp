@@ -36,16 +36,19 @@ void Application::Initialize()
 	{
 		return;
 	}
-	window.ToggleVSync(true);
-	window.ToggleMouse();
 	isRunning = true;
 
-	//demo[PHONGSHADING] = std::make_unique<PhongShadingDemo>(window);
-	//demo[TEST] = std::make_unique<TestStage>(window);
-	//demo[PBR] = std::make_unique<PBRDemo>(window);
+	window.ToggleVSync(true);
+	window.ToggleMouse();
+	//camera.Initialize();
+	//view.Initialize();
+
+	demo[PHONGSHADING] = std::make_unique<PhongShadingDemo>(window);
+	demo[PBR] = std::make_unique<PBRDemo>(window);
 	//demo[TEXTUREDPBR] = std::make_unique<TexturedPBRDemo>(window);
 	//demo[ANIMATION] = std::make_unique<AnimationDemo>(window);
 	demo[HIERARCHY_DEMO] = std::make_unique<TransformHierarchyDemo>(window);
+	//demo[TEST] = std::make_unique<TestStage>(window);
 	//demo[COMPUTESHADERDEMO] = std::make_unique<ComputeShaderDemo>(window);
 }
 

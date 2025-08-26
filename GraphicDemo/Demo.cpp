@@ -18,6 +18,11 @@ void Demo::Initialize()
 {
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
+	//camera.Initialize();
+	//view.Initialize();
+	view.SetViewSize(width, height);
+	mousePast[0] = width / 2.f;
+	mousePast[1] = height / 2.f;
 }
 
 //void Demo::Update(float /*dt*/)
