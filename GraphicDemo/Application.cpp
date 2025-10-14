@@ -40,11 +40,9 @@ void Application::Initialize()
 
 	window.ToggleVSync(true);
 	window.ToggleMouse();
-	//camera.Initialize();
-	//view.Initialize();
 
-	demo[PHONGSHADING] = std::make_unique<PhongShadingDemo>(window);
 	demo[PBR] = std::make_unique<PBRDemo>(window);
+	demo[PHONGSHADING] = std::make_unique<PhongShadingDemo>(window);
 	//demo[TEXTUREDPBR] = std::make_unique<TexturedPBRDemo>(window);
 	//demo[ANIMATION] = std::make_unique<AnimationDemo>(window);
 	demo[HIERARCHY_DEMO] = std::make_unique<TransformHierarchyDemo>(window);
@@ -54,8 +52,6 @@ void Application::Initialize()
 
 void Application::Update(float dt)
 {
-	//view.SetViewSize(window.GetWindowWidth(), window.GetWindowHeight());
-	
 	demo[demoIndex]->UpdateWrapper(dt);
 
 	window.SwapBuffers();

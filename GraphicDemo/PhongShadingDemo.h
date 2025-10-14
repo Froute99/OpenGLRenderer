@@ -45,18 +45,6 @@ private:
 	Shader shader;
 	Shader skyboxShader;
 
-	GLuint uniformModelLocation;
-	GLuint uniformViewLocation;
-	GLuint uniformProjectionLocation;
-
-	GLuint uniformObjectColorLocation;
-	GLuint uniformLightPosLocation;
-	GLuint uniformLightColorLocation;
-
-	GLuint uniformLightCubeModel;
-	GLuint uniformLightCubeView;
-	GLuint uniformLightCubeProjection;
-
 	vec3<float> objectColor;
 	vec3<float> lightPos;
 	vec3<float> lightColor;
@@ -69,13 +57,6 @@ private:
 	bool showObjectWindow = true;
 	bool showLightWindow = true;
 	bool shouldRotate = false;
-
-	// HDR
-	Shader		 hdrShader;
-	unsigned int hdrFBO;	  // framebuffer object handle for HDR
-	unsigned int colorBuffer; // colorbuffer for HDR
-	bool		 hdr = true;
-	float		 exposure = 1.0f;
 
 	void		 RenderQuad();
 	unsigned int quadVAO = 0;

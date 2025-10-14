@@ -64,7 +64,6 @@ float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
 
 vec3 FresnelSchlick(float cosTheta, vec3 F0)
 {
-    // clamp using: to prevent black spot.
     return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
 
@@ -99,13 +98,13 @@ void main()
         // Cook-Torrance BRDF
         float D = DistributionGGX(N, H, roughness);
         float G = GeometrySmith(N, V, L, roughness);
-        // clamp part represent F0, and that is between 0 and 1.
+        // no fresnel value below 0 and above 1 in nature world.
         vec3  F = FresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
 
         vec3  numerator = D * G * F;
         float NdotV = max(dot(N, V), 0.0);
         float NdotL = max(dot(N, L), 0.0);
-        float denominator = 4.0 * NdotV * NdotL + 0.0001; // + 0.0001 to prevent divide by zero
+        float denominator = 4.0 * NdotV * NdotL + 0.0001; // prevent divide by zero
         vec3  specular = numerator / denominator;
 
         vec3 kS = F;                    // kS is equal to Fresnel

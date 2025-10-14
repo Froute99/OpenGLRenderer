@@ -68,9 +68,6 @@ void TransformHierarchyDemo::Initialize()
 void TransformHierarchyDemo::Update(float /*dt*/)
 {
 	//if (!isFocused)
-	//Demo::Update(dt);
-	//Draw::StartDrawing();
-
 	if (anyChange)
 	{
 		sun->GetTransform()->SetTranslation(sunPosition);

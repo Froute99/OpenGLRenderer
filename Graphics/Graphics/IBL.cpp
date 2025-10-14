@@ -176,19 +176,17 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	/* Make 2D Look Up Texture using BRDF */
+	/* BRDF Look up table*/
 	glGenTextures(1, &brdfLUTTexture);
 
-	// pre-allocate enough memory for the LUT texture.
 	glBindTexture(GL_TEXTURE_2D, brdfLUTTexture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, 512, 512, 0, GL_RG, GL_FLOAT, 0);
-	// be sure to set wrapping mode to GL_CLAMP_TO_EDGE
+
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	// then re-configure capture framebuffer object and render screen-space quad with BRDF shader.
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 	glBindRenderbuffer(GL_RENDERBUFFER, RBO);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 512, 512);
@@ -206,11 +204,6 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 	skyboxShader.SendUniformVariable("view", captureViews[5]);
 	skyboxShader.SendUniformVariable("projection", projection);
 	glViewport(0, 0, screenWidth, screenHeight);
-
-	//mesh = MESH::BuildCube(1.0f);
-
-	//vo = new VertexObject();
-	//vo->InitializeWithMeshAndLayout(*mesh, { VerticesDescription::Type::Position });
 
 	return true;
 }
@@ -230,7 +223,6 @@ void EnvironmentMap::RenderCube()
 	if (cubeVAO == 0)
 	{
 		Mesh3D cubeMesh;
-		//vo.InitializeWithMeshAndLayout(cubeMesh, VerticesDescription());
 		float vertices[] = {
 			// back face
 			-1.0f, -1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, // bottom-left
@@ -253,7 +245,7 @@ void EnvironmentMap::RenderCube()
 			-1.0f, -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom-left
 			-1.0f, -1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f,	// bottom-right
 			-1.0f, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,	// top-right
-																// right face
+			// right face
 			1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,		// top-left
 			1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,	// bottom-right
 			1.0f, 1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,	// top-right

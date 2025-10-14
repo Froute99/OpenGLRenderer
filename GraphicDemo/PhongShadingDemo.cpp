@@ -39,7 +39,6 @@ void PhongShadingDemo::Initialize()
 {
 	shader.LoadShaderFrom(PATH::texture_vert, PATH::texture_frag);
 	skyboxShader.LoadShaderFrom(PATH::skyboxVS, PATH::skyboxFS);
-	hdrShader.LoadShaderFrom("../assets/shaders/HDR.vert", "../assets/shaders/HDR.frag");
 
 	const std::string& filename = "../assets/Models/backpack.obj";
 	backpack = GameObject::LoadMeshFromFile(filename);
@@ -51,53 +50,10 @@ void PhongShadingDemo::Initialize()
 	lightPos = { 0.0f, 2.45f, -5.85f };
 	lightColor = { 1.0f, 1.0f, 1.0f };
 
-	// uniform variable location
-	uniformModelLocation = glGetUniformLocation(shader.GetHandleToShader(), "model");
-	uniformViewLocation = glGetUniformLocation(shader.GetHandleToShader(), "view");
-	uniformProjectionLocation = glGetUniformLocation(shader.GetHandleToShader(), "projection");
-
-	uniformObjectColorLocation = glGetUniformLocation(shader.GetHandleToShader(), "objectColor");
-	uniformLightPosLocation = glGetUniformLocation(shader.GetHandleToShader(), "lightPos");
-	uniformLightColorLocation = glGetUniformLocation(shader.GetHandleToShader(), "lightColor");
-
-	uniformLightCubeModel = glGetUniformLocation(skyboxShader.GetHandleToShader(), "model");
-	uniformLightCubeView = glGetUniformLocation(skyboxShader.GetHandleToShader(), "view");
-	uniformLightCubeProjection = glGetUniformLocation(skyboxShader.GetHandleToShader(), "projection");
-
 	// ==================================
 	// Skybox
 	// ==================================
 	skybox = new Skybox();
-
-	// HDR
-	// floating point framebuffer
-	glGenFramebuffers(1, &hdrFBO);
-	glGenTextures(1, &colorBuffer);
-	glBindTexture(GL_TEXTURE_2D, colorBuffer);
-	// mind that the internal format is GL_FLOAT
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GetScreenWidth(), GetScreenHeight(), 0, GL_RGBA, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	unsigned int rboDepth;
-	glGenRenderbuffers(1, &rboDepth);
-	glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, GetScreenWidth(), GetScreenHeight());
-
-	glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBuffer, 0);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	{
-		std::cout << "Framebuffer not completed. Requirements are written in the code as a comment. Check them." << std::endl;
-		/*
-			We have to attach at least one buffer (color, depth or stencil buffer).
-			There should be at least one color attachment.
-			All attachments should be complete as well (reserved memory).
-			Each buffer should have the same number of samples.
-		*/
-	}
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void PhongShadingDemo::Update(float dt)
@@ -110,58 +66,39 @@ void PhongShadingDemo::Update(float dt)
 
 	// std::cout << "\r" << dt;
 
-	//glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
+	// ==================================
+	// Backpack model
+	// ==================================
+
+	Shader::UseShader(shader);
+	if (shouldRotate)
 	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		// ==================================
-		// Backpack model
-		// ==================================
-
-		Shader::UseShader(shader);
-		if (shouldRotate)
-		{
-			backpack->Rotate(backpackRotationSpeed * dt);
-		}
-		const mat4<float>& Model = backpack->GetModelToWorld();
-		const mat4<float>& View = camera.BuildViewMatrix();
-		const mat4<float>& Projection = view.BuildProjectionMatrix();
-		glUniformMatrix4fv(uniformModelLocation, 1, GL_FALSE, &Model.elements[0][0]);
-		glUniformMatrix4fv(uniformViewLocation, 1, GL_FALSE, &View.elements[0][0]);
-		glUniformMatrix4fv(uniformProjectionLocation, 1, GL_FALSE, &Projection.elements[0][0]);
-
-		glUniform3fv(uniformObjectColorLocation, 1, &objectColor.x);
-		glUniform3fv(uniformLightPosLocation, 1, &lightPos.x);
-		glUniform3fv(uniformLightColorLocation, 1, &lightColor.x);
-
-		glUniform1i(glGetUniformLocation(shader.GetHandleToShader(), "textureDiffuse1"), 0);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, backpack->GetTextureHandle(0));
-
-		backpack->Draw();
+		backpack->Rotate(backpackRotationSpeed * dt);
 	}
 
-	//// ==================================
-	//// Skybox
-	//// ==================================
-	// Shader::UseShader(skyboxShader);
-	////const mat4<float>& LightCubeModel = cube->GetModelToWorld();
-	// const mat4<float>& LightCubeModel = skybox->GetModelToWorld();
-	// const mat4<float>& skyboxView = Matrix4::CutOffTranslation(View); // remove translation from origin view matrix
-	// glUniformMatrix4fv(uniformLightCubeModel, 1, GL_FALSE, &LightCubeModel.elements[0][0]);
-	// glUniformMatrix4fv(uniformLightCubeView, 1, GL_FALSE, &skyboxView.elements[0][0]);
-	// glUniformMatrix4fv(uniformLightCubeProjection, 1, GL_FALSE, &Projection.elements[0][0]);
+	shader.SendUniformVariable("model", backpack->GetModelToWorld());
+	shader.SendUniformVariable("view", camera.BuildViewMatrix());
+	shader.SendUniformVariable("projection", view.BuildProjectionMatrix());
 
-	// skybox->Draw();
+	shader.SendUniformVariable("objectColor", objectColor);
+	shader.SendUniformVariable("lightPos", lightPos);
+	shader.SendUniformVariable("lightColor", lightColor);
 
-	// HDR
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//Shader::UseShader(hdrShader);
-	//glActiveTexture(GL_TEXTURE0);
-	//glBindTexture(GL_TEXTURE_2D, colorBuffer);
-	//glUniform1i(glGetUniformLocation(hdrShader.GetHandleToShader(), "hdr"), hdr);
-	//glUniform1f(glGetUniformLocation(hdrShader.GetHandleToShader(), "exposure"), exposure);
-	//RenderQuad();
+	shader.BindTexture("textureDiffuse1", 0, backpack->GetTextureHandle(0));
+
+	backpack->Draw();
+	
+
+	// ==================================
+	// Skybox
+	// ==================================
+	Shader::UseShader(skyboxShader);
+	const mat4<float>& skyboxView = Matrix4::CutOffTranslation(camera.BuildViewMatrix()); // remove translation from origin view matrix
+	skyboxShader.SendUniformVariable("model", skybox->GetModelToWorld());
+	skyboxShader.SendUniformVariable("view", skyboxView);
+	skyboxShader.SendUniformVariable("projection", view.BuildProjectionMatrix());
+
+	skybox->Draw();
 }
 
 void PhongShadingDemo::ResetCamera()
@@ -321,6 +258,7 @@ void PhongShadingDemo::DrawGUI()
 		{
 			backpack->GetTransform()->SetRotation(backpackRotationOffset);
 		}
+		ImGui::End();
 	}
 	//ImGui::NewFrame();
 	{
@@ -352,10 +290,13 @@ void PhongShadingDemo::DrawGUI()
 		ImGui::EndChild();
 
 		ImGui::PopStyleVar();
+
+		ImGui::End();
 	}
 
 	// Rendering
 	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void PhongShadingDemo::RenderQuad()

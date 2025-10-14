@@ -1,3 +1,11 @@
+/*
+ *	Author: JeongHak Kim
+ *	File_name: EnvironmentMap.cpp
+ *
+ *	Diffuse Irradiance, IBL
+ *
+ *	2024. 12. 14
+ */
 
 #include "PBRdemo.h"
 #include "GameObject.h"
@@ -73,28 +81,14 @@ void PBRDemo::Update(float /*dt*/)
 
 	Shader::UseShader(pbrShader);
 	envMap.BindIBLTexture(pbrShader);
-	//pbrShader.SendUniformVariable("irradianceMap", 0);
-	//pbrShader.SendUniformVariable("prefilterMap", 1);
-	//pbrShader.SendUniformVariable("brdfLUT", 2);
 
-	//glActiveTexture(GL_TEXTURE0);
-	//glBindTexture(GL_TEXTURE_CUBE_MAP, envMap.GetIrradianceMapHandle());
-	//glActiveTexture(GL_TEXTURE1);
-	//glBindTexture(GL_TEXTURE_CUBE_MAP, envMap.GetPrefilterMapHandle());
-	//glActiveTexture(GL_TEXTURE2);
-	//glBindTexture(GL_TEXTURE_2D, envMap.GetBRDFLUTTextureHandle());
-
-	mat4<float> Model = sphere1->GetModelToWorld();
-	pbrShader.SendUniformVariable("model", Model);
-	//pbrShader.SendUniformVariable("view", View);
-	//pbrShader.SendUniformVariable("projection", Projection);
+	pbrShader.SendUniformVariable("model", sphere1->GetModelToWorld());
 
 	pbrShader.SendUniformVariable("albedo", sphereColor);
 	pbrShader.SendUniformVariable("roughness", roughness);
 	pbrShader.SendUniformVariable("ao", ambientOcclusion);
 	pbrShader.SendUniformVariable("metallic", metallic);
 
-	// lights
 	pbrShader.SendUniformVariable("lightPositions", lightPosition);
 	pbrShader.SendUniformVariable("lightColors", lightColor);
 	pbrShader.SendUniformVariable("lightIntensity", lightIntensity);
@@ -102,8 +96,7 @@ void PBRDemo::Update(float /*dt*/)
 
 	sphere1->Draw();
 
-	Model = sphere2->GetModelToWorld();
-	pbrShader.SendUniformVariable("model", Model);
+	pbrShader.SendUniformVariable("model", sphere2->GetModelToWorld());
 
 	float		roughness2 = 0.8f;
 	float		metallic2 = 0.1f;
@@ -111,7 +104,6 @@ void PBRDemo::Update(float /*dt*/)
 	pbrShader.SendUniformVariable("ao", ambientOcclusion);
 	pbrShader.SendUniformVariable("metallic", metallic2);
 
-	// lights
 	pbrShader.SendUniformVariable("lightPositions", lightPosition);
 	pbrShader.SendUniformVariable("lightColors", lightColor);
 	pbrShader.SendUniformVariable("lightIntensity", lightIntensity);
@@ -126,10 +118,8 @@ void PBRDemo::Update(float /*dt*/)
 	texturedShader.BindTexture("roughnessMap", 5, roughnessMap->GetTexturehandle());
 	texturedShader.BindTexture("normalMap", 6, normalMap->GetTexturehandle());
 
-	Model = ironSphere->GetModelToWorld();
-	texturedShader.SendUniformVariable("model", Model);
+	texturedShader.SendUniformVariable("model", ironSphere->GetModelToWorld());
 
-	// lights
 	texturedShader.SendUniformVariable("lightPositions", lightPosition);
 	texturedShader.SendUniformVariable("lightColors", lightColor);
 	texturedShader.SendUniformVariable("camPos", camera.GetEyePosition());
@@ -251,22 +241,6 @@ void PBRDemo::DrawGUI()
 		ImGui::DragFloat("ambient occlusion", &ambientOcclusion, 0.01f, 0.000001f, 1.0f);
 		ImGui::DragFloat("metallic", &metallic, 0.005f, 0.000001f, 1.0f);
 
-		// using this thing to set values preset.
-		//bool isModified = ImGui::ListBox("Surface type", &surfaceIndex, surfacesList, sizeof(surfacesList) / sizeof(char*));
-		//if (isModified)
-		//{
-		//	switch (surfaceIndex)
-		//	{
-		//		default:
-		//		case 0: baseReflectivity = { 0.04f }; break;
-		//		case 1: baseReflectivity = { 0.04f }; break;
-		//		case 2: baseReflectivity = { 0.17f }; break;
-		//		case 3: baseReflectivity = { 0.56f, 0.57f, 0.58f }; break;
-		//		case 4: baseReflectivity = { 0.95f, 0.64f, 0.54f }; break;
-		//		case 5: baseReflectivity = { 1.00f, 0.71f, 0.29f }; break;
-		//	}
-		//}
-
 		ImGui::End();
 	}
 	// lights
@@ -277,6 +251,8 @@ void PBRDemo::DrawGUI()
 		ImGui::NewLine();
 		ImGui::DragFloat3("Light 1 Position", &lightPosition.x, 0.02f);
 		ImGui::ColorEdit3("Light 1 Color", &lightColor.x);
+
+		ImGui::End();
 	}
 
 	ImGui::Render();

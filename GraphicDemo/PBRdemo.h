@@ -1,3 +1,11 @@
+/*
+ *	Author: JeongHak Kim
+ *	File_name: EnvironmentMap.cpp
+ *
+ *	Diffuse Irradiance, IBL
+ *
+ *	2024. 12. 14
+ */
 
 #pragma once
 #include "Demo.h"

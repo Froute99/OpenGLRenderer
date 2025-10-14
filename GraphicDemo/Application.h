@@ -21,8 +21,8 @@ class Application : public EventHandler
 public:
 	enum DEMOINDEX
 	{
-		PHONGSHADING,
 		PBR,
+		PHONGSHADING,
 		//TEXTUREDPBR,
 		//TEXTUREDRAWING,
 		//ANIMATION,
