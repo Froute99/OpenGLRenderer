@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	Author: JeongHak Kim
  *	File_name: EnvironmentMap.cpp
  *
@@ -24,11 +24,11 @@
 void PBRDemo::Initialize()
 {
 	pbrShader.LoadShaderFrom("../assets/shaders/PBR.vert", "../assets/shaders/PBR.frag");
+	texturedShader.LoadShaderFrom("../assets/shaders/PBR_Textured.vert", "../assets/shaders/PBR_Textured.frag");
 	if (!envMap.CanLoad("../assets/newport_loft.hdr", view.BuildProjectionMatrix()))
 	{
 		std::cout << "Failed to load env map\n";
 	}
-	texturedShader.LoadShaderFrom("../assets/shaders/PBR_Textured.vert", "../assets/shaders/PBR_Textured.frag");
 
 	sphere1 = GameObject::CreateSphere({ 0, 0, 0 });
 	sphere1->SetObjectType(ObjectType::NonTextured);

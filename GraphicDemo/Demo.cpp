@@ -1,4 +1,4 @@
-/********************************************************
+﻿/********************************************************
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *	
  *	File_name: Demo.cpp
@@ -16,8 +16,10 @@
 
 void Demo::Initialize()
 {
+	//glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
+	glDepthMask(GL_TRUE);
 
 	view.SetViewSize(width, height);
 	mousePast[0] = width / 2.f;
