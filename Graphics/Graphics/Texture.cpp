@@ -19,6 +19,12 @@ Texture::Texture(Image& image)
 	LoadFromImage(image);
 }
 
+Texture::~Texture()
+{
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDeleteTextures(1, &textureHandle);
+}
+
 /* This is the improved verison of texture loader function.
  The original one was little bit wasting memory and performance because
  it assumes all image has 4 component.

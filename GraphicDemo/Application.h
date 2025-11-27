@@ -33,6 +33,7 @@ public:
 	};
 
 	Application();
+	~Application();
 	void Initialize();
 	void Update(float dt);
 	void ShutDown();

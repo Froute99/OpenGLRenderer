@@ -21,6 +21,14 @@ GameObject::GameObject(const vec3<float>& location, const vec3<float>& rotation,
 
 GameObject::~GameObject()
 {
+	for (auto pMesh : meshes)
+	{
+		delete pMesh;
+	}
+	for (auto pVO : vertexObjects)
+	{
+		delete pVO;
+	}
 }
 
 void GameObject::LoadTexture(const std::filesystem::path& path) noexcept
@@ -36,9 +44,9 @@ GameObject* GameObject::CreateCube(const vec3<float>& location, const vec3<float
 
 	Mesh3D*				cubeMesh = MESH::BuildCube(1.f);
 	VerticesDescription layout{ VerticesDescription::Type::Position, VerticesDescription::Type::Normal };
-	VertexObject*		vertexObject = new VertexObject(cubeMesh, layout);
+	VertexObject*		vertexObjects = new VertexObject(cubeMesh, layout);
 	cube->AddMesh(cubeMesh);
-	cube->vertexObject.push_back(vertexObject);
+	cube->vertexObjects.push_back(vertexObjects);
 
 	return cube;
 }
@@ -53,9 +61,9 @@ GameObject* GameObject::CreateSphere(const vec3<float>& location)
 		VerticesDescription::Type::TextureCoordinate
 	};
 
-	VertexObject* vertexObject = new VertexObject(sphereMesh, layout);
+	VertexObject* vertexObjects = new VertexObject(sphereMesh, layout);
 	sphere->AddMesh(sphereMesh);
-	sphere->vertexObject.push_back(vertexObject);
+	sphere->vertexObjects.push_back(vertexObjects);
 	return sphere;
 }
 
@@ -76,7 +84,7 @@ GameObject* GameObject::LoadMeshFromFile(const std::string& filePath)
 
 	GameObject* object = new GameObject();
 	object->meshes.reserve(scene->mNumMeshes);
-	object->vertexObject.reserve(scene->mNumMeshes);
+	object->vertexObjects.reserve(scene->mNumMeshes);
 
 	object->ProcessNode(scene->mRootNode, scene);
 
@@ -161,7 +169,7 @@ Mesh3D* GameObject::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	VerticesDescription layout = { VerticesDescription::Type::Position, VerticesDescription::Type::Normal, VerticesDescription::Type::TextureCoordinate };
 	VertexObject*		v = new VertexObject;
 	v->InitializeWithMeshAndLayout(*result, layout);
-	vertexObject.push_back(v);
+	vertexObjects.push_back(v);
 
 	std::string baseRoot = "../assets/Models/";
 	if (mesh->mMaterialIndex >= 0)
@@ -213,8 +221,8 @@ void GameObject::Draw()
 	unsigned int numMeshes = meshes.size();
 	for (unsigned int i = 0; i < numMeshes; ++i)
 	{
-		glBindVertexArray(vertexObject[i]->VAO);
-		glDrawElements(vertexObject[i]->GetPattern(), meshes[i]->GetIndicesCount(), GL_UNSIGNED_INT, 0);
+		glBindVertexArray(vertexObjects[i]->VAO);
+		glDrawElements(vertexObjects[i]->GetPattern(), meshes[i]->GetIndicesCount(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 	}
 }

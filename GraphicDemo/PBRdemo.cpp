@@ -21,6 +21,27 @@
 
 #include <iostream>		// error logging
 
+PBRDemo::~PBRDemo()
+{
+	delete sphere1;
+	sphere1 = nullptr;
+	delete sphere2;
+	sphere2 = nullptr;
+	delete ironSphere;
+	ironSphere = nullptr;
+
+	delete albedoMap;
+	delete metallicMap;
+	delete roughnessMap;
+	delete normalMap;
+
+	albedoMap = nullptr;
+	metallicMap = nullptr;
+	roughnessMap = nullptr;
+	normalMap = nullptr;
+
+}
+
 void PBRDemo::Initialize()
 {
 	pbrShader.LoadShaderFrom("../assets/shaders/PBR.vert", "../assets/shaders/PBR.frag");

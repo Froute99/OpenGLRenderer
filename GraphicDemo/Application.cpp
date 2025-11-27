@@ -30,6 +30,12 @@ Application::Application()
 	Initialize();
 }
 
+Application::~Application()
+{
+	window.~OpenGLWindow();
+	ShutDown();
+}
+
 void Application::Initialize()
 {
 	if (!window.CanCreateWindow(width, height, this, "Graphic Demo"))
@@ -69,7 +75,7 @@ void Application::HandleKeyPress(KeyboardButton button)
 	switch (button)
 	{
 	case KeyboardButton::Escape:
-		this->ShutDown();
+		ShutDown();
 		break;
 	case KeyboardButton::F:
 		window.ToggleFullScreen();

@@ -9,6 +9,8 @@
 class Mesh3D
 {
 public:
+	~Mesh3D() = default;
+
 	void AddPoint(vec3<float> point) noexcept { points.push_back(point); }
 	void AddNormal(vec3<float> normal) noexcept { normals.push_back(normal); }
 	void AddColor(Color4f color) noexcept { colors.push_back(color); }

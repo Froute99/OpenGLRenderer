@@ -18,6 +18,7 @@ class [[nodiscard]] Image
 {
 public:
 	Image() = default;
+	~Image() = default;
 	Image(const std::filesystem::path& source) noexcept;
 
 	void ResizePixelSize(int image_width, int image_height) noexcept;

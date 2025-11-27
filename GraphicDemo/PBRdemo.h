@@ -21,6 +21,7 @@ class PBRDemo : public Demo
 public:
 	explicit PBRDemo(OpenGLWindow& window)
 		: Demo(window) { Initialize(); }
+	~PBRDemo();
 
 	void Initialize() override;
 	void Update(float dt) override;

@@ -18,6 +18,7 @@ class [[nodiscard]] Camera
 public:
 	constexpr Camera() noexcept = default;
 	Camera(vec3<float> newPos) noexcept;
+	~Camera() = default;
 
 	vec3<float> GetEyePosition() const noexcept { return eye; }
 	vec3<float> GetUp() const noexcept { return up; }

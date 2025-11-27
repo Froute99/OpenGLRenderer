@@ -16,6 +16,7 @@ class [[nodiscard]] Transform
 {
 public:
 	Transform() noexcept = default;
+	~Transform() = default;
 	//mat4<float> GetWorldToModel() noexcept;
 
 	float CalculateWorldDepth() const noexcept;

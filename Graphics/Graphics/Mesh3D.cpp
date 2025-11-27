@@ -211,3 +211,8 @@ Mesh3D* MESH::BuildSphere()
 
 	return sphere;
 }
+
+Mesh3D::~Mesh3D()
+{
+	if (!this) delete this;
+}

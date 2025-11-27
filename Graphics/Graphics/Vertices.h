@@ -19,6 +19,7 @@ class [[nodiscard]] VertexObject
 {
 public:
 	VertexObject() = default;
+	~VertexObject();
 	VertexObject(const Mesh3D* mesh, const VerticesDescription& vertex_layout) noexcept;
 
 	void InitializeWithMeshAndLayout(const Mesh3D& mesh, const VerticesDescription& vertex_layout) noexcept;
@@ -34,8 +35,6 @@ public:
 	
 	void WriteMeshDataToVertexBuffer3D(const Mesh3D& mesh) const noexcept;
 	void DeleteVerticesOnGPU() const;
-
-	void SetupMesh(int numVertices, int numIndices, const void* verticesData, const void* indicesData, unsigned int vertexSize); // test version of using indices
 
 	unsigned int VBO = 0;
 	unsigned int VAO = 0;
