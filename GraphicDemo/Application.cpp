@@ -1,4 +1,4 @@
-/********************************************************
+﻿/********************************************************
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *	
  *	File_name: Application.cpp
@@ -32,7 +32,6 @@ Application::Application()
 
 Application::~Application()
 {
-	window.~OpenGLWindow();
 	ShutDown();
 }
 
