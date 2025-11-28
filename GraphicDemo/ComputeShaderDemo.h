@@ -15,7 +15,7 @@ public:
 
 	void ResetCamera() override final {}
 
-	void HandleResizeEvent(const int& new_width, const int& new_height) override final;
+	void HandleResizeEvent(const int new_width, const int new_height) override final;
 	//void HandleKeyPress(KeyboardButton button) override final;
 	//void HandleKeyRelease(KeyboardButton button) override final;
 	//void HandleScrollEvent(float scroll_amount) override final;

@@ -3,6 +3,7 @@
 #include "Demo.h"
 #include <Graphics/Shader.h>
 #include <Graphics/Texture.h>
+#include <Graphics/IBL.h>
 
 class GameObject;
 
@@ -16,13 +17,13 @@ public:
 	void Update(float dt) override;
 	void ResetCamera() override;
 
-	void HandleResizeEvent(const int& new_width, const int& new_height) override final;
+	void HandleResizeEvent(const int new_width, const int new_height) override final;
 	void HandleKeyPress(KeyboardButton button) override final;
 	void HandleKeyRelease(KeyboardButton button) override final;
 	void HandleScrollEvent(float scroll_amount) override final;
 	void HandleFocusEvent(bool focused) override final;
 
-	void ImguiHelper();
+	void DrawGUI() override;
 
 private:
 	vec3<float> moveSpeed;
@@ -58,8 +59,10 @@ private:
 	unsigned int quadVBO;
 
 	// IBL (Diffuse)
-	Shader equirectangularMappingShader;
+	EnvironmentMap envMap{ GetScreenWidth(), GetScreenHeight() };
 
 	vec3<float> rotationOffset{ 0.f };
+
+	bool shouldIrradiance = true;
 
 };

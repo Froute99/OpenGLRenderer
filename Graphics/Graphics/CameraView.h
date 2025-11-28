@@ -24,6 +24,7 @@ class [[nodiscard]] CameraView
 public:
 	CameraView() = default;
 	CameraView(float newFOV, float newNear);
+	~CameraView() = default;
 
 	void            SetViewSize(int width, int height) noexcept;
 	void			SetZoom(float newZoom) noexcept;
@@ -32,6 +33,7 @@ public:
 
 	// Perspective
 	mat4<float> BuildProjectionMatrix() const noexcept;
+	const mat4<float>& GetProjectionMatrix() const noexcept;
 
 private:
 	mat4<float> projectionMatrix;

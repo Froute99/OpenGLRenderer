@@ -27,13 +27,13 @@ public:
 
 	void ResetCamera() override final;
 
-	void HandleResizeEvent(const int& new_width, const int& new_height) override final;
+	void HandleResizeEvent(const int new_width, const int new_height) override final;
 	void HandleKeyPress(KeyboardButton button) override final;
 	void HandleKeyRelease(KeyboardButton button) override final;
 	void HandleScrollEvent(float scroll_amount) override final;
 	void HandleFocusEvent(bool focused) override final;
 
-	void ImguiHelper();
+	void DrawGUI() override;
 
 private:
 	vec3<float> moveSpeed;
@@ -44,18 +44,6 @@ private:
 
 	Shader shader;
 	Shader skyboxShader;
-
-	GLuint uniformModelLocation;
-	GLuint uniformViewLocation;
-	GLuint uniformProjectionLocation;
-
-	GLuint uniformObjectColorLocation;
-	GLuint uniformLightPosLocation;
-	GLuint uniformLightColorLocation;
-
-	GLuint uniformLightCubeModel;
-	GLuint uniformLightCubeView;
-	GLuint uniformLightCubeProjection;
 
 	vec3<float> objectColor;
 	vec3<float> lightPos;
@@ -69,13 +57,6 @@ private:
 	bool showObjectWindow = true;
 	bool showLightWindow = true;
 	bool shouldRotate = false;
-
-	// HDR
-	Shader		 hdrShader;
-	unsigned int hdrFBO;	  // framebuffer object handle for HDR
-	unsigned int colorBuffer; // colorbuffer for HDR
-	bool		 hdr = true;
-	float		 exposure = 1.0f;
 
 	void		 RenderQuad();
 	unsigned int quadVAO = 0;

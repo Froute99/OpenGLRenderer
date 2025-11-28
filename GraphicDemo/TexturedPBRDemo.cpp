@@ -52,12 +52,11 @@ void TexturedPBRDemo::Initialize()
 	//}
 	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	//const std::string& filename = "../assets/Models/backpack.obj";
-	//backpack = GameObject::LoadMeshFromFile(filename);
-	//backpack->Move({ 0.f, 0.f, -5.0f });
-
 	sphere = GameObject::CreateSphere({ 0, 0, 0 });
 	sphere->Move({ 0.f, 0.f, -5.f });
+
+	Shader::UseShader(pbrShader);
+	pbrShader.SendUniformVariable("irradianceMap", 0);
 
 	albedoMap = new Texture();
 	normalMap = new Texture();
@@ -65,113 +64,36 @@ void TexturedPBRDemo::Initialize()
 	roughnessMap = new Texture();
 	aoMap = new Texture();
 
+	//if (!envMap.CanLoad("../assets/brown_photostudio_02_4k.hdr", view.BuildProjectionMatrix()))
+	{
+		//std::cout << "Failed to load env map\n";
+	}
 	albedoMap->LoadFromPath("../assets/Models/rustediron2_basecolor.png", true);
 	metallicMap->LoadFromPath("../assets/Models/rustediron2_metallic.png");
 	roughnessMap->LoadFromPath("../assets/Models/rustediron2_roughness.png");
 	normalMap->LoadFromPath("../assets/Models/rustediron2_normal.png");
 
-	lightPos = { 0.34f, 0.20f, -4.00f };
+	lightPos = { 0.34f, 0.20f, -3.20f };
 	lightColor = { 1.f };
 
-	//lightPos[0] = { 0.00f, 0.4f, 4.0f };
-	//lightPos[1] = { 0.25f, 0.4f, 4.0f };
-	//lightPos[2] = { 0.50f, 0.4f, 4.0f };
-	//lightPos[3] = { 0.75f, 0.4f, 4.0f };
-
-	//lightCol[0] = { 1.0f, 1.0f, 1.0f };
-	//lightCol[1] = { 1.0f, 1.0f, 1.0f };
-	//lightCol[2] = { 1.0f, 1.0f, 1.0f };
-	//lightCol[3] = { 1.0f, 1.0f, 1.0f };
-
-	//// Framebuffer setup for HDR image cubemap
-	//unsigned int captureFBO, captureRBO;
-	//glGenFramebuffers(1, &captureFBO);
-	//glGenRenderbuffers(1, &captureRBO);
-
-	//glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
-	//glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
-	//glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, GetScreenWidth(), GetScreenHeight());
-	//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, captureRBO);
-
-	//// Load HDR image
-	//// Later, figure out what exactly internalformat and format in member function of Texture class
-	//int			 width, height, nrComponents;
-	//float*		 data = stbi_loadf("newport_loft.hdr", &width, &height, &nrComponents, 0);
-	//unsigned int hdrTexture;
-	//if (data)
-	//{
-	//	glGenTextures(1, &hdrTexture);
-	//	glBindTexture(GL_TEXTURE_2D, hdrTexture);
-	//	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data);
-
-	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	//	stbi_image_free(data);
-	//}
-	//else
-	//{
-	//	std::cout << "Failed to load HDR image." << std::endl;
-	//}
-
-	//unsigned int envCubemap;
-	//glGenTextures(1, &envCubemap);
-	//glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
-	//for (unsigned int i = 0; i < 6; ++i)
-	//{
-	//	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, GetScreenWidth(), GetScreenHeight(), 0, GL_RGB, GL_FLOAT, nullptr);
-	//}
-	//glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	//glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	//glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-	//glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	//glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	//mat4<float> captureProjection = view.BuildProjectionMatrix();
-	//mat4<float> captureViews[] = {		// may swap Z and -Z
-	//	Matrix4::BuildLookAt(vec3<float>(0.0f, 0.0f, 0.0f), vec3<float>(1.0f, 0.0f, 0.0f), vec3<float>(0.0f, -1.0f, 0.0f)),
-	//	Matrix4::BuildLookAt(vec3<float>(0.0f, 0.0f, 0.0f), vec3<float>(-1.0f, 0.0f, 0.0f), vec3<float>(0.0f, -1.0f, 0.0f)),
-	//	Matrix4::BuildLookAt(vec3<float>(0.0f, 0.0f, 0.0f), vec3<float>(0.0f, 1.0f, 0.0f), vec3<float>(0.0f, 0.0f, 1.0f)),
-	//	Matrix4::BuildLookAt(vec3<float>(0.0f, 0.0f, 0.0f), vec3<float>(0.0f, -1.0f, 0.0f), vec3<float>(0.0f, 0.0f, -1.0f)),
-	//	Matrix4::BuildLookAt(vec3<float>(0.0f, 0.0f, 0.0f), vec3<float>(0.0f, 0.0f, 1.0f), vec3<float>(0.0f, -1.0f, 0.0f)),
-	//	Matrix4::BuildLookAt(vec3<float>(0.0f, 0.0f, 0.0f), vec3<float>(0.0f, 0.0f, -1.0f), vec3<float>(0.0f, -1.0f, 0.0f))
-	//};
-
-	//// Mapping equirectangular to cubemap in shader (refer my calculation in paper note)
-	//equirectangularMappingShader.LoadShaderFrom("../assets/shaders/equirectangularMappingCubemap.vs", "../assets/shaders/equirectangularMappingCubemap.fs");
-	//Shader::UseShader(equirectangularMappingShader);
-	//glUniform1i(glGetUniformLocation(equirectangularMappingShader.GetHandleToShader(), "equirectangularMap"), 0);
-	//glUniformMatrix4fv(glGetUniformLocation(equirectangularMappingShader.GetHandleToShader(), "projection"), 1, GL_FALSE, &captureProjection.elements[0][0]);
-	//glActiveTexture(GL_TEXTURE0);
-	//glBindTexture(GL_TEXTURE_2D, hdrTexture);
-
-	//glViewport(0, 0, GetScreenWidth(), GetScreenHeight());
-	//glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
-	//for (unsigned int i = 0; i < 6; ++i)
-	//{
-	//	glUniformMatrix4fv(glGetUniformLocation(equirectangularMappingShader.GetHandleToShader(), "view"), 1, GL_FALSE, &captureViews[i].elements[0][0]);
-	//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, envCubemap, 0);
-	//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	//	RenderCube(); // renders a 1x1 cube
-	//}
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void TexturedPBRDemo::Update(float /*dt*/)
-{
-	camera.MoveX(moveSpeed.x);
-	camera.MoveY(moveSpeed.y);
-	camera.MoveZ(moveSpeed.z);
+static int	 frameCount = 0;
+static float frameTime = 0.f;
 
-	Draw::StartDrawing();
+void TexturedPBRDemo::Update(float dt)
+{
+	++frameCount;
+	frameTime += dt;
+	if (frameTime >= 1.0f)
+	{
+		frameTime -= 1.0f;
+		std::cout << frameCount << std::endl;
+		frameCount = 0;
+	}
 
 	//glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
 	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 		Shader::UseShader(pbrShader);
 
 		const mat4<float>& Model = sphere->GetModelToWorld();
@@ -188,17 +110,22 @@ void TexturedPBRDemo::Update(float /*dt*/)
 		// camera position
 		vec3<float> camPos = camera.GetEyePosition();
 		pbrShader.SendUniformVariable("camPos", camPos);
+		pbrShader.SendUniformVariable("shouldIrradiance", shouldIrradiance);
 
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, envMap.GetIrradianceMapHandle());
 		// materials
-		pbrShader.BindTexture("albedoMap", 0, albedoMap->GetTexturehandle());
-		pbrShader.BindTexture("metallicMap", 1, metallicMap->GetTexturehandle());
-		pbrShader.BindTexture("roughnessMap", 2, roughnessMap->GetTexturehandle());
-		pbrShader.BindTexture("normalMap", 3, normalMap->GetTexturehandle());
-		pbrShader.BindTexture("aoMap", 4, aoMap->GetTexturehandle());
+		pbrShader.BindTexture("albedoMap", 1, albedoMap->GetTexturehandle());
+		pbrShader.BindTexture("metallicMap", 2, metallicMap->GetTexturehandle());
+		pbrShader.BindTexture("roughnessMap", 3, roughnessMap->GetTexturehandle());
+		pbrShader.BindTexture("normalMap", 4, normalMap->GetTexturehandle());
+		//pbrShader.BindTexture("aoMap", 5, aoMap->GetTexturehandle());
 
 		sphere->Draw();
 	}
 	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	//envMap.Render(Matrix4::CutOffTranslation(camera.BuildViewMatrix()));
 
 	//glClear(GL_COLOR_BUFFER_BIT);
 	//Shader::UseShader(hdrShader);
@@ -207,18 +134,13 @@ void TexturedPBRDemo::Update(float /*dt*/)
 	//glUniform1i(glGetUniformLocation(hdrShader.GetHandleToShader(), "hdr"), hdr);
 	//glUniform1f(glGetUniformLocation(hdrShader.GetHandleToShader(), "exposure"), exposure);
 	//RenderQuad();
-
-	Draw::FinishDrawing();
-
-	ImguiHelper();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void TexturedPBRDemo::ResetCamera()
 {
 }
 
-void TexturedPBRDemo::HandleResizeEvent(const int& new_width, const int& new_height)
+void TexturedPBRDemo::HandleResizeEvent(const int new_width, const int new_height)
 {
 	new_width;
 	new_height;
@@ -284,7 +206,7 @@ void TexturedPBRDemo::HandleFocusEvent(bool focused)
 	focused;
 }
 
-void TexturedPBRDemo::ImguiHelper()
+void TexturedPBRDemo::DrawGUI()
 {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
@@ -320,6 +242,8 @@ void TexturedPBRDemo::ImguiHelper()
 		ImGui::NewLine();
 		ImGui::DragFloat3("Light Position", &lightPos.x, 0.02f);
 		ImGui::ColorEdit3("Light Color", &lightColor.x);
+
+		ImGui::Checkbox("Use Irradiance", &shouldIrradiance);
 
 		ImGui::NewLine();
 

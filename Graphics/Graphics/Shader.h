@@ -24,6 +24,7 @@ class [[nodiscard]] Shader
 {
 public:
 	Shader() noexcept = default;
+	~Shader() noexcept = default;
 	Shader(const std::filesystem::path& vertex_source,
 		const std::filesystem::path& fragment_source) noexcept;
 	bool LoadShaderFrom(const std::filesystem::path& vertex_source,

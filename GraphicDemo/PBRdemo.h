@@ -1,59 +1,63 @@
+/*
+ *	Author: JeongHak Kim
+ *	File_name: EnvironmentMap.cpp
+ *
+ *	Diffuse Irradiance, IBL
+ *
+ *	2024. 12. 14
+ */
 
 #pragma once
-
 #include "Demo.h"
 #include <Graphics/Shader.h>
-#include <Graphics/Texture.h>
+#include <Graphics/IBL.h>
+#include <Graphics/UBO.h>
 
 class GameObject;
+class Texture;
 
 class PBRDemo : public Demo
 {
 public:
 	explicit PBRDemo(OpenGLWindow& window)
 		: Demo(window) { Initialize(); }
+	~PBRDemo();
 
 	void Initialize() override;
 	void Update(float dt) override;
 	void ResetCamera() override;
 
-	void HandleResizeEvent(const int& new_width, const int& new_height) override final;
+	void HandleResizeEvent(const int new_width, const int new_height) override final;
 	void HandleKeyPress(KeyboardButton button) override final;
 	void HandleKeyRelease(KeyboardButton button) override final;
 	void HandleScrollEvent(float scroll_amount) override final;
 	void HandleFocusEvent(bool focused) override final;
+	void HandleMousePositionEvent(float x, float y) override;
 
-	void ImguiHelper();
+	void DrawGUI() override;
 
 private:
-	vec3<float> moveSpeed;
-
 	Shader pbrShader;
+	Shader texturedShader;
 
-	GameObject* sphere;
+	GameObject* sphere1;
+	GameObject* sphere2;
+	GameObject* ironSphere;
 
-	unsigned int uniformModelLocation;
-	unsigned int uniformViewLocation;
-	unsigned int uniformProjectionLocation;
+	Texture* albedoMap;
+	Texture* metallicMap;
+	Texture* roughnessMap;
+	Texture* normalMap;
+	//Texture* aoMap;
 
-	unsigned int sphereColorLocation;
 	vec3<float>	 sphereColor;
-
-	unsigned int roughnessLocation;
 	float		 roughness;
-
-	unsigned int aoLocation;
 	float		 ambientOcclusion;
-
-	unsigned int metallicLocation;
 	float		 metallic;
 
-	unsigned int lightPosLocation;
-	unsigned int lightColLocation;
-	vec3<float>	 lightPos[4];
-	vec3<float>	 lightCol[4];
-
-	unsigned int camPosLocation;
+	vec3<float> lightPosition;
+	vec3<float> lightColor;
+	float		lightIntensity;
 
 	Shader		 hdrShader;
 	unsigned int hdrFBO;	  // framebuffer object handle for HDR
@@ -65,6 +69,11 @@ private:
 	unsigned int quadVAO = 0;
 	unsigned int quadVBO;
 
-	int				  surfaceIndex = 0;
+	EnvironmentMap envMap{ GetScreenWidth(), GetScreenHeight() };
+
 	const char* const surfacesList[6] = { "Plastic", "Glass", "Diamond", "Iron", "Copper", "Gold" };
+	int				  surfaceIndex = 0;
+
+	UBO	matricesBlock{ 128 };
+	UBO lightsBlock{ 48 };
 };

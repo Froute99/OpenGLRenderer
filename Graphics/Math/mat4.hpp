@@ -307,21 +307,24 @@ namespace Matrix4
 	template <typename T>
 	constexpr mat4<T> BuildLookAt(const vec3<T>& eyePosition, const vec3<T>& lookAt, const vec3<T>& up)
 	{
-		vec3<float> f = Vector3::normalize(lookAt - eyePosition);
-		vec3<float> r = Vector3::normalize(Vector3::cross_product(f, up));
-		vec3<float> u = Vector3::cross_product(r, f);
+		vec3<float> f = Vector3::normalize(eyePosition - lookAt);
+		vec3<float> r = Vector3::normalize(Vector3::cross_product(up, f));
+		vec3<float> u = Vector3::cross_product(f, r);
 
 		mat4<float> viewMatrix = Matrix4::build_identity<float>();
 
 		viewMatrix.elements[0][0] = r.x;
 		viewMatrix.elements[1][0] = r.y;
 		viewMatrix.elements[2][0] = r.z;
+
 		viewMatrix.elements[0][1] = u.x;
 		viewMatrix.elements[1][1] = u.y;
 		viewMatrix.elements[2][1] = u.z;
-		viewMatrix.elements[0][2] = -f.x;
-		viewMatrix.elements[1][2] = -f.y;
-		viewMatrix.elements[2][2] = -f.z;
+
+		viewMatrix.elements[0][2] = f.x;
+		viewMatrix.elements[1][2] = f.y;
+		viewMatrix.elements[2][2] = f.z;
+
 		viewMatrix.elements[3][0] = -Vector3::dot_product(r, eyePosition);
 		viewMatrix.elements[3][1] = -Vector3::dot_product(u, eyePosition);
 		viewMatrix.elements[3][2] = -Vector3::dot_product(f, eyePosition);
@@ -342,12 +345,12 @@ namespace Matrix4
 	{
 		T tangent = tan(fovYinRadians / static_cast<T>(2));
 
-		mat4<T> result(0.0);
-		result.elements[0][0] = static_cast<T>(1.0) / (aspect * tangent);
-		result.elements[1][1] = static_cast<T>(1.0) / (tangent);
-		result.elements[2][2] = -(zFar + zNear) / (zFar - zNear);
-		result.elements[2][3] = -static_cast<T>(1.0);
-		result.elements[3][2] = -static_cast<T>(2.0) * (zFar * zNear) / (zFar - zNear);
+		mat4<T> result;
+		result[0][0] = static_cast<T>(1) / (aspect * tangent);
+		result[1][1] = static_cast<T>(1) / (tangent);
+		result[2][2] = -(zFar + zNear) / (zFar - zNear);
+		result[2][3] = -static_cast<T>(1);
+		result[3][2] = -static_cast<T>(2) * (zFar * zNear) / (zFar - zNear);
 
 		return result;
 	}
@@ -358,11 +361,11 @@ namespace Matrix4
 		T tangent = tan(fovYinRadians / static_cast<T>(2));
 
 		mat4<T> result(0.0);
-		result.elements[0][0] = static_cast<T>(1.0) / (aspect * tangent);
-		result.elements[1][1] = static_cast<T>(1.0) / (tangent);
-		result.elements[2][2] = -static_cast<T>(1.0);
-		result.elements[2][3] = -static_cast<T>(1.0);
-		result.elements[3][2] = -static_cast<T>(2.0) * zNear;
+		result.elements[0][0] = static_cast<T>(1) / (aspect * tangent);
+		result.elements[1][1] = static_cast<T>(1) / (tangent);
+		result.elements[2][2] = -static_cast<T>(1);
+		result.elements[2][3] = -static_cast<T>(1);
+		result.elements[3][2] = -static_cast<T>(2) * zNear;
 
 		return result;
 	}

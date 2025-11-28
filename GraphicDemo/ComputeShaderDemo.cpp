@@ -37,7 +37,7 @@ void ComputeShaderDemo::Update(float /*dt*/)
 	////glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
 }
 
-void ComputeShaderDemo::HandleResizeEvent(const int& new_width, const int& new_height)
+void ComputeShaderDemo::HandleResizeEvent(const int new_width, const int new_height)
 {
 	Demo::HandleResizeEvent(new_width, new_height);
 }

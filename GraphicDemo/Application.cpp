@@ -1,4 +1,4 @@
-/********************************************************
+﻿/********************************************************
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *	
  *	File_name: Application.cpp
@@ -14,7 +14,7 @@
 #include "PhongShadingDemo.h"
 #include "TextureDrawingDemo.h"
 #include "AnimationDemo.h"
-#include "TransformParentDemo.h"
+#include "TransformHierarchyDemo.h"
 #include "ComputeShaderDemo.h"
 #include "PBRdemo.h"
 #include "TexturedPBRDemo.h"
@@ -30,29 +30,34 @@ Application::Application()
 	Initialize();
 }
 
+Application::~Application()
+{
+	ShutDown();
+}
+
 void Application::Initialize()
 {
 	if (!window.CanCreateWindow(width, height, this, "Graphic Demo"))
 	{
 		return;
 	}
-	window.ToggleVSync(true);
 	isRunning = true;
 
-	//demo[PHONGSHADING] = std::make_unique<PhongShadingDemo>(window);
-	//demo[TEST] = std::make_unique<TestStage>(window);
-	//demo[PBR] = std::make_unique<PBRDemo>(window);
-	demo[TEXTUREDPBR] = std::make_unique<TexturedPBRDemo>(window);
+	window.ToggleVSync(true);
+	window.ToggleMouse();
+
+	demo[PBR] = std::make_unique<PBRDemo>(window);
+	demo[PHONGSHADING] = std::make_unique<PhongShadingDemo>(window);
+	//demo[TEXTUREDPBR] = std::make_unique<TexturedPBRDemo>(window);
 	//demo[ANIMATION] = std::make_unique<AnimationDemo>(window);
-	//demo[TRANSFORMPARENTDEMO] = std::make_unique<TransformParentDemo>(window);
+	demo[HIERARCHY_DEMO] = std::make_unique<TransformHierarchyDemo>(window);
+	//demo[TEST] = std::make_unique<TestStage>(window);
 	//demo[COMPUTESHADERDEMO] = std::make_unique<ComputeShaderDemo>(window);
 }
 
 void Application::Update(float dt)
 {
-	view.SetViewSize(window.GetWindowWidth(), window.GetWindowHeight());
-	
-	demo[demoIndex]->Update(dt);
+	demo[demoIndex]->UpdateWrapper(dt);
 
 	window.SwapBuffers();
 	window.PollEvents();
@@ -69,13 +74,16 @@ void Application::HandleKeyPress(KeyboardButton button)
 	switch (button)
 	{
 	case KeyboardButton::Escape:
-		this->ShutDown();
+		ShutDown();
 		break;
 	case KeyboardButton::F:
 		window.ToggleFullScreen();
 		break;
 	case KeyboardButton::V:
 		window.ToggleVSync(!window.IsVSyncOn());
+		break;
+	case KeyboardButton::T:
+		window.ToggleMouse();
 		break;
 	case KeyboardButton::Page_Up:
 		demo[demoIndex]->ResetCamera();
@@ -110,6 +118,8 @@ void Application::HandleScrollEvent(float scroll_amount)
 }
 void Application::HandleMousePositionEvent(float xpos, float ypos)
 {
+	if (window.GetMouseLock() == true)
+		return;
 	demo[demoIndex]->HandleMousePositionEvent(xpos, ypos);
 }
 
@@ -118,7 +128,7 @@ void Application::HandleMouseEvent(MouseButton button)
 	demo[demoIndex]->HandleMouseEvent(button);
 }
 
-void Application::HandleResizeEvent(const int& new_width, const int& new_height)
+void Application::HandleResizeEvent(const int new_width, const int new_height)
 {
 	window.SetWindowWidth(new_width);
 	window.SetWindowHeight(new_height);

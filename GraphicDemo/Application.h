@@ -16,23 +16,24 @@
 #include "Demo.h"
 #include <array>
 
-class Application : public SimpleEventHandler
+class Application : public EventHandler
 {
 public:
 	enum DEMOINDEX
 	{
-		//PHONGSHADING,
-		//PBR,
-		TEXTUREDPBR,
+		PBR,
+		PHONGSHADING,
+		//TEXTUREDPBR,
 		//TEXTUREDRAWING,
 		//ANIMATION,
-		//TRANSFORMPARENTDEMO,
+		HIERARCHY_DEMO,
 		//COMPUTESHADERDEMO,
 		//TEST,
 		DEMOSIZE
 	};
 
 	Application();
+	~Application();
 	void Initialize();
 	void Update(float dt);
 	void ShutDown();
@@ -44,7 +45,7 @@ public:
 	void HandleScrollEvent(float scroll_amount) override;
 	void HandleMousePositionEvent(float xpos, float ypos) override;
 	void HandleMouseEvent(MouseButton button) override;
-	void HandleResizeEvent(const int& width, const int& height) override;
+	void HandleResizeEvent(const int width, const int height) override;
 	void HandleWindowClose() override;
 	void HandleFocusEvent(bool focused) override;
 
@@ -53,10 +54,8 @@ private:
 
 protected:
 	OpenGLWindow window;
-	Camera		 camera;
-	CameraView	 view;
-	const int	 width = 1000;
-	const int	 height = 1000;
+	const int	 width = 1280;
+	const int	 height = 720;
 
 	int											demoIndex = 0;
 	std::array<std::unique_ptr<Demo>, DEMOSIZE> demo;

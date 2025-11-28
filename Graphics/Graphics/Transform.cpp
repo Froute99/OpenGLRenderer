@@ -21,9 +21,14 @@ float Transform::CalculateWorldDepth() const noexcept
 
 mat4<float> Transform::BuildModelMatrix() const noexcept
 {
-	mat4<float> T = Matrix4::build_translation(translation);
-	mat4<float> R = Matrix4::build_rotation_euler(rotation);
-	mat4<float> S = Matrix4::build_scaling(scale);
+	const mat4<float>& T = Matrix4::build_translation(translation);
+	const mat4<float>& R = Matrix4::build_rotation_euler(rotation);
+	const mat4<float>& S = Matrix4::build_scaling(scale);
 
-	return T * R * S;
+	mat4<float> modelToWorld = T * R * S;
+	if (parent != nullptr)
+	{
+		modelToWorld = parent->BuildModelMatrix() * modelToWorld;
+	}
+	return modelToWorld;
 }

@@ -164,7 +164,6 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
  */
 Mesh3D* MESH::BuildSphere()
 {
-
 	Mesh3D* sphere = new Mesh3D();
 	sphere->SetShapePattern(ShapePattern::TriangleStrip);
 
@@ -211,4 +210,9 @@ Mesh3D* MESH::BuildSphere()
 	}
 
 	return sphere;
+}
+
+Mesh3D::~Mesh3D()
+{
+	if (!this) delete this;
 }

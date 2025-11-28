@@ -428,6 +428,18 @@ int PlatformWindow::GetWindowHeight() const noexcept
 	return windowSize[1];
 }
 
+void PlatformWindow::ToggleMouseCursor() noexcept
+{
+	shouldShowMouse = !shouldShowMouse;
+	int cursor = shouldShowMouse ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED;
+	glfwSetInputMode(window, GLFW_CURSOR, cursor);
+}
+
+bool PlatformWindow::GetMouseLock() const noexcept
+{
+	return shouldShowMouse;
+}
+
 void PlatformWindow::SetWindowWidth(int new_width) noexcept
 {
 	windowSize[0] = new_width;

@@ -11,6 +11,7 @@
 #pragma once
 #include "Demo.h"
 #include <Graphics/Shader.h>
+#include <Graphics/IBL.h>
 
 class Object;
 class GameObject;
@@ -27,7 +28,7 @@ public:
 
 	void ResetCamera() override final;
 
-	void HandleResizeEvent(const int& new_width, const int& new_height) override final;
+	void HandleResizeEvent(const int new_width, const int new_height) override final;
 	void HandleKeyPress(KeyboardButton button) override final;
 	void HandleKeyRelease(KeyboardButton button) override final;
 	void HandleScrollEvent(float scroll_amount) override final;
@@ -35,30 +36,28 @@ public:
 
 	void ImguiHelper();
 
+	void renderCube();
+	unsigned int cubeVAO = 0;
+	unsigned int cubeVBO = 0;
+
 private:
 	vec3<float> moveSpeed;
 
 	GameObject* cube;
+	EnvironmentMap envMap{ GetScreenWidth(), GetScreenHeight() };
 
 	Shader shader;
+	Shader skyboxShader;
+	Shader testShader;
 
-	GLuint uniformModelLocation;
-	GLuint uniformViewLocation;
-	GLuint uniformProjectionLocation;
+	unsigned int hdrTexture = 0;
+	unsigned int envCubemap = 0;
 
-	GLuint uniformObjectColorLocation;
-	GLuint uniformLightPosLocation;
-	GLuint uniformLightColorLocation;
-
-	GLuint uniformLightCubeModel;
-	GLuint uniformLightCubeView;
-	GLuint uniformLightCubeProjection;
-
+	// IMGui
 	vec3<float> objectColor;
 	vec3<float> lightPos;
 	vec3<float> lightColor;
 
-	// IMGui
 	bool showObjectWindow = true;
 	bool showLightWindow = true;
 };

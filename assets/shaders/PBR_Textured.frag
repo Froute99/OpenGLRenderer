@@ -5,6 +5,10 @@ in vec2 TexCoords;
 
 out vec4 FragColor;
 
+uniform samplerCube irradianceMap;
+uniform samplerCube prefilterMap;
+uniform sampler2D brdfLUT;
+
 // material parameters
 uniform sampler2D albedoMap;
 uniform sampler2D metallicMap;
@@ -13,8 +17,6 @@ uniform sampler2D normalMap;
 // uniform sampler2D aoMap;
 
 // lights
-// uniform vec3 lightPositions[4];
-// uniform vec3 lightColors[4];
 uniform vec3 lightPositions;
 uniform vec3 lightColors;
 
@@ -58,9 +60,9 @@ float DistributionGGX(vec3 N, vec3 H, float roughness)
 // schlick-beckmann model + smith model = schlick-ggx model
 float GeometrySchlickBeckmann(float NdotX, float roughness)
 {
-    // float k = (roughness * roughness) / 2;
     float r = (roughness + 1.0);
     float k = (r * r) / 8.0;
+    //float k = (roughness * roughness) / 2;
 
     float nom   = NdotX;
     float denom = NdotX * (1.0 - k) + k;
@@ -83,6 +85,11 @@ vec3 FresnelSchlick(float cosTheta, vec3 F0)
     return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
 
+vec3 FresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
+{
+    return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
+}
+
 void main()
 {
     vec3  albedo    = texture(albedoMap, TexCoords).rgb;    // guaranteed 
@@ -98,7 +105,7 @@ void main()
     // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)
     // vec3 F0 = vec3(0.04);
     vec3 F0 = vec3(0.04);
-    if (metallic > 0.5) F0 = albedo;
+    // if (metallic > 0.5) F0 = albedo;
     F0 = mix(F0, albedo, metallic);
 
     // reflectance equation
@@ -138,9 +145,21 @@ void main()
         Lo += (kD * albedo / PI + specular) * radiance * NdotL;  // note that we already multiplied the BRDF by the Fresnel (kS) so we won't multiply by kS again
     }
 
-    // this ambient light will be changed when IBL is implemented.
-    vec3 ambient = vec3(0.03) * albedo * ao;
+    vec3 F = FresnelSchlickRoughness(max(dot(N, V), 0.0), F0, roughness);
+    vec3 kS = F;
+    vec3 kD = 1.0 - kS;
+    kD *= 1.0 - metallic;
 
+    vec3 irradiance = texture(irradianceMap, N).rgb;
+    vec3 diffuse = irradiance * albedo;
+
+    vec3 R = reflect(-V, N);
+    const float MAX_REFLECTION_LOD = 4.0;
+    vec3 prefilteredColor = textureLod(prefilterMap, R, roughness * MAX_REFLECTION_LOD).rgb;
+    vec2 brdf = texture(brdfLUT, vec2(max(dot(N, V), 0.0), roughness)).rg;
+    vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
+
+    vec3 ambient = (kD * diffuse + specular) * ao;
     vec3 color = ambient + Lo;
 
     // HDR tonemapping

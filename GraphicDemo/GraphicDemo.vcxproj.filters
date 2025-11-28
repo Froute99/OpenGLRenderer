@@ -15,7 +15,7 @@
     <ClCompile Include="TextureDrawingDemo.cpp">
       <Filter>Demo\TextureDrawing</Filter>
     </ClCompile>
-    <ClCompile Include="TransformParentDemo.cpp">
+    <ClCompile Include="TransformHierarchyDemo.cpp">
       <Filter>Demo\TransformParent</Filter>
     </ClCompile>
     <ClCompile Include="ComputeShaderDemo.cpp">
@@ -51,7 +51,7 @@
     <ClInclude Include="TextureDrawingDemo.h">
       <Filter>Demo\TextureDrawing</Filter>
     </ClInclude>
-    <ClInclude Include="TransformParentDemo.h">
+    <ClInclude Include="TransformHierarchyDemo.h">
       <Filter>Demo\TransformParent</Filter>
     </ClInclude>
     <ClInclude Include="ComputeShaderDemo.h">

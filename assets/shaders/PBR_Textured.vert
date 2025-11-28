@@ -8,8 +8,11 @@ out vec3 Normal;
 out vec2 TexCoords;
 
 uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
+layout (std140) uniform Matrices
+{
+    uniform mat4 view;
+    uniform mat4 projection;
+};
 // uniform mat3 normalMatrix;
 
 void main()
@@ -19,5 +22,6 @@ void main()
     Normal = mat3(transpose(inverse(model))) * aNormal;
     TexCoords = aTexCoords;
 
+    // column-major matrices multiply.
     gl_Position =  projection * view * vec4(WorldPos, 1.0);
 }

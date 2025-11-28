@@ -18,6 +18,7 @@ class [[nodiscard]] Texture
 {
 public:
 	Texture() = default;
+	~Texture();
 	Texture(Image& image);
 
 	unsigned int GetTexturehandle() const noexcept { return textureHandle; }

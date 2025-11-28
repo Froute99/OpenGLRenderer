@@ -67,7 +67,7 @@ void AnimationDemo::ResetCamera()
 	//camera.ResetUp();
 }
 
-void AnimationDemo::HandleResizeEvent(const int& new_width, const int& new_height)
+void AnimationDemo::HandleResizeEvent(const int new_width, const int new_height)
 {
 	Demo::HandleResizeEvent(new_width, new_height);
 }

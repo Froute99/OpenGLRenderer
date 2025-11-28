@@ -1,13 +1,13 @@
 #version 330 core
-out vec4 FragColor;
-
-in vec3 vertexNormal;
 in vec3 fragPos;
+in vec3 vertexNormal;
 in vec2 TexCoords;
 
-uniform vec3 lightPos;
+out vec4 FragColor;
+
+uniform vec3 lightPosition;
 uniform vec3 lightColor;
-uniform sampler2D textureDiffuse1;
+uniform sampler2D textureDiffuse;
 
 void main()
 {
@@ -15,11 +15,11 @@ void main()
 	vec3 ambient = ambientStrength * lightColor;
 
 	vec3 norm = normalize(vertexNormal);
-	vec3 lightDir = normalize(lightPos - fragPos);
+	vec3 lightDir = normalize(lightPosition - fragPos);
 
 	float diff = max(dot(norm, lightDir), 0.0);
 	vec3 diffuse = diff * lightColor;
-	vec3 textureColor = vec3(texture(textureDiffuse1, TexCoords));
+	vec3 textureColor = vec3(texture(textureDiffuse, TexCoords));
 
 	vec3 result = (ambient + diffuse) * textureColor;
 	FragColor = vec4(result, 1.0);

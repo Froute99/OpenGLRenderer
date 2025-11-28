@@ -71,7 +71,7 @@ private:
 private:
 	std::vector<Mesh3D*> meshes;
 
-	std::vector<VertexObject*> vertexObject;
+	std::vector<VertexObject*> vertexObjects;
 
 	std::set<std::string> texturePaths;
 	std::vector<Texture>  textures;

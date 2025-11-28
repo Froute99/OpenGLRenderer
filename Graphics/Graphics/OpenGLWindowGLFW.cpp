@@ -52,6 +52,16 @@ bool OpenGLWindow::IsFullScreen() noexcept
 	return platformWindow->IsFullScreen();
 }
 
+void OpenGLWindow::ToggleMouse() noexcept
+{
+	platformWindow->ToggleMouseCursor();
+}
+
+bool OpenGLWindow::GetMouseLock() const noexcept
+{
+	return platformWindow->GetMouseLock();
+}
+
 void OpenGLWindow::SetWindowTitle(const char* title) const noexcept
 {
 	platformWindow->SetWindowTitle(title);
@@ -69,7 +79,7 @@ int OpenGLWindow::GetWindowWidth() const noexcept
 
 void OpenGLWindow::SetWindowWidth(int new_width) noexcept
 {
-	platformWindow->SetWindowHeight(new_width);
+	platformWindow->SetWindowWidth(new_width);
 }
 
 int OpenGLWindow::GetWindowHeight() const noexcept

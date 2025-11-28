@@ -16,6 +16,7 @@ class [[nodiscard]] Transform
 {
 public:
 	Transform() noexcept = default;
+	~Transform() = default;
 	//mat4<float> GetWorldToModel() noexcept;
 
 	float CalculateWorldDepth() const noexcept;
@@ -39,7 +40,7 @@ public:
 	void SetRotation(float x, float y, float z) noexcept { rotation = { x,y,z }; }
 
 	const Transform* GetParent() const noexcept { return parent; }
-	void SetParent(Transform * transform_parent) noexcept { parent = transform_parent; }
+	void SetParent(Transform* transform_parent) noexcept { parent = transform_parent; }
 
 	mat4<float> BuildModelMatrix() const noexcept;
 

@@ -28,6 +28,8 @@ public:
 	bool IsVSyncOn() noexcept;
 	void ToggleFullScreen() noexcept;
 	bool IsFullScreen() noexcept;
+	void ToggleMouse() noexcept;
+	bool GetMouseLock() const noexcept;
 
 	void SetWindowTitle(const char* title) const noexcept;
 	void SetWindowIcon() const noexcept;
