@@ -1,4 +1,4 @@
-/********************************************************
+﻿/********************************************************
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *	
  *	File_name: TransformHierarchyDemo.hpp
@@ -13,7 +13,7 @@
 #include <Graphics/Shader.h>
 #include <Graphics/UBO.h>
 
-class GameObject;
+class SceneObject;
 class Texture;
 
 class TransformHierarchyDemo : public Demo
@@ -38,13 +38,13 @@ public:
 private:
 	Shader shader;
 
-	GameObject* earth;
+	SceneObject* earth;
 	Texture*	earthAlbedo;
 
-	GameObject* sun;
+	SceneObject* sun;
 	Texture*	sunAlbedo;
 
-	GameObject* moon;
+	SceneObject* moon;
 	Texture*	moonAlbedo;
 
 	vec3<float> lightPosition;

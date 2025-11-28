@@ -1,4 +1,4 @@
-/********************************************************
+﻿/********************************************************
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *
  *	File_name: PhongShadingDemo.cpp
@@ -11,7 +11,7 @@
 #include <glew.h>
 #include <glfw3.h>
 #include "PhongShadingDemo.h"
-#include "GameObject.h"
+#include "SceneObject.h"
 #include <Graphics/Draw.h>
 #include <Graphics/PATH.h>
 #include <Graphics/Screenshot.h>
@@ -41,7 +41,7 @@ void PhongShadingDemo::Initialize()
 	skyboxShader.LoadShaderFrom(PATH::skyboxVS, PATH::skyboxFS);
 
 	const std::string& filename = "../assets/Models/backpack.obj";
-	backpack = GameObject::LoadMeshFromFile(filename);
+	backpack = SceneObject::LoadMeshFromFile(filename);
 
 	backpack->Move({ 0.0f, 0.0f, -6.5f });
 	backpackTranslation = backpack->GetTransform()->GetTranslation();

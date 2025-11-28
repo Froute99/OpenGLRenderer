@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Mesh.h"
 #include <Graphics/Color4f.h>
 #include <Math/vec2.hpp>
@@ -9,6 +9,7 @@
 class Mesh3D
 {
 public:
+	Mesh3D() = default;
 	~Mesh3D() = default;
 
 	void AddPoint(vec3<float> point) noexcept { points.push_back(point); }

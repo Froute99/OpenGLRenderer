@@ -1,11 +1,11 @@
-
+﻿
 #pragma once
 #include "Demo.h"
 #include <Graphics/Shader.h>
 #include <Graphics/Texture.h>
 #include <Graphics/IBL.h>
 
-class GameObject;
+class SceneObject;
 
 class TexturedPBRDemo : public Demo
 {
@@ -30,8 +30,8 @@ private:
 
 	Shader pbrShader;
 
-	GameObject* backpack;
-	GameObject* sphere;
+	SceneObject* backpack;
+	SceneObject* sphere;
 
 	Texture* albedoMap;
 	Texture* normalMap;

@@ -1,4 +1,4 @@
-/********************************************************
+﻿/********************************************************
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *	
  *	File_name: TransformHierarchyDemo.cpp
@@ -10,7 +10,7 @@
 
 #include "TransformHierarchyDemo.h"
 #include <Graphics/Draw.h>
-#include "GameObject.h"
+#include "SceneObject.h"
 #include <iostream>
 #include <glew.h>
 
@@ -29,7 +29,7 @@ void TransformHierarchyDemo::Initialize()
 	moonPosition = { 7.f, 0.f, 0.f };
 
 	// SUN
-	sun = GameObject::CreateSphere({ 0 });
+	sun = SceneObject::CreateSphere({ 0 });
 	sun->Move(sunPosition);
 	sun->Rotate({ 3.141592f, 0.f, 0.f });
 	sun->Scale(10.f);
@@ -38,7 +38,7 @@ void TransformHierarchyDemo::Initialize()
 	sunAlbedo->LoadFromPath("../assets/Models/Image_24.png", false);
 
 	// EARTH
-	earth = GameObject::CreateSphere({ 0 });
+	earth = SceneObject::CreateSphere({ 0 });
 	earth->SetParent(sun);
 	earth->Move(earthPosition);
 	earth->Rotate({ 3.141592f, 0.f, 0.f });
@@ -48,7 +48,7 @@ void TransformHierarchyDemo::Initialize()
 	earthAlbedo->LoadFromPath("../assets/Models/Image_14.png", false);
 
 	// MOON
-	moon = GameObject::CreateSphere({ 0 });
+	moon = SceneObject::CreateSphere({ 0 });
 	moon->SetParent(earth);
 	moon->Move(moonPosition);
 	moon->Rotate({ 3.141592f, 0.f, 0.f });

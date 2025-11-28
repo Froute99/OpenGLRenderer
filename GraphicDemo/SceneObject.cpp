@@ -1,4 +1,4 @@
-#include "GameObject.h"
+﻿#include "SceneObject.h"
 #include <Graphics/Vertices.h>
 #include <Graphics/Draw.h>
 #include <Graphics/Mesh3D.h>
@@ -12,14 +12,14 @@
 #include <glew.h>
 #include <vector>
 
-GameObject::GameObject(const vec3<float>& location, const vec3<float>& rotation, float scale)
+SceneObject::SceneObject(const vec3<float>& location, const vec3<float>& rotation, float scale)
 {
 	Move(location);
 	Rotate(rotation);
 	Scale(scale);
 }
 
-GameObject::~GameObject()
+SceneObject::~SceneObject()
 {
 	for (auto pMesh : meshes)
 	{
@@ -31,16 +31,16 @@ GameObject::~GameObject()
 	}
 }
 
-void GameObject::LoadTexture(const std::filesystem::path& path) noexcept
+void SceneObject::LoadTexture(const std::filesystem::path& path) noexcept
 {
 	Texture texture;
 	texture.LoadFromPath(path);
 	textures.push_back(texture);
 }
 
-GameObject* GameObject::CreateCube(const vec3<float>& location, const vec3<float>& rotation, float size)
+SceneObject* SceneObject::CreateCube(const vec3<float>& location, const vec3<float>& rotation, float size)
 {
-	GameObject* cube = new GameObject(location, rotation, size);
+	SceneObject* cube = new SceneObject(location, rotation, size);
 
 	Mesh3D*				cubeMesh = MESH::BuildCube(1.f);
 	VerticesDescription layout{ VerticesDescription::Type::Position, VerticesDescription::Type::Normal };
@@ -51,9 +51,9 @@ GameObject* GameObject::CreateCube(const vec3<float>& location, const vec3<float
 	return cube;
 }
 
-GameObject* GameObject::CreateSphere(const vec3<float>& location)
+SceneObject* SceneObject::CreateSphere(const vec3<float>& location)
 {
-	GameObject* sphere = new GameObject(location, { 0, 0, 0 }, 1);
+	SceneObject* sphere = new SceneObject(location, { 0, 0, 0 }, 1);
 	Mesh3D*		sphereMesh = MESH::BuildSphere();
 	VerticesDescription layout{
 		VerticesDescription::Type::Position,
@@ -67,7 +67,7 @@ GameObject* GameObject::CreateSphere(const vec3<float>& location)
 	return sphere;
 }
 
-GameObject* GameObject::LoadMeshFromFile(const std::string& filePath)
+SceneObject* SceneObject::LoadMeshFromFile(const std::string& filePath)
 {
 	std::cout << "Start to load file: " << filePath << std::endl;
 	unsigned int	 flag = aiProcess_Triangulate | aiProcess_GenSmoothNormals
@@ -82,7 +82,7 @@ GameObject* GameObject::LoadMeshFromFile(const std::string& filePath)
 		std::cout << "Error-Assimp: " << errMsg << std::endl;
 	}
 
-	GameObject* object = new GameObject();
+	SceneObject* object = new SceneObject();
 	object->meshes.reserve(scene->mNumMeshes);
 	object->vertexObjects.reserve(scene->mNumMeshes);
 
@@ -102,7 +102,7 @@ GameObject* GameObject::LoadMeshFromFile(const std::string& filePath)
 	return object;
 }
 
-void GameObject::ProcessNode(aiNode* node, const aiScene* scene)
+void SceneObject::ProcessNode(aiNode* node, const aiScene* scene)
 {
 	// node->mTransformation.
 	//  process all the node's meshes (if any)
@@ -118,7 +118,7 @@ void GameObject::ProcessNode(aiNode* node, const aiScene* scene)
 	}
 }
 
-Mesh3D* GameObject::ProcessMesh(aiMesh* mesh, const aiScene* scene)
+Mesh3D* SceneObject::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 {
 	Mesh3D* result = new Mesh3D();
 
@@ -212,7 +212,7 @@ Mesh3D* GameObject::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	return result;
 }
 
-void GameObject::Draw()
+void SceneObject::Draw()
 {
 	if (objectType == ObjectType::Textured)
 	{
@@ -227,7 +227,7 @@ void GameObject::Draw()
 	}
 }
 
-void GameObject::CheckMaterialTextureTypeExist(aiMaterial* material, aiTextureType type)
+void SceneObject::CheckMaterialTextureTypeExist(aiMaterial* material, aiTextureType type)
 {
 	unsigned int count = material->GetTextureCount(type);
 	if (count > 0)

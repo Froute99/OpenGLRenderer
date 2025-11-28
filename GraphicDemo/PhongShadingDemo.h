@@ -1,4 +1,4 @@
-/********************************************************
+﻿/********************************************************
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *
  *	File_name: PhongShadingDemo.h
@@ -13,7 +13,7 @@
 #include <Graphics/Shader.h>
 
 class Object;
-class GameObject;
+class SceneObject;
 struct aiScene;
 
 class PhongShadingDemo : public Demo
@@ -39,7 +39,7 @@ private:
 	vec3<float> moveSpeed;
 
 	//Object* cube;
-	GameObject* backpack;
+	SceneObject* backpack;
 	Object* skybox;
 
 	Shader shader;

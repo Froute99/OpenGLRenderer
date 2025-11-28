@@ -1,4 +1,4 @@
-/********************************************************
+﻿/********************************************************
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *
  *	File_name: PhongShadingDemo.cpp
@@ -11,7 +11,7 @@
 #include <glew.h>
 #include <glfw3.h>
 #include "TestStage.h"
-#include "GameObject.h"
+#include "SceneObject.h"
 #include <Graphics/Draw.h>
 #include <Graphics/PATH.h>
 #include <Graphics/Screenshot.h>
@@ -36,9 +36,9 @@
 
 void TestStage::Initialize()
 {
-	//cube = GameObject::CreateCube({ 0, 0, -5 }, { 0, 0, 0 }, 1);
+	//cube = SceneObject::CreateCube({ 0, 0, -5 }, { 0, 0, 0 }, 1);
 	//const std::string& filename = "../assets/Models/backpack.obj";
-	//cube = GameObject::LoadMeshFromFile(filename);
+	//cube = SceneObject::LoadMeshFromFile(filename);
 
 	//cube->Rotate({ 0.f, -0.6f, 0.f });
 

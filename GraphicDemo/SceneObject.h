@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Object.h"					// parent class
 #include <Graphics/Transform.h>	// transforms
 #include <Graphics/Texture.h>		// textures
@@ -25,12 +25,12 @@ enum class ObjectType
 	NonTextured
 };
 
-class GameObject : public Object
+class SceneObject : public Object
 {
 public:
-	GameObject() = default;
-	GameObject(const vec3<float>& location, const vec3<float>& rotation, float scale);
-	~GameObject();
+	SceneObject() = default;
+	SceneObject(const vec3<float>& location, const vec3<float>& rotation, float scale);
+	~SceneObject();
 
 	// void Initialize(Mesh newMesh, VertexObject* newVertices);
 
@@ -50,12 +50,12 @@ public:
 
 	virtual void Draw() override;
 
-	static GameObject* CreateCube(const vec3<float>& location,
+	static SceneObject* CreateCube(const vec3<float>& location,
 		const vec3<float>& rotation, float size);
 
-	static GameObject* CreateSphere(const vec3<float>& location);
+	static SceneObject* CreateSphere(const vec3<float>& location);
 
-	static GameObject* LoadMeshFromFile(const std::string& filePath);
+	static SceneObject* LoadMeshFromFile(const std::string& filePath);
 	void			   ProcessNode(aiNode* node, const aiScene* scene);
 	Mesh3D*			   ProcessMesh(aiMesh* mesh, const aiScene* scene);
 

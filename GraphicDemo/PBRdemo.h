@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	Author: JeongHak Kim
  *	File_name: EnvironmentMap.cpp
  *
@@ -13,7 +13,7 @@
 #include <Graphics/IBL.h>
 #include <Graphics/UBO.h>
 
-class GameObject;
+class SceneObject;
 class Texture;
 
 class PBRDemo : public Demo
@@ -40,9 +40,9 @@ private:
 	Shader pbrShader;
 	Shader texturedShader;
 
-	GameObject* sphere1;
-	GameObject* sphere2;
-	GameObject* ironSphere;
+	SceneObject* sphere1;
+	SceneObject* sphere2;
+	SceneObject* ironSphere;
 
 	Texture* albedoMap;
 	Texture* metallicMap;

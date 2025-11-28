@@ -1,4 +1,4 @@
-/********************************************************
+﻿/********************************************************
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *	
  *	File_name: TextureDrawingDemo.hpp
@@ -20,6 +20,8 @@
 #include <Graphics/BitmapFont.h>
 #include <Graphics/Text.h>
 #include <Graphics/Draw.h>
+
+class SceneObject;
 
 class TextureDrawingDemo : public Demo
 {
@@ -45,7 +47,7 @@ private:
 
 	float fireDistance = 300.0f;
 
-	GameObject* dragon;
+	SceneObject* dragon;
 
 	//Material dragon;
 	//Transform dragonTransform;

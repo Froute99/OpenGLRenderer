@@ -8,7 +8,7 @@
  */
 
 #include "PBRdemo.h"
-#include "GameObject.h"
+#include "SceneObject.h"
 #include <glew.h>		// glUniform
 #include <Graphics/Draw.h>	// rendering objects
 #include <Graphics/PATH.h>	// path for shaders
@@ -51,15 +51,15 @@ void PBRDemo::Initialize()
 		std::cout << "Failed to load env map\n";
 	}
 
-	sphere1 = GameObject::CreateSphere({ 0, 0, 0 });
+	sphere1 = SceneObject::CreateSphere({ 0, 0, 0 });
 	sphere1->SetObjectType(ObjectType::NonTextured);
 	sphere1->Move({ 0.f, 0.f, -4.f });
 
-	sphere2 = GameObject::CreateSphere({ 0, 0, 0 });
+	sphere2 = SceneObject::CreateSphere({ 0, 0, 0 });
 	sphere2->SetObjectType(ObjectType::NonTextured);
 	sphere2->Move({ 2.5f, 0.f, -4.f });
 
-	ironSphere = GameObject::CreateSphere({ 0, 0, 0 });
+	ironSphere = SceneObject::CreateSphere({ 0, 0, 0 });
 	ironSphere->Move({ -2.5f, 0.f, -4.f });
 
 	albedoMap = new Texture();

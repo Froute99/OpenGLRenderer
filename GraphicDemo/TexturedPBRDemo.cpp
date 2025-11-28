@@ -1,6 +1,6 @@
-
+﻿
 #include "TexturedPBRDemo.h"
-#include "GameObject.h"
+#include "SceneObject.h"
 #include <iostream>				// error logging
 #include <Graphics/Draw.h>		// rendering objects
 #include <Graphics/PATH.h>		// path for shaders
@@ -52,7 +52,7 @@ void TexturedPBRDemo::Initialize()
 	//}
 	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	sphere = GameObject::CreateSphere({ 0, 0, 0 });
+	sphere = SceneObject::CreateSphere({ 0, 0, 0 });
 	sphere->Move({ 0.f, 0.f, -5.f });
 
 	Shader::UseShader(pbrShader);

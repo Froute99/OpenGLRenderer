@@ -1,4 +1,4 @@
-#include "Mesh3D.h"
+﻿#include "Mesh3D.h"
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
@@ -210,9 +210,4 @@ Mesh3D* MESH::BuildSphere()
 	}
 
 	return sphere;
-}
-
-Mesh3D::~Mesh3D()
-{
-	if (!this) delete this;
 }

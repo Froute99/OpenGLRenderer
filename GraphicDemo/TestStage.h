@@ -1,4 +1,4 @@
-/********************************************************
+﻿/********************************************************
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *
  *	File_name: PhongShadingDemo.h
@@ -14,7 +14,7 @@
 #include <Graphics/IBL.h>
 
 class Object;
-class GameObject;
+class SceneObject;
 struct aiScene;
 
 class TestStage : public Demo
@@ -43,7 +43,7 @@ public:
 private:
 	vec3<float> moveSpeed;
 
-	GameObject* cube;
+	SceneObject* cube;
 	EnvironmentMap envMap{ GetScreenWidth(), GetScreenHeight() };
 
 	Shader shader;

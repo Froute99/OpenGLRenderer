@@ -1,4 +1,4 @@
-/********************************************************
+﻿/********************************************************
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *
  *	File_name: TextureDrawingDemo.cpp
@@ -9,7 +9,7 @@
  *******************************************************/
 
 #include "TextureDrawingDemo.h"
-#include "GameObject.h"
+#include "SceneObject.h"
 #include <Graphics/PATH.h>
 #include <glfw3.h>
 #include <iostream>
@@ -38,7 +38,7 @@ void TextureDrawingDemo::Initialize()
 	//blueFireAnimation.Initialize({ 10, 6, 25.0f }, blueFire.shader);
 
 	//const Mesh rectangle = MESH::create_rectangle({ 0.0f }, { 1.0f }, { 0.0f });
-	//dragon = new GameObject(rectangle, layout);
+	//dragon = new SceneObject(rectangle, layout);
 	//dragon->SetShader(&shader);
 	//dragon->LoadTexture(dragon_png);
 

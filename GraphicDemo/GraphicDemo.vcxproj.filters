@@ -24,7 +24,7 @@
     <ClCompile Include="PBRdemo.cpp">
       <Filter>Demo\PBR</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
+    <ClCompile Include="SceneObject.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Skybox.cpp">
@@ -60,7 +60,7 @@
     <ClInclude Include="PBRdemo.h">
       <Filter>Demo\PBR</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
+    <ClInclude Include="SceneObject.h">
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Skybox.h">
