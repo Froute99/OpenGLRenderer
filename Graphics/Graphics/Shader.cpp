@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *	File_name: Shader.cpp
  *
@@ -32,7 +32,7 @@ namespace ShaderHelper
 		return {};
 	}
 
-	bool CheckCompileErrors(unsigned int shaderObject, const std::string& errorMsg)
+	bool IsShaderObjectValid(unsigned int shaderObject, const std::string& errorMsg)
 	{
 		GLint isCompiled;
 		glGetShaderiv(shaderObject, GL_COMPILE_STATUS, &isCompiled);
@@ -51,10 +51,20 @@ namespace ShaderHelper
 Shader::Shader(const std::filesystem::path& vertex_source,
 	const std::filesystem::path& fragment_source) noexcept
 {
-	LoadShaderFrom(vertex_source, fragment_source);
+	if (!CanLoadShader(vertex_source, fragment_source))
+	{
+		std::cout << "Shader Compilation Failed\n"
+				  << "Check the shader file and its paths\n";
+	}
 }
 
-bool Shader::LoadShaderFrom(const std::filesystem::path& vertex_source,
+Shader::~Shader()
+{
+	UseNothing();
+	glDeleteProgram(handleToShader);
+}
+
+bool Shader::CanLoadShader(const std::filesystem::path& vertex_source,
 	const std::filesystem::path& fragment_source) noexcept
 {
 	const GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -68,11 +78,13 @@ bool Shader::LoadShaderFrom(const std::filesystem::path& vertex_source,
 
 	glShaderSource(vertexShader, 1, &vertexSource, NULL);
 	glCompileShader(vertexShader);
-	ShaderHelper::CheckCompileErrors(vertexShader, "Vertex Shader");
+	if (!ShaderHelper::IsShaderObjectValid(vertexShader, "Vertex Shader"))
+		return false;
 
 	glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
 	glCompileShader(fragmentShader);
-	ShaderHelper::CheckCompileErrors(fragmentShader, "Fragment Shader");
+	if (!ShaderHelper::IsShaderObjectValid(fragmentShader, "Fragment Shader"))
+		return false;
 
 	GLuint program = glCreateProgram();
 	glAttachShader(program, vertexShader);
@@ -105,9 +117,9 @@ unsigned Shader::GetHandleToShader() const noexcept
 	return handleToShader;
 }
 
-void Shader::UseShader(const Shader& shader)
+void Shader::Use()
 {
-	glUseProgram(shader.GetHandleToShader());
+	glUseProgram(GetHandleToShader());
 }
 
 void Shader::UseNothing()
@@ -157,3 +169,4 @@ void Shader::BindTexture(const char* uniformName, const int value, const unsigne
 	glBindTexture(GL_TEXTURE_2D, textureHandle);
 	glUniform1i(location, value);
 }
+

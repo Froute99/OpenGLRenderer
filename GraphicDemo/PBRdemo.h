@@ -37,9 +37,6 @@ public:
 	void DrawGUI() override;
 
 private:
-	Shader pbrShader;
-	Shader texturedShader;
-
 	SceneObject* sphere1;
 	SceneObject* sphere2;
 	SceneObject* ironSphere;

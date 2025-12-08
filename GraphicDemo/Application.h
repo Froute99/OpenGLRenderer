@@ -1,4 +1,4 @@
-/********************************************************
+﻿/********************************************************
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *
  *	File_name: Application.h
@@ -22,11 +22,11 @@ public:
 	enum DEMOINDEX
 	{
 		PBR,
-		PHONGSHADING,
+		//PHONGSHADING,
 		//TEXTUREDPBR,
 		//TEXTUREDRAWING,
 		//ANIMATION,
-		HIERARCHY_DEMO,
+		//HIERARCHY_DEMO,
 		//COMPUTESHADERDEMO,
 		//TEST,
 		DEMOSIZE

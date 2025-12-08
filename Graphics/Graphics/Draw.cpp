@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *	File_name: Draw.cpp
  *	
@@ -32,7 +32,7 @@ void Draw::FinishDrawing()
 void Draw::DrawSprite(const Material& material)
 {
 	glBindTexture(GL_TEXTURE_2D, material.texture.GetTexturehandle());
-	Shader::UseShader(*material.shader);
+	material.shader->Use();
 	//material.shader->SendUniformVariable("ndc", material.ndc);
 	VertexObject::SelectVAO(material.vertices);
 	glDrawArrays(material.vertices.GetPattern(), 0, material.vertices.GetVerticesCount());
@@ -40,7 +40,7 @@ void Draw::DrawSprite(const Material& material)
 
 void Draw::DrawShape(const Material& material)
 {
-	Shader::UseShader(*material.shader);
+	material.shader->Use();
 	//material.shader->SendUniformVariable("ndc", material.ndc);
 	VertexObject::SelectVAO(material.vertices);
 	glDrawArrays(material.vertices.GetPattern(), 0, material.vertices.GetVerticesCount());

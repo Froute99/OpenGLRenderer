@@ -1,4 +1,4 @@
-/********************************************************
+﻿/********************************************************
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *	
  *	File_name: AnimationDemo.cpp
@@ -18,7 +18,7 @@ const std::filesystem::path& blue_fire_png = "../assets/blue_fire.png";
 
 void AnimationDemo::Initialize()
 {
-	shader.LoadShaderFrom(PATH::animation_vert, PATH::animation_frag);
+	shader.CanLoadShader(PATH::animation_vert, PATH::animation_frag);
 
 	//const Mesh& rectangle = MESH::create_rectangle({ 0.0f }, { 1.0f }, { 0.0f });
 

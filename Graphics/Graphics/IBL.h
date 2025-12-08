@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	Author: JeongHak Kim
  *	File_name: EnvironmentMap.cpp
  *
@@ -30,16 +30,16 @@ public:
 	void RenderCube();
 	void RenderQuad();
 
-	void BindIBLTexture(const Shader& shader);
+	void BindIBLTexture(Shader* shader);
 
 private:
 	int screenWidth, screenHeight;
 
-	Shader equirectangularMappingShader;
-	Shader skyboxShader;
-	Shader irradianceShader;
-	Shader prefilterShader;
-	Shader brdfShader;
+	//Shader equirectangularMappingShader;
+	//Shader irradianceShader;
+	//Shader prefilterShader;
+	//Shader brdfShader;
+	//Shader skyboxShader;
 
 	//Mesh3D* mesh;
 	//VertexObject vo;

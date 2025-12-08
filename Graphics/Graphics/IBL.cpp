@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	Author: JeongHak Kim
  *	File_name: EnvironmentMap.cpp
  *
@@ -15,14 +15,15 @@
 #include <iostream>
 #include <fstream>
 #include <Math/Angle.hpp>
+#include <ShaderManager.h>
 
 bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 {
-	equirectangularMappingShader.LoadShaderFrom("../assets/shaders/Equi2Cubemap.vert", "../assets/shaders/Equi2Cubemap.frag");
-	irradianceShader.LoadShaderFrom("../assets/shaders/skybox.vert", "../assets/shaders/convolution.fs");
-	prefilterShader.LoadShaderFrom("../assets/shaders/prefilter.vs", "../assets/shaders/prefilter.fs");
-	brdfShader.LoadShaderFrom("../assets/shaders/BRDF_LUT.vs", "../assets/shaders/BRDF_LUT.fs");
-	skyboxShader.LoadShaderFrom("../assets/shaders/skybox.vert", "../assets/shaders/skybox.frag");
+	Shader* equirectangularMappingShader = ShaderManager::GetShader(ShaderDefinition::EquirectangularConversion);
+	Shader* irradianceShader = ShaderManager::GetShader(ShaderDefinition::Irradiance);
+	Shader* prefilterShader = ShaderManager::GetShader(ShaderDefinition::Prefilter);
+	Shader* brdfShader = ShaderManager::GetShader(ShaderDefinition::BrdfLookupTexture);
+	Shader* skyboxShader = ShaderManager::GetShader(ShaderDefinition::Skybox);
 
 	glGenFramebuffers(1, &FBO);
 	glGenRenderbuffers(1, &RBO);
@@ -75,9 +76,9 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 	};
 
 	/* HDR image to Cubemap */
-	Shader::UseShader(equirectangularMappingShader);
-	equirectangularMappingShader.SendUniformVariable("equirectangularMap", 0);
-	equirectangularMappingShader.SendUniformVariable("projection", captureProjection);
+	equirectangularMappingShader->Use();
+	equirectangularMappingShader->SendUniformVariable("equirectangularMap", 0);
+	equirectangularMappingShader->SendUniformVariable("projection", captureProjection);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
@@ -85,7 +86,7 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 	for (unsigned int i = 0; i < 6; ++i)
 	{
-		equirectangularMappingShader.SendUniformVariable("view", captureViews[i]);
+		equirectangularMappingShader->SendUniformVariable("view", captureViews[i]);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, cubeMap, 0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -113,9 +114,9 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 	glBindRenderbuffer(GL_RENDERBUFFER, RBO);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 32, 32);
 
-	Shader::UseShader(irradianceShader);
-	irradianceShader.SendUniformVariable("environmentMap", 0);
-	irradianceShader.SendUniformVariable("projection", captureProjection);
+	irradianceShader->Use();
+	irradianceShader->SendUniformVariable("environmentMap", 0);
+	irradianceShader->SendUniformVariable("projection", captureProjection);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
 
@@ -123,7 +124,7 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 	for (unsigned int i = 0; i < 6; ++i)
 	{
-		irradianceShader.SendUniformVariable("view", captureViews[i]);
+		irradianceShader->SendUniformVariable("view", captureViews[i]);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, irradianceMap, 0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -146,9 +147,9 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 
-	Shader::UseShader(prefilterShader);
-	prefilterShader.SendUniformVariable("environmentMap", 0);
-	prefilterShader.SendUniformVariable("projection", captureProjection);
+	prefilterShader->Use();
+	prefilterShader->SendUniformVariable("environmentMap", 0);
+	prefilterShader->SendUniformVariable("projection", captureProjection);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
 
@@ -164,10 +165,10 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 		glViewport(0, 0, mipWidth, mipHeight);
 
 		float roughness = (float)mip / (float)(TOTAL_MIP_LEVEL - 1);
-		prefilterShader.SendUniformVariable("roughness", roughness);
+		prefilterShader->SendUniformVariable("roughness", roughness);
 		for (unsigned int i = 0; i < 6; ++i)
 		{
-			prefilterShader.SendUniformVariable("view", captureViews[i]);
+			prefilterShader->SendUniformVariable("view", captureViews[i]);
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, prefilterMap, mip);
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -193,16 +194,16 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, brdfLUTTexture, 0);
 
 	glViewport(0, 0, 512, 512);
-	Shader::UseShader(brdfShader);
+	brdfShader->Use();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	RenderQuad();
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	Shader::UseShader(skyboxShader);
-	skyboxShader.SendUniformVariable("skybox", 0);
-	skyboxShader.SendUniformVariable("view", captureViews[5]);
-	skyboxShader.SendUniformVariable("projection", projection);
+	skyboxShader->Use();
+	skyboxShader->SendUniformVariable("skybox", 0);
+	skyboxShader->SendUniformVariable("view", captureViews[5]);
+	skyboxShader->SendUniformVariable("projection", projection);
 	glViewport(0, 0, screenWidth, screenHeight);
 
 	return true;
@@ -210,9 +211,10 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 
 void EnvironmentMap::Render(const mat4<float>& view, const mat4<float>& projection)
 {
-	Shader::UseShader(skyboxShader);
-	skyboxShader.SendUniformVariable("view", view);
-	skyboxShader.SendUniformVariable("projection", projection);
+	Shader* skyboxShader = ShaderManager::GetShader(ShaderDefinition::Skybox);
+	skyboxShader->Use();
+	skyboxShader->SendUniformVariable("view", view);
+	skyboxShader->SendUniformVariable("projection", projection);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
 	RenderCube();
@@ -315,11 +317,11 @@ void EnvironmentMap::RenderQuad()
 	glBindVertexArray(0);
 }
 
-void EnvironmentMap::BindIBLTexture(const Shader& shader)
+void EnvironmentMap::BindIBLTexture(Shader* shader)
 {
-	shader.SendUniformVariable("irradianceMap", 0);
-	shader.SendUniformVariable("prefilterMap", 1);
-	shader.SendUniformVariable("brdfLUT", 2);
+	shader->SendUniformVariable("irradianceMap", 0);
+	shader->SendUniformVariable("prefilterMap", 1);
+	shader->SendUniformVariable("brdfLUT", 2);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap);

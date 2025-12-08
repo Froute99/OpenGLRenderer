@@ -1,4 +1,4 @@
-#include "ComputeShader.h"
+﻿#include "ComputeShader.h"
 #include "Shader.h"
 #include "PATH.h"
 #include <iostream>
@@ -20,12 +20,12 @@ bool ComputeShader::LoadShader(const std::filesystem::path& path) noexcept
 	const GLuint computeShader = glCreateShader(GL_COMPUTE_SHADER);
 	glShaderSource(computeShader, 1, &shaderSource, NULL);
 	glCompileShader(computeShader);
-	ShaderHelper::CheckCompileErrors(computeShader, "Compute Shader");
+	ShaderHelper::IsShaderObjectValid(computeShader, "Compute Shader");
 
 	GLuint programID = glCreateProgram();
 	glAttachShader(programID, computeShader);
 	glLinkProgram(programID);
-	ShaderHelper::CheckCompileErrors(programID, "Compute Shader Linkage");
+	ShaderHelper::IsShaderObjectValid(programID, "Compute Shader Linkage");
 
 	glDetachShader(programID, computeShader);
 	glDeleteShader(computeShader);

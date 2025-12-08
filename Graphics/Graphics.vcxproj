@@ -208,6 +208,8 @@
     <ClInclude Include="Math\vec2.hpp" />
     <ClInclude Include="Math\vec3.hpp" />
     <ClInclude Include="Math\vec4.hpp" />
+    <ClInclude Include="ShaderManager.h" />
+    <ClInclude Include="ShaderPaths.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\BitmapFont.cpp" />
@@ -238,6 +240,7 @@
     <ClCompile Include="imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
+    <ClCompile Include="ShaderManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

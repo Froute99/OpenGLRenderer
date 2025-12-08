@@ -20,7 +20,7 @@
 
 void TransformHierarchyDemo::Initialize()
 {
-	shader.LoadShaderFrom("../assets/shaders/texture.vert", "../assets/shaders/texture.frag");
+	shader.CanLoadShader("../assets/shaders/texture.vert", "../assets/shaders/texture.frag");
 
 	camera.SetEyePosition({ 0.f, 5.f, 30.f });
 
@@ -86,7 +86,7 @@ void TransformHierarchyDemo::Update(float /*dt*/)
 	matricesBlock.WriteData(0, 64, &View);
 	matricesBlock.WriteData(64, 64, &Projection);
 
-	Shader::UseShader(shader);
+	shader.Use();
 	mat4<float> Model = sun->GetModelToWorld();
 
 	shader.SendUniformVariable("model", Model);

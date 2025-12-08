@@ -21,6 +21,8 @@
 
 #include <iostream>		// error logging
 
+#include <ShaderManager.h>
+
 PBRDemo::~PBRDemo()
 {
 	delete sphere1;
@@ -44,8 +46,10 @@ PBRDemo::~PBRDemo()
 
 void PBRDemo::Initialize()
 {
-	pbrShader.LoadShaderFrom("../assets/shaders/PBR.vert", "../assets/shaders/PBR.frag");
-	texturedShader.LoadShaderFrom("../assets/shaders/PBR_Textured.vert", "../assets/shaders/PBR_Textured.frag");
+	Shader* pbrShader = ShaderManager::GetShader(ShaderDefinition::PBR);
+	Shader* texturedPbrShader = ShaderManager::GetShader(ShaderDefinition::TexturedPBR);
+	//pbrShader.LoadShaderFrom("../assets/shaders/PBR.vert", "../assets/shaders/PBR.frag");
+	//texturedShader.CanLoadShader("../assets/shaders/PBR_Textured.vert", "../assets/shaders/PBR_Textured.frag");
 	if (!envMap.CanLoad("../assets/newport_loft.hdr", view.BuildProjectionMatrix()))
 	{
 		std::cout << "Failed to load env map\n";
@@ -73,9 +77,9 @@ void PBRDemo::Initialize()
 	roughnessMap->LoadFromPath("../assets/Models/rustediron2_roughness.png");
 	normalMap->LoadFromPath("../assets/Models/rustediron2_normal.png");
 
-	matricesBlock.BindTo(pbrShader.GetHandleToShader(), "Matrices");
-	matricesBlock.BindTo(texturedShader.GetHandleToShader(), "Matrices");
-	lightsBlock.BindTo(pbrShader.GetHandleToShader(), "Lights");
+	matricesBlock.BindTo(pbrShader->GetHandleToShader(), "Matrices");
+	matricesBlock.BindTo(texturedPbrShader->GetHandleToShader(), "Matrices");
+	lightsBlock.BindTo(pbrShader->GetHandleToShader(), "Lights");
 
 	sphereColor = vec3<float>(1.f, 0.f, 0.f);
 	roughness = 0.1f;
@@ -100,50 +104,52 @@ void PBRDemo::Update(float /*dt*/)
 	matricesBlock.WriteData(0, 64, &View);
 	matricesBlock.WriteData(64, 64, &Projection);
 
-	Shader::UseShader(pbrShader);
+	Shader* pbrShader = ShaderManager::GetShader(ShaderDefinition::PBR);
+	pbrShader->Use();
 	envMap.BindIBLTexture(pbrShader);
 
-	pbrShader.SendUniformVariable("model", sphere1->GetModelToWorld());
+	pbrShader->SendUniformVariable("model", sphere1->GetModelToWorld());
 
-	pbrShader.SendUniformVariable("albedo", sphereColor);
-	pbrShader.SendUniformVariable("roughness", roughness);
-	pbrShader.SendUniformVariable("ao", ambientOcclusion);
-	pbrShader.SendUniformVariable("metallic", metallic);
+	pbrShader->SendUniformVariable("albedo", sphereColor);
+	pbrShader->SendUniformVariable("roughness", roughness);
+	pbrShader->SendUniformVariable("ao", ambientOcclusion);
+	pbrShader->SendUniformVariable("metallic", metallic);
 
-	pbrShader.SendUniformVariable("lightPositions", lightPosition);
-	pbrShader.SendUniformVariable("lightColors", lightColor);
-	pbrShader.SendUniformVariable("lightIntensity", lightIntensity);
-	pbrShader.SendUniformVariable("camPos", camPos);
+	pbrShader->SendUniformVariable("lightPositions", lightPosition);
+	pbrShader->SendUniformVariable("lightColors", lightColor);
+	pbrShader->SendUniformVariable("lightIntensity", lightIntensity);
+	pbrShader->SendUniformVariable("camPos", camPos);
 
 	sphere1->Draw();
 
-	pbrShader.SendUniformVariable("model", sphere2->GetModelToWorld());
+	pbrShader->SendUniformVariable("model", sphere2->GetModelToWorld());
 
 	float		roughness2 = 0.8f;
 	float		metallic2 = 0.1f;
-	pbrShader.SendUniformVariable("roughness", roughness2);
-	pbrShader.SendUniformVariable("ao", ambientOcclusion);
-	pbrShader.SendUniformVariable("metallic", metallic2);
+	pbrShader->SendUniformVariable("roughness", roughness2);
+	pbrShader->SendUniformVariable("ao", ambientOcclusion);
+	pbrShader->SendUniformVariable("metallic", metallic2);
 
-	pbrShader.SendUniformVariable("lightPositions", lightPosition);
-	pbrShader.SendUniformVariable("lightColors", lightColor);
-	pbrShader.SendUniformVariable("lightIntensity", lightIntensity);
-	pbrShader.SendUniformVariable("camPos", camera.GetEyePosition());
+	pbrShader->SendUniformVariable("lightPositions", lightPosition);
+	pbrShader->SendUniformVariable("lightColors", lightColor);
+	pbrShader->SendUniformVariable("lightIntensity", lightIntensity);
+	pbrShader->SendUniformVariable("camPos", camera.GetEyePosition());
 
 	sphere2->Draw();
 
-	Shader::UseShader(texturedShader);
-	envMap.BindIBLTexture(texturedShader);
-	texturedShader.BindTexture("albedoMap", 3, albedoMap->GetTexturehandle());
-	texturedShader.BindTexture("metallicMap", 4, metallicMap->GetTexturehandle());
-	texturedShader.BindTexture("roughnessMap", 5, roughnessMap->GetTexturehandle());
-	texturedShader.BindTexture("normalMap", 6, normalMap->GetTexturehandle());
+	Shader* texturedPbrShader = ShaderManager::GetShader(ShaderDefinition::TexturedPBR);
+	texturedPbrShader->Use();
+	envMap.BindIBLTexture(texturedPbrShader);
+	texturedPbrShader->BindTexture("albedoMap", 3, albedoMap->GetTexturehandle());
+	texturedPbrShader->BindTexture("metallicMap", 4, metallicMap->GetTexturehandle());
+	texturedPbrShader->BindTexture("roughnessMap", 5, roughnessMap->GetTexturehandle());
+	texturedPbrShader->BindTexture("normalMap", 6, normalMap->GetTexturehandle());
 
-	texturedShader.SendUniformVariable("model", ironSphere->GetModelToWorld());
+	texturedPbrShader->SendUniformVariable("model", ironSphere->GetModelToWorld());
 
-	texturedShader.SendUniformVariable("lightPositions", lightPosition);
-	texturedShader.SendUniformVariable("lightColors", lightColor);
-	texturedShader.SendUniformVariable("camPos", camera.GetEyePosition());
+	texturedPbrShader->SendUniformVariable("lightPositions", lightPosition);
+	texturedPbrShader->SendUniformVariable("lightColors", lightColor);
+	texturedPbrShader->SendUniformVariable("camPos", camera.GetEyePosition());
 
 	ironSphere->Draw();
 

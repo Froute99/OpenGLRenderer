@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *	File_name: Shader.h
  *	
@@ -14,24 +14,25 @@
 #include <Math/mat3.hpp>
 #include <Math/mat4.hpp>
 
+
 namespace ShaderHelper
 {
 	std::string ReadSourceFrom(const std::filesystem::path& path);
-	bool CheckCompileErrors(unsigned int shaderObject, const std::string& errorMsg);
+	bool IsShaderObjectValid(unsigned int shaderObject, const std::string& errorMsg);
 }
 
 class [[nodiscard]] Shader
 {
 public:
-	Shader() noexcept = default;
-	~Shader() noexcept = default;
+	Shader() noexcept = delete;
+	~Shader();
 	Shader(const std::filesystem::path& vertex_source,
 		const std::filesystem::path& fragment_source) noexcept;
-	bool LoadShaderFrom(const std::filesystem::path& vertex_source,
+	bool CanLoadShader(const std::filesystem::path& vertex_source,
 		const std::filesystem::path& fragment_source) noexcept;
 	unsigned GetHandleToShader() const noexcept;
 
-	static void UseShader(const Shader& shader);
+	void Use();
 	static void UseNothing();
 
 	void SendUniformVariable(const char* variable_name, const int variable) const noexcept;

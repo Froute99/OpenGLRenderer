@@ -9,9 +9,6 @@
     <ClCompile Include="Demo.cpp">
       <Filter>Demo</Filter>
     </ClCompile>
-    <ClCompile Include="PhongShadingDemo.cpp">
-      <Filter>Demo\PhongShading</Filter>
-    </ClCompile>
     <ClCompile Include="TextureDrawingDemo.cpp">
       <Filter>Demo\TextureDrawing</Filter>
     </ClCompile>
@@ -30,9 +27,6 @@
     <ClCompile Include="Skybox.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
-    <ClCompile Include="TexturedPBRDemo.cpp">
-      <Filter>Demo\TexturedPBR</Filter>
-    </ClCompile>
     <ClCompile Include="TestStage.cpp">
       <Filter>Demo\Test</Filter>
     </ClCompile>
@@ -44,9 +38,6 @@
     </ClInclude>
     <ClInclude Include="Demo.h">
       <Filter>Demo</Filter>
-    </ClInclude>
-    <ClInclude Include="PhongShadingDemo.h">
-      <Filter>Demo\PhongShading</Filter>
     </ClInclude>
     <ClInclude Include="TextureDrawingDemo.h">
       <Filter>Demo\TextureDrawing</Filter>
@@ -68,9 +59,6 @@
     </ClInclude>
     <ClInclude Include="Object.h">
       <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="TexturedPBRDemo.h">
-      <Filter>Demo\TexturedPBR</Filter>
     </ClInclude>
     <ClInclude Include="TestStage.h">
       <Filter>Demo\Test</Filter>

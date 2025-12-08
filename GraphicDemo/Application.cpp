@@ -11,13 +11,13 @@
 #include <iostream>
 #include "glfw3.h"
 #include "Application.h"
-#include "PhongShadingDemo.h"
+//#include "PhongShadingDemo.h"
 #include "TextureDrawingDemo.h"
 #include "AnimationDemo.h"
 #include "TransformHierarchyDemo.h"
 #include "ComputeShaderDemo.h"
 #include "PBRdemo.h"
-#include "TexturedPBRDemo.h"
+//#include "TexturedPBRDemo.h"
 #include "TestStage.h"
 
 bool Application::IsRunning() const
@@ -47,10 +47,10 @@ void Application::Initialize()
 	window.ToggleMouse();
 
 	demo[PBR] = std::make_unique<PBRDemo>(window);
-	demo[PHONGSHADING] = std::make_unique<PhongShadingDemo>(window);
+	//demo[PHONGSHADING] = std::make_unique<PhongShadingDemo>(window);
 	//demo[TEXTUREDPBR] = std::make_unique<TexturedPBRDemo>(window);
 	//demo[ANIMATION] = std::make_unique<AnimationDemo>(window);
-	demo[HIERARCHY_DEMO] = std::make_unique<TransformHierarchyDemo>(window);
+	//demo[HIERARCHY_DEMO] = std::make_unique<TransformHierarchyDemo>(window);
 	//demo[TEST] = std::make_unique<TestStage>(window);
 	//demo[COMPUTESHADERDEMO] = std::make_unique<ComputeShaderDemo>(window);
 }
