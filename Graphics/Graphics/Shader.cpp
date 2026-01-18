@@ -61,7 +61,7 @@ Shader::Shader(const std::filesystem::path& vertex_source,
 Shader::~Shader()
 {
 	UseNothing();
-	glDeleteProgram(handleToShader);
+	glDeleteProgram(handle);
 }
 
 bool Shader::CanLoadShader(const std::filesystem::path& vertex_source,
@@ -99,22 +99,24 @@ bool Shader::CanLoadShader(const std::filesystem::path& vertex_source,
 		glGetProgramInfoLog(program, 1024, &length, message);
 	}
 
+	UniformBlocksAutoLink();
+
 	glDetachShader(program, vertexShader);
 	glDetachShader(program, fragmentShader);
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
-	if (handleToShader != 0)
+	if (handle != 0)
 	{
-		glDeleteProgram(handleToShader);
+		glDeleteProgram(handle);
 	}
-	handleToShader = program;
+	handle = program;
 
 	return true;
 }
 
 unsigned Shader::GetHandleToShader() const noexcept
 {
-	return handleToShader;
+	return handle;
 }
 
 void Shader::Use()
@@ -134,39 +136,60 @@ void Shader::UseNothing()
  * or if name is associated with an atomic counter or a named uniform block. */
 void Shader::SendUniformVariable(const char* variable_name, const int variable) const noexcept
 {
-	const int location = glGetUniformLocation(handleToShader, variable_name);
+	const int location = glGetUniformLocation(handle, variable_name);
 	glUniform1i(location, variable);
 }
 
 void Shader::SendUniformVariable(const char* variable_name, const float variable) const noexcept
 {
-	const int location = glGetUniformLocation(handleToShader, variable_name);
+	const int location = glGetUniformLocation(handle, variable_name);
 	glUniform1f(location, variable);
 }
 
 void Shader::SendUniformVariable(const char* variable_name, const mat3<float>& matrix) const noexcept
 {
-	const int location = glGetUniformLocation(handleToShader, variable_name);
+	const int location = glGetUniformLocation(handle, variable_name);
 	glUniformMatrix3fv(location, 1, false, &matrix[0][0]);
 }
 
 void Shader::SendUniformVariable(const char* name, const vec3<float>& v) const noexcept
 {
-	const int location = glGetUniformLocation(handleToShader, name);
+	const int location = glGetUniformLocation(handle, name);
 	glUniform3fv(location, 1, &v.x);
 }
 
 void Shader::SendUniformVariable(const char* name, const mat4<float>& m) const noexcept
 {
-	const int location = glGetUniformLocation(handleToShader, name);
+	const int location = glGetUniformLocation(handle, name);
 	glUniformMatrix4fv(location, 1, GL_FALSE, &m[0][0]);
 }
 
 void Shader::BindTexture(const char* uniformName, const int value, const unsigned int textureHandle) const noexcept
 {
-	const int location = glGetUniformLocation(handleToShader, uniformName);
+	const int location = glGetUniformLocation(handle, uniformName);
 	glActiveTexture(GL_TEXTURE0 + value);
 	glBindTexture(GL_TEXTURE_2D, textureHandle);
 	glUniform1i(location, value);
 }
 
+#include "UBO.h"
+void UniformBlockLinkingHelper(unsigned int handle, const std::string& /*blockName*/, BindingSlot slot)
+{
+	// Try to find block with blockName in the shader
+	GLuint idx = glGetUniformBlockIndex(handle, "Matrices");
+	if (idx != GL_INVALID_INDEX)
+	{
+		// succeed to find the index in the shader, bind the block with the slot
+		glUniformBlockBinding(handle, idx, slot);
+		return;
+	}
+	//std::cout << "Cannot find block \"" << blockName << "\". Check out the name.\n";
+}
+
+void Shader::UniformBlocksAutoLink()
+{
+	//unsigned int blockIndex = glGetUniformBlockIndex(handle, "Matrices");
+	//glUniformBlockBinding(handle, blockIndex, SLOT_MATRIX);
+
+	UniformBlockLinkingHelper(handle, "Matrices", SLOT_MATRIX);
+}

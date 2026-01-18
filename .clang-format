@@ -1,6 +1,7 @@
 Language: Cpp
 BasedOnStyle: LLVM
 
+IndentWidth: 4
 AccessModifierOffset: -4
 AlignAfterOpenBracket: DontAlign
 AlignConsecutiveDeclarations: true
@@ -40,6 +41,5 @@ SortIncludes: false
 SpaceBeforeCaseColon: false
 TabWidth: 4
 UseTab: Always
-IndentWidth: 4
 ColumnLimit: 0
 CommentPragmas: '^[^ ]'   # preventing comment indent

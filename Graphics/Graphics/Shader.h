@@ -24,7 +24,7 @@ namespace ShaderHelper
 class [[nodiscard]] Shader
 {
 public:
-	Shader() noexcept = delete;
+	Shader() noexcept = default;
 	~Shader();
 	Shader(const std::filesystem::path& vertex_source,
 		const std::filesystem::path& fragment_source) noexcept;
@@ -42,6 +42,8 @@ public:
 	void SendUniformVariable(const char* name, const mat4<float>& m) const noexcept;
 	void BindTexture(const char* uniformName, const int value, const unsigned int textureHandle) const noexcept;
 
+	void UniformBlocksAutoLink();
+
 private:
-	unsigned int handleToShader = 0;
+	unsigned int handle = 0;
 };

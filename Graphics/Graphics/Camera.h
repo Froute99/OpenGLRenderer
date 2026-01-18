@@ -13,6 +13,7 @@
 #include <Math/mat4.hpp>
 #include <Math/Angle.hpp>
 
+struct GUD;
 class [[nodiscard]] Camera
 {
 public:
@@ -51,6 +52,8 @@ public:
 	float yaw = -ANGLE::pi / 2.f;
 	float pitch = 0.f;
 	float roll = 0.f;
+
+	void UniformRegistry(GUD& data);
 
 private:
 	vec3<float> eye{ 0.0f, 0.0f, 1.0f }; // camera position

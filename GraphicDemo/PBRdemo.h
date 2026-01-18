@@ -71,6 +71,7 @@ private:
 	const char* const surfacesList[6] = { "Plastic", "Glass", "Diamond", "Iron", "Copper", "Gold" };
 	int				  surfaceIndex = 0;
 
-	UBO	matricesBlock{ 128 };
+	//UBO	matricesBlock{ 128 };
 	UBO lightsBlock{ 48 };
+	
 };
