@@ -99,8 +99,6 @@ bool Shader::CanLoadShader(const std::filesystem::path& vertex_source,
 		glGetProgramInfoLog(program, 1024, &length, message);
 	}
 
-	UniformBlocksAutoLink();
-
 	glDetachShader(program, vertexShader);
 	glDetachShader(program, fragmentShader);
 	glDeleteShader(vertexShader);
@@ -110,6 +108,7 @@ bool Shader::CanLoadShader(const std::filesystem::path& vertex_source,
 		glDeleteProgram(handle);
 	}
 	handle = program;
+	UniformBlocksAutoLink();
 
 	return true;
 }
@@ -173,23 +172,20 @@ void Shader::BindTexture(const char* uniformName, const int value, const unsigne
 }
 
 #include "UBO.h"
-void UniformBlockLinkingHelper(unsigned int handle, const std::string& /*blockName*/, BindingSlot slot)
+void UniformBlockLinkingHelper(unsigned int handle, const std::string& blockName, BindingSlot slot)
 {
 	// Try to find block with blockName in the shader
-	GLuint idx = glGetUniformBlockIndex(handle, "Matrices");
+	GLuint idx = glGetUniformBlockIndex(handle, blockName.c_str());
 	if (idx != GL_INVALID_INDEX)
 	{
 		// succeed to find the index in the shader, bind the block with the slot
 		glUniformBlockBinding(handle, idx, slot);
 		return;
 	}
-	//std::cout << "Cannot find block \"" << blockName << "\". Check out the name.\n";
+	std::cout << "Cannot find block \"" << blockName << "\". Check out the name.\n";
 }
 
 void Shader::UniformBlocksAutoLink()
 {
-	//unsigned int blockIndex = glGetUniformBlockIndex(handle, "Matrices");
-	//glUniformBlockBinding(handle, blockIndex, SLOT_MATRIX);
-
 	UniformBlockLinkingHelper(handle, "Matrices", SLOT_MATRIX);
 }
