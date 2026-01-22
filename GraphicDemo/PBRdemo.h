@@ -52,9 +52,9 @@ private:
 	float		 ambientOcclusion;
 	float		 metallic;
 
-	vec3<float> lightPosition;
-	vec3<float> lightColor;
-	float		lightIntensity;
+	//vec3<float> lightPosition;
+	//vec3<float> lightColor;
+	//float		lightIntensity;
 
 	Shader		 hdrShader;
 	unsigned int hdrFBO;	  // framebuffer object handle for HDR
@@ -70,8 +70,5 @@ private:
 
 	const char* const surfacesList[6] = { "Plastic", "Glass", "Diamond", "Iron", "Copper", "Gold" };
 	int				  surfaceIndex = 0;
-
-	//UBO	matricesBlock{ 128 };
-	UBO lightsBlock{ 48 };
 	
 };

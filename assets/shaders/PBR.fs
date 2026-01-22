@@ -15,8 +15,10 @@ uniform float roughness;
 uniform float ao;
 uniform float metallic;
 
-layout (std140) uniform Lights
+layout (std140) uniform Matrices
 {
+    uniform mat4 view;
+    uniform mat4 projection;
     uniform vec3 lightPositions;
     uniform vec3 lightColors;
     uniform float lightIntensity;

@@ -180,6 +180,7 @@ void UniformBlockLinkingHelper(unsigned int handle, const std::string& blockName
 	{
 		// succeed to find the index in the shader, bind the block with the slot
 		glUniformBlockBinding(handle, idx, slot);
+		std::cout << "\"" << blockName << "\" block found and linked\n";
 		return;
 	}
 	std::cout << "Cannot find block \"" << blockName << "\". Check out the name.\n";

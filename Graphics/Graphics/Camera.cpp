@@ -23,9 +23,10 @@ mat4<float> Camera::BuildViewMatrix() const noexcept
 	return Matrix4::BuildLookAt(eye, eye + front, up);
 }
 
-void Camera::UniformRegistry(GUD& data)
+void Camera::UniformRegistry(GlobalUniformData& data)
 {
 	data.viewMatrix = BuildViewMatrix();
+	data.cameraPosition = GetEyePosition();
 }
 
 void Camera::SetFront(const vec3<float>& value) noexcept

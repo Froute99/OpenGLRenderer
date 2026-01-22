@@ -17,42 +17,38 @@ static unsigned int globalBindingPoint = 1;
 enum BindingSlot
 {
 	SLOT_MATRIX = 0,		// SLOT_GLOBAL
-	SLOT_OBJECT = 1,
-	SLOT_MATERIAL = 2,
+	SLOT_MATERIAL = 1,
 	MAX_SLOTS
 };
 
 // Generalized Uniform Data
-struct GUD
+struct GlobalUniformData
 {
 	//mat4<float> ndcMatrix;
 	mat4<float> viewMatrix;
 	mat4<float> projectionMatrix;
-	//vec3<float> lightPosition;
-	//vec3<float> lightColor;
-	//float		lightIntensity;
-	//vec3<float> cameraPosition;
-	//uniform vec3 lightPosition;
-	//uniform vec3 lightColors;
-	//uniform float lightIntensity;
-	//uniform vec3 camPos;
+	vec3<float> lightPosition;
+	vec3<float> lightColor;
+	float		lightIntensity;
+	vec3<float> cameraPosition;
 };
 
-class GUBO			// Later, this class will be substitute UBO, and change the name to UBO
+class GlobalUniformBuffer			// Later, this class will be substitute UBO, and change the name to UBO
 {
 public:
-	GUBO();
+	GlobalUniformBuffer();
 	void Bind(unsigned int shaderHandle);
-	void Update(GUD newData);			// Seralization
+	void Update(GlobalUniformData newData);			// Seralization
 
 private:
 	unsigned int handle;
 
 };
 
+// Split to separated header
 class GlobalUniformManager		// Singleton, Observer, DirtyFlag
 {
-	using Updator = std::function<void(GUD&)>;
+	using Updator = std::function<void(GlobalUniformData&)>;
 public:
 	static GlobalUniformManager& GetInstance()
 	{
@@ -62,7 +58,7 @@ public:
 
 	GlobalUniformManager() {}
 
-	void Init(unsigned int shaderHandle) { ubo.Bind(shaderHandle); }
+	void Init(unsigned int shaderHandle) { buffer.Bind(shaderHandle); }
 
 	void RegisterUpdator(Updator updator)
 	{
@@ -71,25 +67,30 @@ public:
 
 	void Update()
 	{
-		//if (!isDirty)
-		//	return;
+		if (!isDirty)
+			return;
 
 		for (auto& updator : updators)
 		{
-			updator(newGUD);
+			updator(data);
 		}
-		// GUBO update with newGUD
-		ubo.Update(newGUD);
+		// GlobalUniformBuffer update with data
+		buffer.Update(data);
 
 		isDirty = false;
 	}
 
 	void SetDirty() { isDirty = true; }
 
-//private:
-	GUD									   newGUD;
+	// Temporal
+	void SetLightPosition(const vec3<float>& value) { data.lightPosition = value; }
+	void SetLightColor(const vec3<float>& value) { data.lightColor = value; }
+	void SetLightIntensity(const float value) { data.lightIntensity = value; }
+
+private:
+	GlobalUniformData	 data;
 	std::vector<Updator> updators;
-	GUBO								   ubo;
+	GlobalUniformBuffer				 buffer;
 
 	bool isDirty = true;		// Dirty Flag
 
@@ -97,21 +98,5 @@ public:
 	GlobalUniformManager& operator=(const GlobalUniformManager&) = delete;
 	GlobalUniformManager(GlobalUniformManager&&) = delete;
 	GlobalUniformManager& operator=(GlobalUniformManager&&) = delete;
-};
-
-class UBO
-{
-public:
-	UBO(int size);
-	void BindTo(const unsigned int shaderHandle, const char* blockName) noexcept;
-	void WriteData(unsigned int offset, unsigned int size, const void* data);
-	
-	// For debug
-	unsigned int GetHandle() const noexcept { return handle; }
-
-private:
-	unsigned int handle;
-	unsigned int bindingPoint = 0;
-	//unsigned int offset = 0;
 
 };

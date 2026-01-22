@@ -77,36 +77,27 @@ void PBRDemo::Initialize()
 	roughnessMap->LoadFromPath("../assets/Models/rustediron2_roughness.png");
 	normalMap->LoadFromPath("../assets/Models/rustediron2_normal.png");
 
-	//matricesBlock.BindTo(pbrShader->GetHandleToShader(), "Matrices");
-	//matricesBlock.BindTo(texturedPbrShader->GetHandleToShader(), "Matrices");
-	GlobalUniformManager::GetInstance().Init(pbrShader->GetHandleToShader());
-	lightsBlock.BindTo(pbrShader->GetHandleToShader(), "Lights");
+	GlobalUniformManager& uniformManager = GlobalUniformManager::GetInstance();
+	uniformManager.Init(pbrShader->GetHandleToShader());
+	uniformManager.SetLightPosition({ 3.6f, 0.55f, -0.4f });
+	uniformManager.SetLightColor({ 1.f });
+	uniformManager.SetLightIntensity(10.f);
 
 	sphereColor = vec3<float>(1.f, 0.f, 0.f);
 	roughness = 0.1f;
 	ambientOcclusion = 0.1f;
 	metallic = 0.8f;
 
-	lightPosition = { 3.6f, 0.55f, -0.4f };
-	lightColor = { 1.f };
-	lightIntensity = 10.f;
+	//lightPosition = { 3.6f, 0.55f, -0.4f };
+	//lightColor = { 1.f };
+	//lightIntensity = 10.f;
 }
 
 void PBRDemo::Update(float /*dt*/)
 {
-	const vec3<float>& camPos = camera.GetEyePosition();
-	lightsBlock.WriteData(0, 12, &lightPosition[0]);
-	lightsBlock.WriteData(16, 12, &lightColor[0]);
-	lightsBlock.WriteData(28, 4, &lightIntensity);
-	lightsBlock.WriteData(32, 12, &camPos[0]);
-
 	const mat4<float>& View = camera.BuildViewMatrix();
 	const mat4<float>& Projection = view.BuildProjectionMatrix();
 	GlobalUniformManager::GetInstance().Update();
-	//matricesBlock.WriteData(0, 128, &GlobalUniformManager::GetInstance().newGUD);
-	//matricesBlock.WriteData(0, 64, &View);
-	//matricesBlock.WriteData(64, 64, &Projection);
-	//GlobalUniformManager::GetInstance().Update();
 
 	Shader* pbrShader = ShaderManager::GetShader(ShaderDefinition::PBR);
 	pbrShader->Use();
@@ -118,11 +109,6 @@ void PBRDemo::Update(float /*dt*/)
 	pbrShader->SendUniformVariable("roughness", roughness);
 	pbrShader->SendUniformVariable("ao", ambientOcclusion);
 	pbrShader->SendUniformVariable("metallic", metallic);
-
-	pbrShader->SendUniformVariable("lightPositions", lightPosition);
-	pbrShader->SendUniformVariable("lightColors", lightColor);
-	pbrShader->SendUniformVariable("lightIntensity", lightIntensity);
-	pbrShader->SendUniformVariable("camPos", camPos);
 
 	sphere1->Draw();
 
@@ -279,9 +265,9 @@ void PBRDemo::DrawGUI()
 		ImGui::Begin("Lights");
 		ImGui::SetWindowCollapsed(false);
 
-		ImGui::NewLine();
-		ImGui::DragFloat3("Light 1 Position", &lightPosition.x, 0.02f);
-		ImGui::ColorEdit3("Light 1 Color", &lightColor.x);
+		//ImGui::NewLine();
+		//ImGui::DragFloat3("Light 1 Position", &lightPosition.x, 0.02f);
+		//ImGui::ColorEdit3("Light 1 Color", &lightColor.x);
 
 		ImGui::End();
 	}

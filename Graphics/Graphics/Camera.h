@@ -13,7 +13,7 @@
 #include <Math/mat4.hpp>
 #include <Math/Angle.hpp>
 
-struct GUD;
+struct GlobalUniformData;
 class [[nodiscard]] Camera
 {
 public:
@@ -53,7 +53,7 @@ public:
 	float pitch = 0.f;
 	float roll = 0.f;
 
-	void UniformRegistry(GUD& data);
+	void UniformRegistry(GlobalUniformData& data);
 
 private:
 	vec3<float> eye{ 0.0f, 0.0f, 1.0f }; // camera position

@@ -12,6 +12,10 @@ layout (std140) uniform Matrices
 {
     uniform mat4 view;
     uniform mat4 projection;
+    uniform vec3 lightPositions;
+    uniform vec3 lightColors;
+    uniform float lightIntensity;
+    uniform vec3 camPos;
 };
 
 void main()

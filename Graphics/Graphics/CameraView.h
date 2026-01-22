@@ -19,7 +19,7 @@ enum FrameOfReference
 	Normalize
 };
 
-struct GUD;
+struct GlobalUniformData;
 
 class [[nodiscard]] CameraView
 {
@@ -37,7 +37,7 @@ public:
 	mat4<float> BuildProjectionMatrix() const noexcept;
 	const mat4<float>& GetProjectionMatrix() const noexcept;
 
-	void UniformRegistry(GUD& data);
+	void UniformRegistry(GlobalUniformData& data);
 
 private:
 	mat4<float> projectionMatrix;

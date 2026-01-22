@@ -37,7 +37,7 @@ mat4<float> CameraView::BuildProjectionMatrix() const noexcept
 	//return Matrix4::InfiniteProjectionMatrix(ANGLE::DegreeToRadian(fov), aspectRatio, near);
 }
 
-void CameraView::UniformRegistry(GUD& data)
+void CameraView::UniformRegistry(GlobalUniformData& data)
 {
 	data.projectionMatrix = BuildProjectionMatrix();
 }
