@@ -21,17 +21,20 @@ enum BindingSlot
 	MAX_SLOTS
 };
 
+#pragma warning(push)
+#pragma warning(disable : 4324)
 // Generalized Uniform Data
 struct GlobalUniformData
 {
 	//mat4<float> ndcMatrix;
-	mat4<float> viewMatrix;
-	mat4<float> projectionMatrix;
-	vec3<float> lightPosition;
-	vec3<float> lightColor;
-	float		lightIntensity;
-	vec3<float> cameraPosition;
+	mat4<float> viewMatrix;				// 0
+	mat4<float> projectionMatrix;		// 64
+	vec3<float> lightPosition;			// 128
+	alignas(16) vec3<float> lightColor; // 144
+	float		lightIntensity = 1.f;	// 160
+	vec3<float> cameraPosition;			// 176
 };
+#pragma warning(pop)
 
 class GlobalUniformBuffer			// Later, this class will be substitute UBO, and change the name to UBO
 {

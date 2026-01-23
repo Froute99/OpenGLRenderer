@@ -81,7 +81,7 @@ void PBRDemo::Initialize()
 	uniformManager.Init(pbrShader->GetHandleToShader());
 	uniformManager.SetLightPosition({ 3.6f, 0.55f, -0.4f });
 	uniformManager.SetLightColor({ 1.f });
-	uniformManager.SetLightIntensity(10.f);
+	uniformManager.SetLightIntensity(200.f);
 
 	sphereColor = vec3<float>(1.f, 0.f, 0.f);
 	roughness = 0.1f;
