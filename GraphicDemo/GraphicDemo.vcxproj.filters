@@ -30,6 +30,9 @@
     <ClCompile Include="TestStage.cpp">
       <Filter>Demo\Test</Filter>
     </ClCompile>
+    <ClCompile Include="StressTestStage.cpp">
+      <Filter>Demo\StressTest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -63,6 +66,9 @@
     <ClInclude Include="TestStage.h">
       <Filter>Demo\Test</Filter>
     </ClInclude>
+    <ClInclude Include="StressTestStage.h">
+      <Filter>Demo\StressTest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Demo">
@@ -94,6 +100,9 @@
     </Filter>
     <Filter Include="Demo\Test">
       <UniqueIdentifier>{07984a7f-8356-4014-9ef6-95fc04f08217}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Demo\StressTest">
+      <UniqueIdentifier>{a377768b-c158-4843-a38a-76307a402a9f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

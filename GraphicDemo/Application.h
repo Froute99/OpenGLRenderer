@@ -29,6 +29,7 @@ public:
 		//HIERARCHY_DEMO,
 		//COMPUTESHADERDEMO,
 		//TEST,
+		//STRESS_TEST,
 		DEMOSIZE
 	};
 

@@ -24,7 +24,7 @@ public:
 	void UpdateWrapper(float dt) noexcept;
 	virtual void DrawGUI() = 0;
 
-	virtual void ResetCamera() = 0;
+	virtual void ResetCamera() {}
 
 	virtual ~Demo() {}
 

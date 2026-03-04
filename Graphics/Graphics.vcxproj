@@ -202,12 +202,14 @@
     <ClInclude Include="imgui\imstb_rectpack.h" />
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Math\Angle.hpp" />
     <ClInclude Include="Math\mat3.hpp" />
     <ClInclude Include="Math\mat4.hpp" />
     <ClInclude Include="Math\vec2.hpp" />
     <ClInclude Include="Math\vec3.hpp" />
     <ClInclude Include="Math\vec4.hpp" />
+    <ClInclude Include="RenderQueue.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="ShaderPaths.h" />
   </ItemGroup>
@@ -240,6 +242,7 @@
     <ClCompile Include="imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
+    <ClCompile Include="RenderQueue.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

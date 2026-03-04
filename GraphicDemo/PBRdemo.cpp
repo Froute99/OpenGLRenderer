@@ -47,13 +47,13 @@ PBRDemo::~PBRDemo()
 void PBRDemo::Initialize()
 {
 	Shader* pbrShader = ShaderManager::GetShader(ShaderDefinition::PBR);
-	//Shader* texturedPbrShader = ShaderManager::GetShader(ShaderDefinition::TexturedPBR);
 	//pbrShader.LoadShaderFrom("../assets/shaders/PBR.vert", "../assets/shaders/PBR.frag");
 	//texturedShader.CanLoadShader("../assets/shaders/PBR_Textured.vert", "../assets/shaders/PBR_Textured.frag");
 	if (!envMap.CanLoad("../assets/newport_loft.hdr", view.BuildProjectionMatrix()))
 	{
 		std::cout << "Failed to load env map\n";
 	}
+	Shader* texturedPbrShader = ShaderManager::GetShader(ShaderDefinition::TexturedPBR);
 
 	sphere1 = SceneObject::CreateSphere({ 0, 0, 0 });
 	sphere1->SetObjectType(ObjectType::NonTextured);
@@ -95,8 +95,6 @@ void PBRDemo::Initialize()
 
 void PBRDemo::Update(float /*dt*/)
 {
-	const mat4<float>& View = camera.BuildViewMatrix();
-	const mat4<float>& Projection = view.BuildProjectionMatrix();
 	GlobalUniformManager::GetInstance().Update();
 
 	Shader* pbrShader = ShaderManager::GetShader(ShaderDefinition::PBR);
@@ -125,30 +123,27 @@ void PBRDemo::Update(float /*dt*/)
 	//pbrShader->SendUniformVariable("lightIntensity", lightIntensity);
 	//pbrShader->SendUniformVariable("camPos", camera.GetEyePosition());
 
-	//sphere2->Draw();
+	sphere2->Draw();
 
-	//Shader* texturedPbrShader = ShaderManager::GetShader(ShaderDefinition::TexturedPBR);
-	//texturedPbrShader->Use();
-	//envMap.BindIBLTexture(texturedPbrShader);
-	//texturedPbrShader->BindTexture("albedoMap", 3, albedoMap->GetTexturehandle());
-	//texturedPbrShader->BindTexture("metallicMap", 4, metallicMap->GetTexturehandle());
-	//texturedPbrShader->BindTexture("roughnessMap", 5, roughnessMap->GetTexturehandle());
-	//texturedPbrShader->BindTexture("normalMap", 6, normalMap->GetTexturehandle());
+	Shader* texturedPbrShader = ShaderManager::GetShader(ShaderDefinition::TexturedPBR);
+	texturedPbrShader->Use();
+	envMap.BindIBLTexture(texturedPbrShader);
+	texturedPbrShader->BindTexture("albedoMap", 3, albedoMap->GetTexturehandle());
+	texturedPbrShader->BindTexture("metallicMap", 4, metallicMap->GetTexturehandle());
+	texturedPbrShader->BindTexture("roughnessMap", 5, roughnessMap->GetTexturehandle());
+	texturedPbrShader->BindTexture("normalMap", 6, normalMap->GetTexturehandle());
 
-	//texturedPbrShader->SendUniformVariable("model", ironSphere->GetModelToWorld());
+	texturedPbrShader->SendUniformVariable("model", ironSphere->GetModelToWorld());
 
 	//texturedPbrShader->SendUniformVariable("lightPositions", lightPosition);
 	//texturedPbrShader->SendUniformVariable("lightColors", lightColor);
 	//texturedPbrShader->SendUniformVariable("camPos", camera.GetEyePosition());
 
-	//ironSphere->Draw();
+	ironSphere->Draw();
 
+	const mat4<float>& View = camera.BuildViewMatrix();
+	const mat4<float>& Projection = view.BuildProjectionMatrix();
 	envMap.Render(Matrix4::CutOffTranslation(View), Projection);
-}
-
-void PBRDemo::ResetCamera()
-{
-
 }
 
 void PBRDemo::HandleResizeEvent(const int new_width, const int new_height)

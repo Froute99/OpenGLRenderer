@@ -19,6 +19,7 @@
 #include "PBRdemo.h"
 //#include "TexturedPBRDemo.h"
 #include "TestStage.h"
+#include "StressTestStage.h"
 
 bool Application::IsRunning() const
 {
@@ -53,6 +54,7 @@ void Application::Initialize()
 	//demo[HIERARCHY_DEMO] = std::make_unique<TransformHierarchyDemo>(window);
 	//demo[TEST] = std::make_unique<TestStage>(window);
 	//demo[COMPUTESHADERDEMO] = std::make_unique<ComputeShaderDemo>(window);
+	//demo[STRESS_TEST] = std::make_unique<StressTestStage>(window);
 }
 
 void Application::Update(float dt)

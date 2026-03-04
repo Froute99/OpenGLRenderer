@@ -25,7 +25,6 @@ public:
 
 	void Initialize() override;
 	void Update(float dt) override;
-	void ResetCamera() override;
 
 	void HandleResizeEvent(const int new_width, const int new_height) override final;
 	void HandleKeyPress(KeyboardButton button) override final;
@@ -70,5 +69,5 @@ private:
 
 	const char* const surfacesList[6] = { "Plastic", "Glass", "Diamond", "Iron", "Copper", "Gold" };
 	int				  surfaceIndex = 0;
-	
+
 };
