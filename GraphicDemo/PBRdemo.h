@@ -20,7 +20,10 @@ class PBRDemo : public Demo
 {
 public:
 	explicit PBRDemo(OpenGLWindow& window)
-		: Demo(window) { Initialize(); }
+		: Demo(window)
+	{
+		Initialize();
+	}
 	~PBRDemo();
 
 	void Initialize() override;

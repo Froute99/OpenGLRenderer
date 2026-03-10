@@ -29,7 +29,6 @@ enum class ShaderDefinition
 	Skybox
 };
 
-
 // Used Singleton Pattern
 #include <map>
 #include <memory>

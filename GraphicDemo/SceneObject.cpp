@@ -218,11 +218,12 @@ void SceneObject::Draw()
 	{
 		// Activate and bind textures
 	}
-	unsigned int numMeshes = meshes.size();
-	for (unsigned int i = 0; i < numMeshes; ++i)
+	//unsigned int numMeshes = meshes.size();
+	unsigned int size = vertexObjects.size();
+	for (unsigned int i = 0; i < size; ++i)
 	{
 		glBindVertexArray(vertexObjects[i]->VAO);
-		glDrawElements(vertexObjects[i]->GetPattern(), meshes[i]->GetIndicesCount(), GL_UNSIGNED_INT, 0);
+		glDrawElements(vertexObjects[i]->GetPattern(), vertexObjects[i]->GetIndicesCount(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 	}
 }

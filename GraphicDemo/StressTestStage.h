@@ -13,6 +13,7 @@
 #include <Graphics/IBL.h>
 #include <Graphics/UBO.h>
 #include <vector>
+#include "RenderQueue.h"			// optimization test
 
 class SceneObject;
 class StressTestStage : public Demo
@@ -23,7 +24,7 @@ public:
 	{
 		Initialize();
 	}
-	~StressTestStage() {}
+	~StressTestStage() noexcept override {}
 
 	void Initialize() override;
 	void Update(float dt) override;
@@ -31,9 +32,12 @@ public:
 	void DrawGUI() override;
 
 private:
-	float		   frameTime = 0.f;
+	float frameTime = 0.f;
 	int	  frameCount = 0;
 
 	EnvironmentMap envMap{ GetScreenWidth(), GetScreenHeight() };
 	std::vector<SceneObject*> objects;
+	RenderQueue				  rq;
+
+	std::vector<SimpleMaterialPBR*> stockMaterials;
 };

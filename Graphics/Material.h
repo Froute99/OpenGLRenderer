@@ -9,12 +9,24 @@
 
 
 #pragma once
+#include "Graphics/Shader.h"
 #include <Math/vec3.hpp>
 
-struct SimpleMaterialPBR
+class SimpleMaterialPBR
 {
-	vec3<float> sphereColor{ 1.f, 0.f, 0.f };
-	float		roughness = 0.1f;
-	float		ambientOcclusion = 0.1f;
-	float		metallic = 0.8f;
+public:
+	vec3<float> sphereColor;
+	float		roughness;
+	float		ambientOcclusion;
+	float		metallic;
+
+	void ApplyToShader(Shader* shader)
+	{
+		// TODO: check the entire sequence of send uniform variable is
+		// guaranteed while the proper shader is used
+		shader->SendUniformVariable("albedo", sphereColor);
+		shader->SendUniformVariable("roughness", roughness);
+		shader->SendUniformVariable("ao", ambientOcclusion);
+		shader->SendUniformVariable("metallic", metallic);
+	}
 };

@@ -65,6 +65,9 @@ public:
 	ObjectType GetObjectType() { return objectType; }
 	void	   SetObjectType(ObjectType newObjectType) { objectType = newObjectType; }
 
+	// TODO: this is temp function. 
+	VertexObject* GetVO() { return vertexObjects[0]; }
+
 private:
 	ObjectType objectType = ObjectType::Textured;
 

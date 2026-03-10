@@ -10,6 +10,7 @@
 
 #include "ShaderManager.h"
 #include <Graphics/Shader.h>
+#include <glew.h>
 
 Shader* ShaderManager::GetShader(ShaderDefinition name)
 {

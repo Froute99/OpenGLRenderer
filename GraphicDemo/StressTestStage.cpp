@@ -12,16 +12,22 @@
  */
 
 #include "StressTestStage.h"
-#include <ShaderManager.h>		// access to shader instance
 #include "SceneObject.h"
+#include <ShaderManager.h>		// access to shader instance
 #include <iostream>				// printing fps
 
-// need frame counter
-// create mass of objects
+// imguis
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_glfw.h>
+#include <imgui/imgui_impl_opengl3.h>
+
+#include "Material.h"
+
+#include <random>
 
 void StressTestStage::Initialize()
 {
-	// vsync off
+	// TODO: vsync off
 
 	Shader* pbrShader = ShaderManager::GetShader(ShaderDefinition::PBR);
 	if (!envMap.CanLoad("../assets/newport_loft.hdr", view.BuildProjectionMatrix()))
@@ -29,19 +35,52 @@ void StressTestStage::Initialize()
 		std::cout << "Failed to load env map\n";
 	}
 
-	const int MAX_OBJECT_COUNT = 1;
-	for (int i = 0; i < MAX_OBJECT_COUNT; ++i)
+	GlobalUniformManager& uniformManager = GlobalUniformManager::GetInstance();
+	uniformManager.Init(pbrShader->GetHandleToShader());
+	uniformManager.SetLightPosition({ 3.6f, 0.55f, -0.4f });
+	uniformManager.SetLightColor({ 1.f });
+	uniformManager.SetLightIntensity(200.f);
+
+	// 500 meshes, 20 materials 500*20 = 10000
+	const int MAX_OBJECT_COUNT = 500;
+	const int MAX_MATERIAL_COUNT = 20;
+
+	std::random_device					  rd;
+	std::mt19937						  ren(rd());		// random engine
+	std::uniform_real_distribution<float> fd(0.f, 1.f);		// float distribution
+	stockMaterials.reserve(MAX_MATERIAL_COUNT);
+	for (int i = 0; i < MAX_MATERIAL_COUNT; ++i)
 	{
-		SceneObject* object = SceneObject::CreateSphere({ 0, 0, 0 });
-		object->SetObjectType(ObjectType::NonTextured);
-		object->Move({ 0, 0, 2.f * i });
-		objects.push_back(object);
+		SimpleMaterialPBR* m = new SimpleMaterialPBR();
+
+		m->sphereColor = { fd(ren), fd(ren), fd(ren) };
+		m->roughness = fd(ren);
+		m->ambientOcclusion = fd(ren);
+		m->metallic = fd(ren);
+		stockMaterials.push_back(m);
 	}
 
+	std::uniform_int_distribution<int> d(0, MAX_MATERIAL_COUNT - 1);
+	for (int i = 0; i < MAX_OBJECT_COUNT * MAX_MATERIAL_COUNT; ++i)
+	{
+		float x = (float)(i % 100) * 2.f - 50.f;
+		float y = (float)(i / 100) * 2.f - 50.f;
+
+		SceneObject* object = SceneObject::CreateSphere({ 0, 0, 0 });
+		object->SetObjectType(ObjectType::NonTextured);
+		object->Move({ x, y, -50.f });
+		objects.push_back(object);
+
+		SimpleMaterialPBR* m = stockMaterials[d(ren)];
+		RenderCommand cmd{ pbrShader, object->GetVO(), object->GetModelToWorld(), m };
+		rq.Push(cmd);
+	}
 }
 
 void StressTestStage::Update(float dt)
 {
+	GlobalUniformManager::GetInstance().Update();
+
 	// frame count
 	frameTime += dt;
 	++frameCount;
@@ -53,39 +92,43 @@ void StressTestStage::Update(float dt)
 		std::cout << fps << "\r";
 	}
 
-	// TODO: make a non-batch drawing sequence
-	
-	// below is a pseudo-code of batch drawing sequence
-	// Renderqueue q;
-	// for (each object)
-	// {
-	// create render command
-	// push it to render queue
-	// }
-	// q.sort, draw, clear
-
 	Shader* pbrShader = ShaderManager::GetShader(ShaderDefinition::PBR);
 	pbrShader->Use();
 	envMap.BindIBLTexture(pbrShader);
 
-	vec3<float> sphereColor{ 1.f, 0.f, 0.f };
-	float roughness = 0.1f;
-	float ambientOcclusion = 0.1f;
-	float metallic = 0.8f;
+	rq.Sort();
+	rq.Draw();
 
-	// TODO: these should go be the material
-	pbrShader->SendUniformVariable("albedo", sphereColor);
-	pbrShader->SendUniformVariable("roughness", roughness);
-	pbrShader->SendUniformVariable("ao", ambientOcclusion);
-	pbrShader->SendUniformVariable("metallic", metallic);
+	// TODO: clear should be go to shutdown or stage clear function
+	//rq.Clear();
 
-	for (Object* object : objects)
-	{
-		pbrShader->SendUniformVariable("model", object->GetModelToWorld());
-		object->Draw();
-	}
+
+	//vec3<float> sphereColor{ 1.f, 0.f, 0.f };
+	//float roughness = 0.1f;
+	//float ambientOcclusion = 0.1f;
+	//float metallic = 0.8f;
+
+	//pbrShader->SendUniformVariable("albedo", sphereColor);
+	//pbrShader->SendUniformVariable("roughness", roughness);
+	//pbrShader->SendUniformVariable("ao", ambientOcclusion);
+	//pbrShader->SendUniformVariable("metallic", metallic);
+
+	//for (SceneObject* object : objects)
+	//{
+	//	pbrShader->SendUniformVariable("model", object->GetModelToWorld());
+	//	object->Draw();
+	//}
+
+	const mat4<float>& View = camera.BuildViewMatrix();
+	const mat4<float>& Projection = view.BuildProjectionMatrix();
+	envMap.Render(Matrix4::CutOffTranslation(View), Projection);
 }
 
 void StressTestStage::DrawGUI()
 {
+	//ImGui_ImplOpenGL3_NewFrame();
+	//ImGui_ImplGlfw_NewFrame();
+
+	////ImGui::Render();
+	//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

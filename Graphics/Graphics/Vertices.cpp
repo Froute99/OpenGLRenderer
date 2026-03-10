@@ -44,8 +44,9 @@ void VertexObject::InitializeWithMeshAndLayout(const Mesh3D& mesh, const Vertice
 		break;
 	}
 	layout = vertex_layout;
-	verticesCount = static_cast<int>(mesh.GetPointsCount());
+	verticesCount = mesh.GetPointsCount();
 	bufferVertexCapacity = static_cast<int>(verticesCount * layout.GetVertexSize());
+	indicesCount = mesh.GetIndicesCount();
 
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -80,16 +81,6 @@ void VertexObject::SelectVAO(const VertexObject& vertices) noexcept
 void VertexObject::SelectNothing()
 {
 	glBindVertexArray(0);
-}
-
-unsigned VertexObject::GetPattern() const noexcept
-{
-	return pattern;
-}
-
-int VertexObject::GetVerticesCount() const noexcept
-{
-	return verticesCount;
 }
 
 void VertexObject::WriteMeshDataToVertexBuffer3D(const Mesh3D& mesh) const noexcept

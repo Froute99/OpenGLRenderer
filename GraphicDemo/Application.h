@@ -21,7 +21,7 @@ class Application : public EventHandler
 public:
 	enum DEMOINDEX
 	{
-		PBR,
+		//PBR,
 		//PHONGSHADING,
 		//TEXTUREDPBR,
 		//TEXTUREDRAWING,
@@ -29,7 +29,7 @@ public:
 		//HIERARCHY_DEMO,
 		//COMPUTESHADERDEMO,
 		//TEST,
-		//STRESS_TEST,
+		STRESS_TEST,
 		DEMOSIZE
 	};
 

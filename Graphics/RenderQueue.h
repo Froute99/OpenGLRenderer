@@ -11,19 +11,23 @@
 #pragma once
 #include <Math/mat4.hpp>
 #include <vector>
-#include "Material.h"
 
 class Shader;
+class SimpleMaterialPBR;
+class VertexObject;
 
 struct RenderCommand
 {
-	RenderCommand(Shader* shader, SimpleMaterialPBR* material, int handleToVAO, const mat4<float>& modelMatrix)
-		: shader(shader), material(material), handleToVAO(handleToVAO), modelMatrix(modelMatrix)
+	RenderCommand(Shader* shader, VertexObject* vo, const mat4<float>& modelMatrix, SimpleMaterialPBR* m)
+		: shader(shader)
+		, vo(vo)
+		, modelMatrix(modelMatrix)
+		, material(m)
 	{}
 	Shader*				shader;
-	SimpleMaterialPBR*	material;
-	int					handleToVAO;
+	VertexObject*		vo;
 	mat4<float>			modelMatrix;
+	SimpleMaterialPBR*	material;
 };
 
 class RenderQueue

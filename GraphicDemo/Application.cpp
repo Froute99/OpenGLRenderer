@@ -47,14 +47,14 @@ void Application::Initialize()
 	window.ToggleVSync(true);
 	window.ToggleMouse();
 
-	demo[PBR] = std::make_unique<PBRDemo>(window);
+	//demo[PBR] = std::make_unique<PBRDemo>(window);
 	//demo[PHONGSHADING] = std::make_unique<PhongShadingDemo>(window);
 	//demo[TEXTUREDPBR] = std::make_unique<TexturedPBRDemo>(window);
 	//demo[ANIMATION] = std::make_unique<AnimationDemo>(window);
 	//demo[HIERARCHY_DEMO] = std::make_unique<TransformHierarchyDemo>(window);
 	//demo[TEST] = std::make_unique<TestStage>(window);
 	//demo[COMPUTESHADERDEMO] = std::make_unique<ComputeShaderDemo>(window);
-	//demo[STRESS_TEST] = std::make_unique<StressTestStage>(window);
+	demo[STRESS_TEST] = std::make_unique<StressTestStage>(window);
 }
 
 void Application::Update(float dt)
