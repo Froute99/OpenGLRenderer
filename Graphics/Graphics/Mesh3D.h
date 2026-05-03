@@ -25,6 +25,7 @@ public:
 	}
 
 	vec3<float> GetPoint(int index) const noexcept { return points.at(index); }
+	std::vector<vec3<float>> GetPoints() const noexcept { return points; }
 	vec3<float> GetNormal(int index) const noexcept { return normals.at(index); }
 	vec2<float> GetTextureCoordinate(int index) const noexcept { return textureCoordinates.at(index); }
 	Color4f		GetColor(int index) const noexcept { return colors.at(index); }

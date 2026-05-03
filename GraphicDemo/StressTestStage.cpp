@@ -42,8 +42,8 @@ void StressTestStage::Initialize()
 	uniformManager.SetLightIntensity(200.f);
 
 	// 500 meshes, 20 materials 500*20 = 10000
-	const int MAX_OBJECT_COUNT = 500;
-	const int MAX_MATERIAL_COUNT = 20;
+	const int MAX_OBJECT_COUNT = 10000;
+	const int MAX_MATERIAL_COUNT = 1;
 
 	std::random_device					  rd;
 	std::mt19937						  ren(rd());		// random engine
@@ -66,14 +66,47 @@ void StressTestStage::Initialize()
 		float x = (float)(i % 100) * 2.f - 50.f;
 		float y = (float)(i / 100) * 2.f - 50.f;
 
-		SceneObject* object = SceneObject::CreateSphere({ 0, 0, 0 });
-		object->SetObjectType(ObjectType::NonTextured);
+		SceneObject*		object = new SceneObject({ 0, 0, 0 }, { 0, 0, 0 }, 1);
 		object->Move({ x, y, -50.f });
-		objects.push_back(object);
+		Mesh3D* sphereMesh = MESH::BuildSphere();
+		
 
-		SimpleMaterialPBR* m = stockMaterials[d(ren)];
-		RenderCommand cmd{ pbrShader, object->GetVO(), object->GetModelToWorld(), m };
-		rq.Push(cmd);
+		const auto& model = object->GetModelToWorld();
+		const mat3	 normalMat = glm::transpose(glm::inverse(model));
+		
+
+
+		for (const auto& v : sphereMesh->GetPoints())
+		{
+			vec4<float> temp = model * vec4<float>(v, 1.0f);
+			vec3<float> bakedPosition = vec3<float>(temp.x, temp.y, temp.z);
+			vec3<float> normal;
+			vec2<float> texCoord;
+		}
+		for (int i = 0; i < sphereMesh->GetIndicesCount(); ++i)
+		{
+			//indices.push_back(baseIndex + i);
+		}
+		//sphereMesh->GetPoints();
+		//VerticesDescription layout{
+		//	VerticesDescription::Type::Position,
+		//	VerticesDescription::Type::Normal,
+		//	VerticesDescription::Type::TextureCoordinate
+		//};
+
+		//VertexObject* vertexObjects = new VertexObject(sphereMesh, layout);
+		//sphere->AddMesh(sphereMesh);
+		//sphere->vertexObjects.push_back(vertexObjects);
+
+
+		//SceneObject* object = SceneObject::CreateSphere({ 0, 0, 0 });
+		//object->SetObjectType(ObjectType::NonTextured);
+		//object->Move({ x, y, -50.f });
+		//objects.push_back(object);
+
+		//SimpleMaterialPBR* m = stockMaterials[d(ren)];
+		//RenderCommand cmd{ pbrShader, object->GetVO(), object->GetModelToWorld(), m };
+		//rq.Push(cmd);
 	}
 }
 
@@ -96,8 +129,8 @@ void StressTestStage::Update(float dt)
 	pbrShader->Use();
 	envMap.BindIBLTexture(pbrShader);
 
-	rq.Sort();
-	rq.Draw();
+	//rq.Sort();
+	//rq.Draw();
 
 	// TODO: clear should be go to shutdown or stage clear function
 	//rq.Clear();
