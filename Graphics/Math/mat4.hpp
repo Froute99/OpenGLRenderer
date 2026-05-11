@@ -130,6 +130,58 @@ public:
 		assert(0 <= col && col <= 3);
 		return column[col];
 	}
+
+	constexpr const T Determinant() const noexcept
+	{
+		vec3<T> subRow0(column[0][1], column[0][2], column[0][3]);
+		vec3<T> subRow1(column[1][1], column[1][2], column[1][3]);
+		vec3<T> subRow2(column[2][1], column[2][2], column[2][3]);
+		vec3<T> subRow3(column[3][1], column[3][2], column[3][3]);
+
+		T r0 = column[0][0] * mat3<T>(subRow1, subRow2, subRow3).Determinant();
+		T r1 = column[1][0] * mat3<T>(subRow0, subRow2, subRow3).Determinant();
+		T r2 = column[2][0] * mat3<T>(subRow0, subRow1, subRow3).Determinant();
+		T r3 = column[3][0] * mat3<T>(subRow0, subRow1, subRow2).Determinant();
+
+		return r0 - r1 + r2 - r3;
+	}
+
+	constexpr mat4<T> Inverse() noexcept
+	{
+		// cofactor matrix(+, -, checker matrix)
+		// adj matrix(matrix of determinant of sub matrices)
+
+		mat4<T> inverse;
+		T		invDet = T(1) / Determinant();
+
+		for (int r = 0; r < 4; ++r)
+		{
+			for (int c = 0; c < 4; ++c)
+			{
+				mat3<T> sub;
+				int		ii = 0;
+				for (int i = 0; i < 4; ++i)
+				{
+					if (i == r)
+						continue;
+
+					int ji = 0;
+					for (int j = 0; j < 4; ++j)
+					{
+						if (j == c)
+							continue;
+
+						sub[ii][ji] = column[i][j];
+						++ji;
+					}
+					++ii;
+				}
+				int sign = ((r + c) % 2 == 0) ? 1 : -1;
+				inverse[c][r] = invDet * sign * sub.Determinant();
+			}
+		}
+		return inverse;
+	}
 };
 
 template <typename T>

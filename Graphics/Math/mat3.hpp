@@ -98,6 +98,16 @@ public:
 		assert(0 <= col && col <= 2);
 		return column[col];
 	}
+
+	constexpr const T Determinant() const noexcept
+	{
+		return (column[0][0] * column[1][1] * column[2][2]
+			+ column[0][1] * column[1][2] * column[2][0]
+			+ column[0][2] * column[1][0] * column[2][1])
+			- (column[0][2] * column[1][1] * column[2][0]
+				+ column[0][1] * column[1][0] * column[2][2]
+				+ column[0][0] * column[1]);
+	}
 };
 
 template <typename T>
