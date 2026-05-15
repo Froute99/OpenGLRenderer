@@ -60,6 +60,8 @@ void StressTestStage::Initialize()
 		stockMaterials.push_back(m);
 	}
 
+
+
 	std::uniform_int_distribution<int> d(0, MAX_MATERIAL_COUNT - 1);
 	for (int i = 0; i < MAX_OBJECT_COUNT * MAX_MATERIAL_COUNT; ++i)
 	{
@@ -68,34 +70,33 @@ void StressTestStage::Initialize()
 
 		SceneObject*		object = new SceneObject({ 0, 0, 0 }, { 0, 0, 0 }, 1);
 		object->Move({ x, y, -50.f });
-		Mesh3D* sphereMesh = MESH::BuildSphere();
-		
+		Mesh3D* cubeMesh = MESH::BuildCube(1.f);
 
-		const auto& model = object->GetModelToWorld();
-		const mat3	 normalMat = glm::transpose(glm::inverse(model));
-		
+		mat4<float> model = object->GetModelToWorld();
+		mat4<float> normalMatrix = model.Inverse().Transpose();
+		mat3<float> trimMatrix;
 
+		//for (int j = 0; j < cubeMesh->GetPointsCount(); ++j)
+		//{
+		//	vec4<float> temp = model * vec4<float>(cubeMesh->GetPoint(j), 1.0f);
 
-		for (const auto& v : sphereMesh->GetPoints())
-		{
-			vec4<float> temp = model * vec4<float>(v, 1.0f);
-			vec3<float> bakedPosition = vec3<float>(temp.x, temp.y, temp.z);
-			vec3<float> normal;
-			vec2<float> texCoord;
-		}
-		for (int i = 0; i < sphereMesh->GetIndicesCount(); ++i)
-		{
-			//indices.push_back(baseIndex + i);
-		}
-		//sphereMesh->GetPoints();
+		//	vec3<float> bakedPosition = vec3<float>(temp.x, temp.y, temp.z);
+		//	vec3<float> normal = normalMatrix.ToMat3() * cubeMesh->GetNormal(j);
+		//	vec2<float> texCoord = cubeMesh->GetTextureCoordinate(j);
+		//}
+		//for (int i = 0; i < cubeMesh->GetIndicesCount(); ++i)
+		//{
+		//	indices.push_back(baseIndex + i);
+		//}
+		//cubeMesh->GetPoints();
 		//VerticesDescription layout{
 		//	VerticesDescription::Type::Position,
 		//	VerticesDescription::Type::Normal,
 		//	VerticesDescription::Type::TextureCoordinate
 		//};
 
-		//VertexObject* vertexObjects = new VertexObject(sphereMesh, layout);
-		//sphere->AddMesh(sphereMesh);
+		//VertexObject* vertexObjects = new VertexObject(cubeMesh, layout);
+		//sphere->AddMesh(cubeMesh);
 		//sphere->vertexObjects.push_back(vertexObjects);
 
 
@@ -154,7 +155,7 @@ void StressTestStage::Update(float dt)
 
 	const mat4<float>& View = camera.BuildViewMatrix();
 	const mat4<float>& Projection = view.BuildProjectionMatrix();
-	envMap.Render(Matrix4::CutOffTranslation(View), Projection);
+	envMap.Render(View.CutOffTranslation(), Projection);
 }
 
 void StressTestStage::DrawGUI()

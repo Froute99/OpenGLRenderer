@@ -182,6 +182,41 @@ public:
 		}
 		return inverse;
 	}
+
+	constexpr mat4<T> Transpose() noexcept
+	{
+		return mat4<T>{
+			column[0][0], column[1][0], column[2][0], column[3][0],
+			column[0][1], column[1][1], column[2][1], column[3][1],
+			column[0][2], column[1][2], column[2][2], column[3][2],
+			column[0][3], column[1][3], column[2][3], column[3][3]
+		};
+	}
+
+	constexpr mat3<T> ToMat3() noexcept
+	{
+		return mat3<T>{
+			column[0][0], column[0][1], column[0][2],
+			column[1][0], column[1][1], column[1][2],
+			column[2][0], column[2][1], column[2][2]
+		};
+	}
+
+	constexpr mat4<T> CutOffTranslation() const noexcept
+	{
+		mat4<T> result = *this;
+		result.elements[0][3] = 0;
+		result.elements[1][3] = 0;
+		result.elements[2][3] = 0;
+
+		result.elements[3][0] = 0;
+		result.elements[3][1] = 0;
+		result.elements[3][2] = 0;
+
+		result.elements[3][3] = 1;
+
+		return result;
+	}
 };
 
 template <typename T>
@@ -358,17 +393,6 @@ namespace Matrix4
 	}
 
 	template <typename T>
-	constexpr mat4<T> transpose(const mat4<T>& m) noexcept
-	{
-		return mat4<T>{
-			m.column[0].x, m.column[1].x, m.column[2].x, m.column[3].x,
-			m.column[0].y, m.column[1].y, m.column[2].y, m.column[3].y,
-			m.column[0].z, m.column[1].z, m.column[2].z, m.column[3].z,
-			m.column[0].w, m.column[1].w, m.column[2].w, m.column[3].w
-		};
-	}
-
-	template <typename T>
 	constexpr mat4<T> BuildLookAt(const vec3<T>& eyePosition, const vec3<T>& lookAt, const vec3<T>& up)
 	{
 		vec3<float> f = Vector3::normalize(eyePosition - lookAt);
@@ -397,12 +421,6 @@ namespace Matrix4
 		return viewMatrix;
 	}
 
-	// we need 4 matrix build function
-	// 1. General Projection Matrix						Skip this because I always use symmetric view frustum
-	// 2. Infinite Far Plane Projection Matrix			Skip this because I always use symmetric view frustum
-	// 3. General-Symmetric Projection Matrix
-	// 4. Infinite-Symmetric Projection Matrix
-
 	// General-symmetric projection
 	template <typename T>
 	constexpr mat4<T> GeneralProjectionMatrix(T fovYinRadians, T aspect, T zNear, T zFar)
@@ -419,6 +437,7 @@ namespace Matrix4
 		return result;
 	}
 
+	// Infinite-Symmetric Projection Matrix
 	template <typename T>
 	constexpr mat4<T> InfiniteProjectionMatrix(T fovYinRadians, T aspect, T zNear)
 	{
@@ -430,23 +449,6 @@ namespace Matrix4
 		result.elements[2][2] = -static_cast<T>(1);
 		result.elements[2][3] = -static_cast<T>(1);
 		result.elements[3][2] = -static_cast<T>(2) * zNear;
-
-		return result;
-	}
-
-	template <typename T>
-	constexpr mat4<T> CutOffTranslation(const mat4<T>& m)
-	{
-		mat4<T> result = m;
-		result.elements[0][3] = 0;
-		result.elements[1][3] = 0;
-		result.elements[2][3] = 0;
-
-		result.elements[3][0] = 0;
-		result.elements[3][1] = 0;
-		result.elements[3][2] = 0;
-
-		result.elements[3][3] = 1;
 
 		return result;
 	}

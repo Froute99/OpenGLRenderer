@@ -143,7 +143,7 @@ void PBRDemo::Update(float /*dt*/)
 
 	const mat4<float>& View = camera.BuildViewMatrix();
 	const mat4<float>& Projection = view.BuildProjectionMatrix();
-	envMap.Render(Matrix4::CutOffTranslation(View), Projection);
+	envMap.Render(View.CutOffTranslation(), Projection);
 }
 
 void PBRDemo::HandleResizeEvent(const int new_width, const int new_height)

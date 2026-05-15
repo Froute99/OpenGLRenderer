@@ -21,7 +21,7 @@ layout (std140) uniform Matrices
 void main()
 {
     WorldPos = vec3(model * vec4(aPosition, 1.0));
-    Normal = mat3(transpose(inverse(model))) * aNormal;       // removeing traslations. And this should be done in cpu process
+    Normal = mat3(transpose(inverse(model))) * aNormal;       // removing translations. And this should be done in cpu process
     TexCoords = aTexCoords;
 
     gl_Position = projection * view * vec4(WorldPos, 1.0);

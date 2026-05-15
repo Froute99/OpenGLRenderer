@@ -39,7 +39,7 @@ public:
 	unsigned GetVertexSize() const noexcept;
 
 	void EnableAttributes() const noexcept;
-	
+
 private:
 	unsigned vertexSize = 0;
 	std::vector<TypeDescription> typeDescription{};
