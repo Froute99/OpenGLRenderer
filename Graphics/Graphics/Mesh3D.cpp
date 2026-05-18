@@ -69,6 +69,11 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	cube->AddNormal({ 0.f, 0.f, 1.f });
 	cube->AddNormal({ 0.f, 0.f, 1.f });
 
+	cube->AddTexCoord({ 0.0f, 0.0f });			// bottom-left
+	cube->AddTexCoord({ 1.0f, 0.0f });			// bottom-right
+	cube->AddTexCoord({ 1.0f, 1.0f });			// top-right
+	cube->AddTexCoord({ 0.0f, 1.0f });			// top-left
+
 	cube->AddIndices({ 0, 1, 2 });
 	cube->AddIndices({ 2, 3, 0 });
 
@@ -82,6 +87,11 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	cube->AddNormal({ 1.f, 0.f, 0.f });
 	cube->AddNormal({ 1.f, 0.f, 0.f });
 	cube->AddNormal({ 1.f, 0.f, 0.f });
+
+	cube->AddTexCoord({ 0.0f, 0.0f }); // bottom-left
+	cube->AddTexCoord({ 1.0f, 0.0f }); // bottom-right
+	cube->AddTexCoord({ 1.0f, 1.0f }); // top-right
+	cube->AddTexCoord({ 0.0f, 1.0f }); // top-left
 
 	cube->AddIndices({ 4, 5, 6 });
 	cube->AddIndices({ 6, 7, 4 });
@@ -97,6 +107,11 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	cube->AddNormal({ 0.f, 1.f, 0.f });
 	cube->AddNormal({ 0.f, 1.f, 0.f });
 
+	cube->AddTexCoord({ 0.0f, 0.0f }); // bottom-left
+	cube->AddTexCoord({ 1.0f, 0.0f }); // bottom-right
+	cube->AddTexCoord({ 1.0f, 1.0f }); // top-right
+	cube->AddTexCoord({ 0.0f, 1.0f }); // top-left
+
 	cube->AddIndices({ 8, 9, 10 });
 	cube->AddIndices({ 10, 11, 8 });
 
@@ -110,6 +125,11 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	cube->AddNormal({ -1.f, 0.f, 0.f });
 	cube->AddNormal({ -1.f, 0.f, 0.f });
 	cube->AddNormal({ -1.f, 0.f, 0.f });
+
+	cube->AddTexCoord({ 0.0f, 0.0f }); // bottom-left
+	cube->AddTexCoord({ 1.0f, 0.0f }); // bottom-right
+	cube->AddTexCoord({ 1.0f, 1.0f }); // top-right
+	cube->AddTexCoord({ 0.0f, 1.0f }); // top-left
 
 	cube->AddIndices({ 12, 13, 14 });
 	cube->AddIndices({ 14, 15, 12 });
@@ -125,6 +145,11 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	cube->AddNormal({ 0.f, -1.f, 0.f });
 	cube->AddNormal({ 0.f, -1.f, 0.f });
 
+	cube->AddTexCoord({ 0.0f, 0.0f }); // bottom-left
+	cube->AddTexCoord({ 1.0f, 0.0f }); // bottom-right
+	cube->AddTexCoord({ 1.0f, 1.0f }); // top-right
+	cube->AddTexCoord({ 0.0f, 1.0f }); // top-left
+
 	cube->AddIndices({ 16, 17, 18 });
 	cube->AddIndices({ 18, 19, 16 });
 
@@ -138,6 +163,11 @@ Mesh3D* MESH::BuildCube(float size, Color4f /*color*/)
 	cube->AddNormal({ 0.f, 0.f, -1.f });
 	cube->AddNormal({ 0.f, 0.f, -1.f });
 	cube->AddNormal({ 0.f, 0.f, -1.f });
+
+	cube->AddTexCoord({ 0.0f, 0.0f }); // bottom-left
+	cube->AddTexCoord({ 1.0f, 0.0f }); // bottom-right
+	cube->AddTexCoord({ 1.0f, 1.0f }); // top-right
+	cube->AddTexCoord({ 0.0f, 1.0f }); // top-left
 
 	cube->AddIndices({ 20, 21, 22 });
 	cube->AddIndices({ 22, 23, 20 });

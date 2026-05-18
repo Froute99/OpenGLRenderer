@@ -30,5 +30,5 @@ namespace ShaderPaths
 	const std::string prefilterFS = "../assets/shaders/Prefilter.fs";
 	const std::string brdfLutFS = "../assets/shaders/BRDF_LUT.fs";
 
-
+	const std::string batchingVS = "../assets/shaders/BatchingGeometry.vs";
 } // namespace ShaderPaths

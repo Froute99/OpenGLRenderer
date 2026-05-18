@@ -36,6 +36,7 @@ public:
 	int					GetPointsCount() const noexcept { return static_cast<int>(points.size()); }
 	int					GetIndicesCount() const noexcept { return static_cast<int>(indices.size()); }
 	const unsigned int* GetIndicesData() const noexcept { return indices.data(); }
+	unsigned int		GetIndex(int index) const noexcept { return indices[index]; }
 
 private:
 	std::vector<vec3<float>>  points;

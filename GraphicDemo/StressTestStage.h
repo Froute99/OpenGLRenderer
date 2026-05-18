@@ -31,6 +31,12 @@ public:
 
 	void DrawGUI() override;
 
+	std::vector<unsigned int> indices;
+
+	unsigned int vao = 0;
+	unsigned int vbo = 0;
+	unsigned int ebo = 0;
+
 private:
 	float frameTime = 0.f;
 	int	  frameCount = 0;

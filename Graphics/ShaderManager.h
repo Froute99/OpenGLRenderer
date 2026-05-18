@@ -26,7 +26,8 @@ enum class ShaderDefinition
 	Irradiance,
 	Prefilter,
 	BrdfLookupTexture,
-	Skybox
+	Skybox,
+	Test
 };
 
 // Used Singleton Pattern
@@ -48,6 +49,7 @@ public:
 		definitions[ShaderDefinition::Irradiance] = { ShaderPaths::cubemapVS, ShaderPaths::convolutionFS };
 		definitions[ShaderDefinition::Prefilter] = { ShaderPaths::transformVS, ShaderPaths::prefilterFS };
 		definitions[ShaderDefinition::BrdfLookupTexture] = { ShaderPaths::textureVS, ShaderPaths::brdfLutFS };
+		definitions[ShaderDefinition::Test] = { ShaderPaths::batchingVS, ShaderPaths::pbrFS };
 	}
 
 	static ShaderManager& GetInstance()

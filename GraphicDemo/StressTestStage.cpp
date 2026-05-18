@@ -25,11 +25,35 @@
 
 #include <random>
 
+#include <glew.h>
+
+std::ostream& operator<<(std::ostream& os, const mat4<float>& m)
+{
+	for (int i = 0; i < 4; ++i)
+	{
+		os << m[i][0] << ", "
+		   << m[i][1] << ", "
+		   << m[i][2] << ", "
+		   << m[i][3] << std::endl;
+	}
+	return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const vec4<float>& v)
+{
+	os << v[0] << ", "
+	   << v[1] << ", "
+	   << v[2] << ", "
+	   << v[3] << std::endl;
+	return os;
+}
+
 void StressTestStage::Initialize()
 {
 	// TODO: vsync off
 
-	Shader* pbrShader = ShaderManager::GetShader(ShaderDefinition::PBR);
+	//Shader* pbrShader = ShaderManager::GetShader(ShaderDefinition::PBR);
+	Shader* pbrShader = ShaderManager::GetShader(ShaderDefinition::Test);
 	if (!envMap.CanLoad("../assets/newport_loft.hdr", view.BuildProjectionMatrix()))
 	{
 		std::cout << "Failed to load env map\n";
@@ -60,55 +84,82 @@ void StressTestStage::Initialize()
 		stockMaterials.push_back(m);
 	}
 
+	unsigned int baseIndex = 0;
+	std::vector<vec3<float>> positions;
+	std::vector<vec3<float>> normals;
+	std::vector<vec2<float>> texCoords;
 
+	glGenVertexArrays(1, &vao);
+	glGenBuffers(1, &vbo);
+	glGenBuffers(1, &ebo);
 
 	std::uniform_int_distribution<int> d(0, MAX_MATERIAL_COUNT - 1);
 	for (int i = 0; i < MAX_OBJECT_COUNT * MAX_MATERIAL_COUNT; ++i)
 	{
-		float x = (float)(i % 100) * 2.f - 50.f;
-		float y = (float)(i / 100) * 2.f - 50.f;
+		float x = (float)(i % 100) * 2.f - 100.f;
+		float y = (float)(i / 100) * 2.f - 100.f;
 
 		SceneObject*		object = new SceneObject({ 0, 0, 0 }, { 0, 0, 0 }, 1);
-		object->Move({ x, y, -50.f });
+		object->SetObjectType(ObjectType::NonTextured);
+		object->Move({ x, y, -100.f });
 		Mesh3D* cubeMesh = MESH::BuildCube(1.f);
+		object->AddMesh(cubeMesh);
 
 		mat4<float> model = object->GetModelToWorld();
 		mat4<float> normalMatrix = model.Inverse().Transpose();
-		mat3<float> trimMatrix;
+		
+		baseIndex = positions.size();
+		for (int j = 0; j < cubeMesh->GetPointsCount(); ++j)
+		{
+			vec4<float> temp = model * vec4<float>(cubeMesh->GetPoint(j), 1.0f);
 
-		//for (int j = 0; j < cubeMesh->GetPointsCount(); ++j)
-		//{
-		//	vec4<float> temp = model * vec4<float>(cubeMesh->GetPoint(j), 1.0f);
+			vec3<float> bakedPosition = vec3<float>(temp.x, temp.y, temp.z);
+			vec3<float> normal = normalMatrix.ToMat3() * cubeMesh->GetNormal(j);
+			vec2<float> texCoord = cubeMesh->GetTextureCoordinate(j);
 
-		//	vec3<float> bakedPosition = vec3<float>(temp.x, temp.y, temp.z);
-		//	vec3<float> normal = normalMatrix.ToMat3() * cubeMesh->GetNormal(j);
-		//	vec2<float> texCoord = cubeMesh->GetTextureCoordinate(j);
-		//}
-		//for (int i = 0; i < cubeMesh->GetIndicesCount(); ++i)
-		//{
-		//	indices.push_back(baseIndex + i);
-		//}
-		//cubeMesh->GetPoints();
-		//VerticesDescription layout{
-		//	VerticesDescription::Type::Position,
-		//	VerticesDescription::Type::Normal,
-		//	VerticesDescription::Type::TextureCoordinate
-		//};
+			positions.push_back(bakedPosition);
+			normals.push_back(normal);
+			texCoords.push_back(texCoord);
+		}
+		for (int h = 0; h < cubeMesh->GetIndicesCount(); ++h)
+		{
+			indices.push_back(baseIndex + cubeMesh->GetIndex(h));
+		}
 
-		//VertexObject* vertexObjects = new VertexObject(cubeMesh, layout);
-		//sphere->AddMesh(cubeMesh);
-		//sphere->vertexObjects.push_back(vertexObjects);
-
-
-		//SceneObject* object = SceneObject::CreateSphere({ 0, 0, 0 });
+		//SceneObject* object = SceneObject::CreateCube({ 0, 0, 0 }, { 0, 0, 0 }, 1.f);
 		//object->SetObjectType(ObjectType::NonTextured);
-		//object->Move({ x, y, -50.f });
+		//object->Move({ x, y, -100.f });
 		//objects.push_back(object);
 
 		//SimpleMaterialPBR* m = stockMaterials[d(ren)];
 		//RenderCommand cmd{ pbrShader, object->GetVO(), object->GetModelToWorld(), m };
 		//rq.Push(cmd);
 	}
+
+	unsigned int posSize = positions.size() * sizeof(vec3<float>);
+	unsigned int normalSize = normals.size() * sizeof(vec3<float>);
+	unsigned int tcSize = texCoords.size() * sizeof(vec2<float>);
+	unsigned int totalSize = posSize + normalSize + tcSize;
+
+	glBindVertexArray(vao);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, totalSize, nullptr, GL_STATIC_DRAW);
+
+	glBufferSubData(GL_ARRAY_BUFFER, 0, posSize, positions.data());
+	glBufferSubData(GL_ARRAY_BUFFER, posSize, normalSize, normals.data());
+	glBufferSubData(GL_ARRAY_BUFFER, posSize + normalSize, tcSize, texCoords.data());
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)posSize);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)(posSize + normalSize));
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
+
+	glBindVertexArray(0);
 }
 
 void StressTestStage::Update(float dt)
@@ -126,7 +177,8 @@ void StressTestStage::Update(float dt)
 		std::cout << fps << "\r";
 	}
 
-	Shader* pbrShader = ShaderManager::GetShader(ShaderDefinition::PBR);
+	//Shader* pbrShader = ShaderManager::GetShader(ShaderDefinition::PBR);
+	Shader* pbrShader = ShaderManager::GetShader(ShaderDefinition::Test);
 	pbrShader->Use();
 	envMap.BindIBLTexture(pbrShader);
 
@@ -136,22 +188,9 @@ void StressTestStage::Update(float dt)
 	// TODO: clear should be go to shutdown or stage clear function
 	//rq.Clear();
 
-
-	//vec3<float> sphereColor{ 1.f, 0.f, 0.f };
-	//float roughness = 0.1f;
-	//float ambientOcclusion = 0.1f;
-	//float metallic = 0.8f;
-
-	//pbrShader->SendUniformVariable("albedo", sphereColor);
-	//pbrShader->SendUniformVariable("roughness", roughness);
-	//pbrShader->SendUniformVariable("ao", ambientOcclusion);
-	//pbrShader->SendUniformVariable("metallic", metallic);
-
-	//for (SceneObject* object : objects)
-	//{
-	//	pbrShader->SendUniformVariable("model", object->GetModelToWorld());
-	//	object->Draw();
-	//}
+	glBindVertexArray(vao);
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
 
 	const mat4<float>& View = camera.BuildViewMatrix();
 	const mat4<float>& Projection = view.BuildProjectionMatrix();

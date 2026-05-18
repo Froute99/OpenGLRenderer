@@ -12,6 +12,8 @@
 #include <vector>
 #include <functional>
 
+#include <iostream>
+
 static unsigned int globalBindingPoint = 1;
 
 enum BindingSlot
@@ -72,7 +74,6 @@ public:
 	{
 		if (!isDirty)
 			return;
-
 		for (auto& updator : updators)
 		{
 			updator(data);
