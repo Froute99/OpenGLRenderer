@@ -184,6 +184,9 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="ComputeShaderDemo.h" />
     <ClInclude Include="Demo.h" />
+    <ClInclude Include="FrameTimeGraph.h" />
+    <ClInclude Include="GPUTimer.h" />
+    <ClInclude Include="Log.h" />
     <ClInclude Include="SceneObject.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="PBRdemo.h" />

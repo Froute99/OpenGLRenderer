@@ -14,17 +14,10 @@
 #include "stb_image.h"
 #include <iostream>
 #include <fstream>
-#include <Math/Angle.hpp>
 #include <ShaderManager.h>
 
-bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
+void EnvironmentMap::InitFrameBuffer()
 {
-	Shader* equirectangularMappingShader = ShaderManager::GetShader(ShaderDefinition::EquirectangularConversion);
-	Shader* irradianceShader = ShaderManager::GetShader(ShaderDefinition::Irradiance);
-	Shader* prefilterShader = ShaderManager::GetShader(ShaderDefinition::Prefilter);
-	Shader* brdfShader = ShaderManager::GetShader(ShaderDefinition::BrdfLookupTexture);
-	Shader* skyboxShader = ShaderManager::GetShader(ShaderDefinition::Skybox);
-
 	glGenFramebuffers(1, &FBO);
 	glGenRenderbuffers(1, &RBO);
 
@@ -32,27 +25,30 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 	glBindRenderbuffer(GL_RENDERBUFFER, RBO);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 512, 512);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, RBO);
+}
 
+bool EnvironmentMap::LoadHDRTexture(const char* path)
+{
 	stbi_set_flip_vertically_on_load(true);
 	int	   width, height, nrComponents;
 	float* data = stbi_loadf(path, &width, &height, &nrComponents, 0);
-	if (data != nullptr)
-	{
-		glGenTextures(1, &texture);
-		glBindTexture(GL_TEXTURE_2D, texture);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data);
-		stbi_image_free(data);
+	if (data == nullptr) return false;
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	}
-	else
-	{
-		return false;
-	}
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data);
+	stbi_image_free(data);
 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	return true;
+}
+
+void EnvironmentMap::ConvertToCubemap()
+{
 	glGenTextures(1, &cubeMap);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
 	for (unsigned int i = 0; i < 6; ++i)
@@ -65,17 +61,8 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	mat4<float> captureProjection = Matrix4::GeneralProjectionMatrix(ANGLE::pi / 2.f, 1.0f, 0.1f, 1000.f);
-	mat4<float> captureViews[] = {
-		Matrix4::BuildLookAt(vec3<float>(0.0f, 0.0f, 0.0f), vec3<float>(1.0f, 0.0f, 0.0f), vec3<float>(0.0f, -1.0f, 0.0f)),
-		Matrix4::BuildLookAt(vec3<float>(0.0f, 0.0f, 0.0f), vec3<float>(-1.0f, 0.0f, 0.0f), vec3<float>(0.0f, -1.0f, 0.0f)),
-		Matrix4::BuildLookAt(vec3<float>(0.0f, 0.0f, 0.0f), vec3<float>(0.0f, 1.0f, 0.0f), vec3<float>(0.0f, 0.0f, 1.0f)),
-		Matrix4::BuildLookAt(vec3<float>(0.0f, 0.0f, 0.0f), vec3<float>(0.0f, -1.0f, 0.0f), vec3<float>(0.0f, 0.0f, -1.0f)),
-		Matrix4::BuildLookAt(vec3<float>(0.0f, 0.0f, 0.0f), vec3<float>(0.0f, 0.0f, 1.0f), vec3<float>(0.0f, -1.0f, 0.0f)),
-		Matrix4::BuildLookAt(vec3<float>(0.0f, 0.0f, 0.0f), vec3<float>(0.0f, 0.0f, -1.0f), vec3<float>(0.0f, -1.0f, 0.0f))
-	};
-
-	/* HDR image to Cubemap */
+	/* .hdr image file to Cubemap */
+	Shader* equirectangularMappingShader = ShaderManager::GetShader(ShaderDefinition::EquirectangularConversion);
 	equirectangularMappingShader->Use();
 	equirectangularMappingShader->SendUniformVariable("equirectangularMap", 0);
 	equirectangularMappingShader->SendUniformVariable("projection", captureProjection);
@@ -96,8 +83,10 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
 	glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+}
 
-	/* Irradiance Map */
+void EnvironmentMap::BakeIrradianceMap()
+{
 	glGenTextures(1, &irradianceMap);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap);
 	for (unsigned int i = 0; i < 6; ++i)
@@ -114,6 +103,7 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 	glBindRenderbuffer(GL_RENDERBUFFER, RBO);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 32, 32);
 
+	Shader* irradianceShader = ShaderManager::GetShader(ShaderDefinition::Irradiance);
 	irradianceShader->Use();
 	irradianceShader->SendUniformVariable("environmentMap", 0);
 	irradianceShader->SendUniformVariable("projection", captureProjection);
@@ -131,8 +121,13 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 		RenderCube();
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
 
+void EnvironmentMap::BakePrefilterMap()
+{
 	unsigned int PREFILTER_SIZE = 128;
+	unsigned int TOTAL_MIP_LEVEL = 5;
+
 	/* Prefilter Map */
 	glGenTextures(1, &prefilterMap);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, prefilterMap);
@@ -147,6 +142,7 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 
+	Shader* prefilterShader = ShaderManager::GetShader(ShaderDefinition::Prefilter);
 	prefilterShader->Use();
 	prefilterShader->SendUniformVariable("environmentMap", 0);
 	prefilterShader->SendUniformVariable("projection", captureProjection);
@@ -154,7 +150,6 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-	unsigned int TOTAL_MIP_LEVEL = 5;
 	for (unsigned int mip = 0; mip < TOTAL_MIP_LEVEL; ++mip)
 	{
 		float		 mipScaler = (float)std::pow(0.5f, mip);
@@ -176,10 +171,11 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 		}
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
 
-	/* BRDF Look up table*/
+void EnvironmentMap::BakeBRDFLookupTable()
+{
 	glGenTextures(1, &brdfLUTTexture);
-
 	glBindTexture(GL_TEXTURE_2D, brdfLUTTexture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, 512, 512, 0, GL_RG, GL_FLOAT, 0);
 
@@ -194,17 +190,33 @@ bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, brdfLUTTexture, 0);
 
 	glViewport(0, 0, 512, 512);
+	Shader* brdfShader = ShaderManager::GetShader(ShaderDefinition::BrdfLookupTexture);
 	brdfShader->Use();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	RenderQuad();
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
 
+void EnvironmentMap::InitSkybox(const mat4<float>& projection)
+{
+	Shader* skyboxShader = ShaderManager::GetShader(ShaderDefinition::Skybox);
 	skyboxShader->Use();
 	skyboxShader->SendUniformVariable("skybox", 0);
 	skyboxShader->SendUniformVariable("view", captureViews[5]);
 	skyboxShader->SendUniformVariable("projection", projection);
 	glViewport(0, 0, screenWidth, screenHeight);
+}
+
+bool EnvironmentMap::CanLoad(const char* path, const mat4<float>& projection)
+{
+	InitFrameBuffer();
+	if (!LoadHDRTexture(path)) return false;
+	ConvertToCubemap();
+	BakeIrradianceMap();
+	BakePrefilterMap();
+	BakeBRDFLookupTable();
+	InitSkybox(projection);
 
 	return true;
 }
@@ -225,7 +237,7 @@ void EnvironmentMap::RenderCube()
 	if (cubeVAO == 0)
 	{
 		Mesh3D cubeMesh;
-		float vertices[] = {
+		float  vertices[] = {
 			// back face
 			-1.0f, -1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, // bottom-left
 			1.0f, 1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,	// top-right
@@ -248,12 +260,12 @@ void EnvironmentMap::RenderCube()
 			-1.0f, -1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f,	// bottom-right
 			-1.0f, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,	// top-right
 			// right face
-			1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,		// top-left
-			1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,	// bottom-right
-			1.0f, 1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,	// top-right
-			1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,	// bottom-right
-			1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,		// top-left
-			1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,	// bottom-left
+			1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,	  // top-left
+			1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom-right
+			1.0f, 1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,  // top-right
+			1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom-right
+			1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,	  // top-left
+			1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,  // bottom-left
 			// bottom face
 			-1.0f, -1.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, // top-right
 			1.0f, -1.0f, -1.0f, 0.0f, -1.0f, 0.0f, 1.0f, 1.0f,	// top-left
@@ -296,10 +308,10 @@ void EnvironmentMap::RenderQuad()
 	{
 		float quadVertices[] = {
 			// positions        // texture Coords
-			-1.0f, 1.0f, 0.0f,	0.0f, 1.0f,
+			-1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
 			-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-			1.0f, 1.0f, 0.0f,	1.0f, 1.0f,
-			1.0f, -1.0f, 0.0f,	1.0f, 0.0f
+			1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+			1.0f, -1.0f, 0.0f, 1.0f, 0.0f
 		};
 		// setup plane VAO
 		glGenVertexArrays(1, &quadVAO);

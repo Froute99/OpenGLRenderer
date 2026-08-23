@@ -39,13 +39,20 @@ enum struct DrawType
 class Draw
 {
 public:
-	static void StartDrawing();
-	static void StartDrawing(const Color4f& background_color);
+	//static void StartDrawing();
+	static void StartDrawing(const Color4f& background_color = { 0.f });
 	static void FinishDrawing();
 	static void DrawSprite(const Material& material);
 	static void DrawShape(const Material& material);
 	static void DrawGameObject(DrawType type, Material* target);
 	static void DrawText(const Shader& shader, const mat4<float>& ndc, const Text& text);
+	static void DrawElements(unsigned int vao, unsigned int pattern, size_t indicesSize);
+	static void DrawElementsWithCount(unsigned int, unsigned int, size_t);
+
+	static int GetDrawCount() { return count; }
+
 private:
+	inline static int count;
+
 };
 

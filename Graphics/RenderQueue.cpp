@@ -13,6 +13,7 @@
 #include "Graphics/Vertices.h"
 #include <glew.h>
 #include <algorithm>
+#include "Graphics/Draw.h"
 
 auto compare = [](const RenderCommand& a, const RenderCommand& b) {
 	if (a.shader != b.shader)
@@ -53,8 +54,9 @@ void RenderQueue::Draw() noexcept
 		// TODO: might need a new-fancy Render class
 		currentShader->SendUniformVariable("model", c.modelMatrix);
 
-		glBindVertexArray(c.vo->VAO);
-		glDrawElements(c.vo->GetPattern(), c.vo->GetIndicesCount(), GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
+		Draw::DrawElementsWithCount(c.vo->VAO, c.vo->GetPattern(), c.vo->GetIndicesCount());
+		//glBindVertexArray(c.vo->VAO);
+		//glDrawElements(c.vo->GetPattern(), c.vo->GetIndicesCount(), GL_UNSIGNED_INT, 0);
+		//glBindVertexArray(0);
 	}
 }

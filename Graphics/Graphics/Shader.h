@@ -14,7 +14,6 @@
 #include <Math/mat3.hpp>
 #include <Math/mat4.hpp>
 
-
 namespace ShaderHelper
 {
 	std::string ReadSourceFrom(const std::filesystem::path& path);
@@ -46,4 +45,5 @@ public:
 
 private:
 	unsigned int handle = 0;
+
 };

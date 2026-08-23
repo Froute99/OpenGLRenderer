@@ -28,7 +28,7 @@ public:
 		column[1].x = 0;
 		column[1].y = 0;
 		column[1].z = 0;
-		column[2].w = 0;
+		column[1].w = 0;
 
 		column[2].x = 0;
 		column[2].y = 0;

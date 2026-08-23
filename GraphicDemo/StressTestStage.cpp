@@ -14,18 +14,13 @@
 #include "StressTestStage.h"
 #include "SceneObject.h"
 #include <ShaderManager.h>		// access to shader instance
-#include <iostream>				// printing fps
-
-// imguis
-#include <imgui/imgui.h>
-#include <imgui/imgui_impl_glfw.h>
-#include <imgui/imgui_impl_opengl3.h>
+#include <random>
 
 #include "Material.h"
 
-#include <random>
+#include <Graphics/Draw.h>
 
-#include <glew.h>
+#include "Log.h"
 
 std::ostream& operator<<(std::ostream& os, const mat4<float>& m)
 {
@@ -48,10 +43,14 @@ std::ostream& operator<<(std::ostream& os, const vec4<float>& v)
 	return os;
 }
 
+StressTestStage::~StressTestStage() noexcept
+{
+	// TODO: clear should be go to shutdown or stage clear function
+	//rq.Clear();
+}
+
 void StressTestStage::Initialize()
 {
-	// TODO: vsync off
-
 	//Shader* pbrShader = ShaderManager::GetShader(ShaderDefinition::PBR);
 	Shader* pbrShader = ShaderManager::GetShader(ShaderDefinition::Test);
 	if (!envMap.CanLoad("../assets/newport_loft.hdr", view.BuildProjectionMatrix()))
@@ -65,12 +64,12 @@ void StressTestStage::Initialize()
 	uniformManager.SetLightColor({ 1.f });
 	uniformManager.SetLightIntensity(200.f);
 
-	// 500 meshes, 20 materials 500*20 = 10000
 	const int MAX_OBJECT_COUNT = 10000;
 	const int MAX_MATERIAL_COUNT = 1;
 
 	std::random_device					  rd;
-	std::mt19937						  ren(rd());		// random engine
+	//std::mt19937						  ren(rd());		// random engine
+	std::mt19937						  ren(0);		// random engine
 	std::uniform_real_distribution<float> fd(0.f, 1.f);		// float distribution
 	stockMaterials.reserve(MAX_MATERIAL_COUNT);
 	for (int i = 0; i < MAX_MATERIAL_COUNT; ++i)
@@ -94,11 +93,14 @@ void StressTestStage::Initialize()
 	glGenBuffers(1, &ebo);
 
 	std::uniform_int_distribution<int> d(0, MAX_MATERIAL_COUNT - 1);
+	//material = stockMaterials[d(ren)];
+	material = stockMaterials[0];
 	for (int i = 0; i < MAX_OBJECT_COUNT * MAX_MATERIAL_COUNT; ++i)
 	{
 		float x = (float)(i % 100) * 2.f - 100.f;
 		float y = (float)(i / 100) * 2.f - 100.f;
-
+		
+		/*** Static Batching **************/
 		SceneObject*		object = new SceneObject({ 0, 0, 0 }, { 0, 0, 0 }, 1);
 		object->SetObjectType(ObjectType::NonTextured);
 		object->Move({ x, y, -100.f });
@@ -126,16 +128,17 @@ void StressTestStage::Initialize()
 			indices.push_back(baseIndex + cubeMesh->GetIndex(h));
 		}
 
+		/*** Render Queue **************/
 		//SceneObject* object = SceneObject::CreateCube({ 0, 0, 0 }, { 0, 0, 0 }, 1.f);
 		//object->SetObjectType(ObjectType::NonTextured);
 		//object->Move({ x, y, -100.f });
 		//objects.push_back(object);
 
-		//SimpleMaterialPBR* m = stockMaterials[d(ren)];
-		//RenderCommand cmd{ pbrShader, object->GetVO(), object->GetModelToWorld(), m };
+		//RenderCommand cmd{ pbrShader, object->GetVO(), object->GetModelToWorld(), material };
 		//rq.Push(cmd);
 	}
 
+	/*** Static Batching **************/
 	unsigned int posSize = positions.size() * sizeof(vec3<float>);
 	unsigned int normalSize = normals.size() * sizeof(vec3<float>);
 	unsigned int tcSize = texCoords.size() * sizeof(vec2<float>);
@@ -166,42 +169,46 @@ void StressTestStage::Update(float dt)
 {
 	GlobalUniformManager::GetInstance().Update();
 
-	// frame count
-	frameTime += dt;
-	++frameCount;
-	if (frameTime >= 1.0f)
-	{
-		int fps = (int)(frameCount / frameTime);
-		frameTime -= 1.0f;
-		frameCount = 0;
-		std::cout << fps << "\r";
-	}
+	frameTimeGraph.Push(dt * 1000.f);
+	Log::Add("Frame time average of recent 60 frames: " + std::to_string(frameTimeGraph.GetAvgFrameTime()) + " ms");
+	gpuTimer.Begin();		// Start measuring GPU time
 
-	//Shader* pbrShader = ShaderManager::GetShader(ShaderDefinition::PBR);
+	/*** Static Batching **************/
 	Shader* pbrShader = ShaderManager::GetShader(ShaderDefinition::Test);
 	pbrShader->Use();
-	envMap.BindIBLTexture(pbrShader);
+	material->ApplyToShader(pbrShader);
+	Draw::DrawElementsWithCount(vao, GL_TRIANGLES, indices.size());
 
+
+	/*** Render Queue **************/
+	//Shader* pbrShader = ShaderManager::GetShader(ShaderDefinition::PBR);
 	//rq.Sort();
 	//rq.Draw();
 
-	// TODO: clear should be go to shutdown or stage clear function
-	//rq.Clear();
 
-	glBindVertexArray(vao);
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
-
+	// IBL environment map
 	const mat4<float>& View = camera.BuildViewMatrix();
 	const mat4<float>& Projection = view.BuildProjectionMatrix();
+	envMap.BindIBLTexture(pbrShader);
 	envMap.Render(View.CutOffTranslation(), Projection);
+
+	gpuTimer.End();		// End of measuring GPU time
+
+	frameTimeGraph.cpuMs = dt * 1000.f;
+	frameTimeGraph.gpuMs = gpuTimer.GetElapsedTime();
+
+	Log::Add("Draw calls: " + std::to_string(Draw::GetDrawCount()));
+	Log::Flush();
 }
 
 void StressTestStage::DrawGUI()
 {
-	//ImGui_ImplOpenGL3_NewFrame();
-	//ImGui_ImplGlfw_NewFrame();
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
 
-	////ImGui::Render();
-	//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	ImGui::NewFrame();
+	frameTimeGraph.Render();
+
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

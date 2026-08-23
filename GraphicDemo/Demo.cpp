@@ -12,8 +12,8 @@
 #include <Graphics/Draw.h>
 #include <math/Angle.hpp>
 #include <glew.h>
-#include <iostream>
 #include <Graphics/UBO.h>
+#include <iostream>
 
 void Demo::Initialize()
 {

@@ -15,6 +15,9 @@
 #include <vector>
 #include "RenderQueue.h"			// optimization test
 
+#include "FrameTimeGraph.h"
+#include "GPUTimer.h"
+
 class SceneObject;
 class StressTestStage : public Demo
 {
@@ -24,7 +27,8 @@ public:
 	{
 		Initialize();
 	}
-	~StressTestStage() noexcept override {}
+	~StressTestStage() noexcept override;
+
 
 	void Initialize() override;
 	void Update(float dt) override;
@@ -38,12 +42,17 @@ public:
 	unsigned int ebo = 0;
 
 private:
-	float frameTime = 0.f;
-	int	  frameCount = 0;
-
 	EnvironmentMap envMap{ GetScreenWidth(), GetScreenHeight() };
 	std::vector<SceneObject*> objects;
 	RenderQueue				  rq;
 
 	std::vector<SimpleMaterialPBR*> stockMaterials;
+	SimpleMaterialPBR*				material;					// not for a new memory.
+
+	FrameTimeGraph frameTimeGraph{ 60, 60 };
+	GPUTimer	   gpuTimer;
+	
+	int	  frameIndex;
+	int	  frameCount;
+	float frameBuffer[60];
 };

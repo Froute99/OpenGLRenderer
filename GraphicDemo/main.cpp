@@ -15,13 +15,13 @@ int main()
 {
 	Application app;
 	Clock clock;
-	float dt = 0.0f;
+	float dtSecond = 0.0f;
 	
 	while (app.IsRunning())
 	{
 		clock.UpdateClock();
-		app.Update(dt);
-		dt = clock.GetTimeFromLastUpdate();
+		app.Update(dtSecond);
+		dtSecond = clock.GetTimeFromLastUpdate();
 	}
 
 	return 0;

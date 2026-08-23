@@ -9,6 +9,7 @@
 
 #pragma once
 #include <Math/mat4.hpp>
+#include <Math/Angle.hpp>
 #include <Graphics/Shader.h>
 
 class Mesh3D;
@@ -20,6 +21,15 @@ public:
 	EnvironmentMap() = default;
 	EnvironmentMap(const int screenWidth, const int screenHeight)
 		: screenWidth(screenWidth), screenHeight(screenHeight) {}
+
+	void InitFrameBuffer();
+	bool LoadHDRTexture(const char* path);
+	void ConvertToCubemap();
+	void BakeIrradianceMap();
+	void BakePrefilterMap();
+	void BakeBRDFLookupTable();
+	void InitSkybox(const mat4<float>& projection);
+
 	bool CanLoad(const char* path, const mat4<float>& projection);
 	void Render(const mat4<float>& view, const mat4<float>& projection);
 
@@ -35,14 +45,15 @@ public:
 private:
 	int screenWidth, screenHeight;
 
-	//Shader equirectangularMappingShader;
-	//Shader irradianceShader;
-	//Shader prefilterShader;
-	//Shader brdfShader;
-	//Shader skyboxShader;
-
-	//Mesh3D* mesh;
-	//VertexObject vo;
+	mat4<float> captureProjection = Matrix4::GeneralProjectionMatrix(ANGLE::pi / 2.0f, 1.0f, 0.1f, 1000.f);
+	mat4<float> captureViews[6] = {
+		Matrix4::BuildLookAt(vec3<float>(0.0f, 0.0f, 0.0f), vec3<float>(1.0f, 0.0f, 0.0f), vec3<float>(0.0f, -1.0f, 0.0f)),
+		Matrix4::BuildLookAt(vec3<float>(0.0f, 0.0f, 0.0f), vec3<float>(-1.0f, 0.0f, 0.0f), vec3<float>(0.0f, -1.0f, 0.0f)),
+		Matrix4::BuildLookAt(vec3<float>(0.0f, 0.0f, 0.0f), vec3<float>(0.0f, 1.0f, 0.0f), vec3<float>(0.0f, 0.0f, 1.0f)),
+		Matrix4::BuildLookAt(vec3<float>(0.0f, 0.0f, 0.0f), vec3<float>(0.0f, -1.0f, 0.0f), vec3<float>(0.0f, 0.0f, -1.0f)),
+		Matrix4::BuildLookAt(vec3<float>(0.0f, 0.0f, 0.0f), vec3<float>(0.0f, 0.0f, 1.0f), vec3<float>(0.0f, -1.0f, 0.0f)),
+		Matrix4::BuildLookAt(vec3<float>(0.0f, 0.0f, 0.0f), vec3<float>(0.0f, 0.0f, -1.0f), vec3<float>(0.0f, -1.0f, 0.0f))
+	};
 
 	unsigned int cubeVAO = 0;
 	unsigned int cubeVBO = 0;
@@ -59,6 +70,8 @@ private:
 	unsigned int prefilterMap = 0;
 	unsigned int brdfLUTTexture = 0;
 
-	//mat4<float> captureProjection;
-	//mat4<float> captureViews[6];
+	//Shader skyboxShader;
+	//Mesh3D* mesh;
+	//VertexObject vo;
+
 };

@@ -9,7 +9,6 @@
  *******************************************************/
 
 #include <iostream>
-#include "glfw3.h"
 #include "Application.h"
 //#include "PhongShadingDemo.h"
 #include "TextureDrawingDemo.h"
@@ -20,6 +19,7 @@
 //#include "TexturedPBRDemo.h"
 #include "TestStage.h"
 #include "StressTestStage.h"
+#include "glfw3.h"
 
 bool Application::IsRunning() const
 {
@@ -44,7 +44,7 @@ void Application::Initialize()
 	}
 	isRunning = true;
 
-	window.ToggleVSync(true);
+	window.ToggleVSync(false);
 	window.ToggleMouse();
 
 	//demo[PBR] = std::make_unique<PBRDemo>(window);
