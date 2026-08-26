@@ -1,4 +1,4 @@
-/********************************************************
+﻿/********************************************************
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *
  *	File_name: Application.h
@@ -21,14 +21,15 @@ class Application : public EventHandler
 public:
 	enum DEMOINDEX
 	{
-		PBR,
-		PHONGSHADING,
+		//PBR,
+		//PHONGSHADING,
 		//TEXTUREDPBR,
 		//TEXTUREDRAWING,
 		//ANIMATION,
-		HIERARCHY_DEMO,
+		//HIERARCHY_DEMO,
 		//COMPUTESHADERDEMO,
 		//TEST,
+		STRESS_TEST,
 		DEMOSIZE
 	};
 

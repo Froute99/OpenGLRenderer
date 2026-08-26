@@ -1,5 +1,5 @@
 #version 330 core
-in vec3 TexCoords;
+in vec3 worldPos;
 
 out vec4 FragColor;
 
@@ -7,7 +7,7 @@ uniform samplerCube skybox;
 
 void main()
 {
-	vec3 color = texture(skybox, TexCoords).rgb;
+	vec3 color = texture(skybox, worldPos).rgb;
 
 	// HDR tonemap, gamma correction
 	color = color / (color + vec3(1.0));

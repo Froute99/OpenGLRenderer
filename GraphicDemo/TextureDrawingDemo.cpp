@@ -16,7 +16,7 @@
 
 void TextureDrawingDemo::Initialize()
 {
-	shader.LoadShaderFrom(PATH::texture_vert, PATH::texture_frag);
+	shader.CanLoadShader(PATH::texture_vert, PATH::texture_frag);
 	layout = { VerticesDescription::Type::Position, VerticesDescription::Type::TextureCoordinate };
 
 	//view.SetViewSize(width, height);

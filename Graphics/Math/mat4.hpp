@@ -28,7 +28,7 @@ public:
 		column[1].x = 0;
 		column[1].y = 0;
 		column[1].z = 0;
-		column[2].w = 0;
+		column[1].w = 0;
 
 		column[2].x = 0;
 		column[2].y = 0;
@@ -130,6 +130,93 @@ public:
 		assert(0 <= col && col <= 3);
 		return column[col];
 	}
+
+	constexpr const T Determinant() const noexcept
+	{
+		vec3<T> subRow0(column[0][1], column[0][2], column[0][3]);
+		vec3<T> subRow1(column[1][1], column[1][2], column[1][3]);
+		vec3<T> subRow2(column[2][1], column[2][2], column[2][3]);
+		vec3<T> subRow3(column[3][1], column[3][2], column[3][3]);
+
+		T r0 = column[0][0] * mat3<T>(subRow1, subRow2, subRow3).Determinant();
+		T r1 = column[1][0] * mat3<T>(subRow0, subRow2, subRow3).Determinant();
+		T r2 = column[2][0] * mat3<T>(subRow0, subRow1, subRow3).Determinant();
+		T r3 = column[3][0] * mat3<T>(subRow0, subRow1, subRow2).Determinant();
+
+		return r0 - r1 + r2 - r3;
+	}
+
+	constexpr mat4<T> Inverse() noexcept
+	{
+		// cofactor matrix(+, -, checker matrix)
+		// adj matrix(matrix of determinant of sub matrices)
+
+		mat4<T> inverse;
+		T		invDet = T(1) / Determinant();
+
+		for (int r = 0; r < 4; ++r)
+		{
+			for (int c = 0; c < 4; ++c)
+			{
+				mat3<T> sub;
+				int		ii = 0;
+				for (int i = 0; i < 4; ++i)
+				{
+					if (i == r)
+						continue;
+
+					int ji = 0;
+					for (int j = 0; j < 4; ++j)
+					{
+						if (j == c)
+							continue;
+
+						sub[ii][ji] = column[i][j];
+						++ji;
+					}
+					++ii;
+				}
+				int sign = ((r + c) % 2 == 0) ? 1 : -1;
+				inverse[c][r] = invDet * sign * sub.Determinant();
+			}
+		}
+		return inverse;
+	}
+
+	constexpr mat4<T> Transpose() noexcept
+	{
+		return mat4<T>{
+			column[0][0], column[1][0], column[2][0], column[3][0],
+			column[0][1], column[1][1], column[2][1], column[3][1],
+			column[0][2], column[1][2], column[2][2], column[3][2],
+			column[0][3], column[1][3], column[2][3], column[3][3]
+		};
+	}
+
+	constexpr mat3<T> ToMat3() noexcept
+	{
+		return mat3<T>{
+			column[0][0], column[0][1], column[0][2],
+			column[1][0], column[1][1], column[1][2],
+			column[2][0], column[2][1], column[2][2]
+		};
+	}
+
+	constexpr mat4<T> CutOffTranslation() const noexcept
+	{
+		mat4<T> result = *this;
+		result.elements[0][3] = 0;
+		result.elements[1][3] = 0;
+		result.elements[2][3] = 0;
+
+		result.elements[3][0] = 0;
+		result.elements[3][1] = 0;
+		result.elements[3][2] = 0;
+
+		result.elements[3][3] = 1;
+
+		return result;
+	}
 };
 
 template <typename T>
@@ -148,6 +235,18 @@ mat4<T> operator*(const mat4<T>& m1, const mat4<T>& m2) noexcept
 		}
 	}
 	return m;
+}
+
+template <typename T>
+vec4<T> operator*(const mat4<T>& m, const vec4<T>& v) noexcept
+{
+	vec4<T> result{
+		m[0][0] * v.x + m[1][0] * v.y + m[2][0] * v.z + m[3][0] * v.w,
+		m[0][1] * v.x + m[1][1] * v.y + m[2][1] * v.z + m[3][1] * v.w,
+		m[0][2] * v.x + m[1][2] * v.y + m[2][2] * v.z + m[3][2] * v.w,
+		m[0][3] * v.x + m[1][3] * v.y + m[2][3] * v.z + m[3][3] * v.w,
+	};
+	return result;
 }
 
 template <typename T>
@@ -294,17 +393,6 @@ namespace Matrix4
 	}
 
 	template <typename T>
-	constexpr mat4<T> transpose(const mat4<T>& m) noexcept
-	{
-		return mat4<T>{
-			m.column[0].x, m.column[1].x, m.column[2].x, m.column[3].x,
-			m.column[0].y, m.column[1].y, m.column[2].y, m.column[3].y,
-			m.column[0].z, m.column[1].z, m.column[2].z, m.column[3].z,
-			m.column[0].w, m.column[1].w, m.column[2].w, m.column[3].w
-		};
-	}
-
-	template <typename T>
 	constexpr mat4<T> BuildLookAt(const vec3<T>& eyePosition, const vec3<T>& lookAt, const vec3<T>& up)
 	{
 		vec3<float> f = Vector3::normalize(eyePosition - lookAt);
@@ -333,12 +421,6 @@ namespace Matrix4
 		return viewMatrix;
 	}
 
-	// we need 4 matrix build function
-	// 1. General Projection Matrix						Skip this because I always use symmetric view frustum
-	// 2. Infinite Far Plane Projection Matrix			Skip this because I always use symmetric view frustum
-	// 3. General-Symmetric Projection Matrix
-	// 4. Infinite-Symmetric Projection Matrix
-
 	// General-symmetric projection
 	template <typename T>
 	constexpr mat4<T> GeneralProjectionMatrix(T fovYinRadians, T aspect, T zNear, T zFar)
@@ -355,6 +437,7 @@ namespace Matrix4
 		return result;
 	}
 
+	// Infinite-Symmetric Projection Matrix
 	template <typename T>
 	constexpr mat4<T> InfiniteProjectionMatrix(T fovYinRadians, T aspect, T zNear)
 	{
@@ -366,23 +449,6 @@ namespace Matrix4
 		result.elements[2][2] = -static_cast<T>(1);
 		result.elements[2][3] = -static_cast<T>(1);
 		result.elements[3][2] = -static_cast<T>(2) * zNear;
-
-		return result;
-	}
-
-	template <typename T>
-	constexpr mat4<T> CutOffTranslation(const mat4<T>& m)
-	{
-		mat4<T> result = m;
-		result.elements[0][3] = 0;
-		result.elements[1][3] = 0;
-		result.elements[2][3] = 0;
-
-		result.elements[3][0] = 0;
-		result.elements[3][1] = 0;
-		result.elements[3][2] = 0;
-
-		result.elements[3][3] = 1;
 
 		return result;
 	}

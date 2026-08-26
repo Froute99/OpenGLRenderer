@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *	File_name: Draw.cpp
  *	
@@ -11,17 +11,12 @@
 #include "Draw.h"
 #include <glew.h>
 
-void Draw::StartDrawing()
-{
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-
-/* Background will be cleared with parameter */
 void Draw::StartDrawing(const Color4f& background_color)
 {
 	glClearColor(background_color.r, background_color.g, background_color.b, background_color.a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	count = 0;
 }
 
 void Draw::FinishDrawing()
@@ -32,7 +27,7 @@ void Draw::FinishDrawing()
 void Draw::DrawSprite(const Material& material)
 {
 	glBindTexture(GL_TEXTURE_2D, material.texture.GetTexturehandle());
-	Shader::UseShader(*material.shader);
+	material.shader->Use();
 	//material.shader->SendUniformVariable("ndc", material.ndc);
 	VertexObject::SelectVAO(material.vertices);
 	glDrawArrays(material.vertices.GetPattern(), 0, material.vertices.GetVerticesCount());
@@ -40,7 +35,7 @@ void Draw::DrawSprite(const Material& material)
 
 void Draw::DrawShape(const Material& material)
 {
-	Shader::UseShader(*material.shader);
+	material.shader->Use();
 	//material.shader->SendUniformVariable("ndc", material.ndc);
 	VertexObject::SelectVAO(material.vertices);
 	glDrawArrays(material.vertices.GetPattern(), 0, material.vertices.GetVerticesCount());
@@ -62,6 +57,19 @@ void Draw::DrawGameObject(DrawType type, Material* target)
 	default:
 		break;
 	}
+}
+
+void Draw::DrawElements(unsigned int vao, unsigned int pattern, size_t indicesSize)
+{
+	glBindVertexArray(vao);
+	glDrawElements(pattern, indicesSize, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+}
+
+void Draw::DrawElementsWithCount(unsigned int vao, unsigned int pattern, size_t indicesSize)
+{
+	++count;
+	DrawElements(vao, pattern, indicesSize);
 }
 
 //void Draw::DrawText(const Shader& shader, const mat3<float>& ndc, const Text& text)

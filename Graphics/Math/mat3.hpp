@@ -68,6 +68,7 @@ public:
 		column[2].z = repeated_value;
 	}
 
+
 	union
 	{
 		T		elements[3][3];
@@ -98,6 +99,25 @@ public:
 		assert(0 <= col && col <= 2);
 		return column[col];
 	}
+
+	constexpr const T Determinant() const noexcept
+	{
+		return (column[0][0] * column[1][1] * column[2][2]
+			+ column[0][1] * column[1][2] * column[2][0]
+			+ column[0][2] * column[1][0] * column[2][1])
+			- (column[0][2] * column[1][1] * column[2][0]
+				+ column[0][1] * column[1][1] * column[2][1]
+				 + column[0][2] * column[1][2] * column[2][2]);
+	}
+
+	constexpr mat3<T> Transpose() noexcept
+	{
+		return mat3<T>{
+			column[0][0], column[1][0], column[2][0],
+			column[0][1], column[1][1], column[2][1],
+			column[0][2], column[1][2], column[2][2]
+		};
+	}
 };
 
 template <typename T>
@@ -115,6 +135,17 @@ mat3<T> operator*(const mat3<T>& m1, const mat3<T>& m2) noexcept
 		}
 	}
 	return m;
+}
+
+template <typename T>
+vec3<T> operator*(const mat3<T>& m, const vec3<T>& v) noexcept
+{
+	vec3<T> result{
+		m[0][0] * v.x + m[0][1] * v.y + m[0][2] * v.z,
+		m[1][0] * v.x + m[1][1] * v.y + m[1][2] * v.z,
+		m[2][0] * v.x + m[2][1] * v.y + m[2][2] * v.z
+	};
+	return result;
 }
 
 template <typename T>
@@ -168,14 +199,5 @@ namespace Matrix3
 			scale_x, 0, 0,
 				0, scale_y, 0,
 				0, 0, 1 };
-	}
-
-	template <typename T>
-	constexpr mat3<T> transpose(const mat3<T>& m) noexcept
-	{
-		return mat3<T>{
-			m.column[0].x, m.column[1].x, m.column[2].x,
-				m.column[0].y, m.column[1].y, m.column[2].y,
-				m.column[0].z, m.column[1].z, m.column[2].z };
 	}
 }

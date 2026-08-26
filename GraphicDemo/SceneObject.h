@@ -65,12 +65,18 @@ public:
 	ObjectType GetObjectType() { return objectType; }
 	void	   SetObjectType(ObjectType newObjectType) { objectType = newObjectType; }
 
+	// TODO: this is temp function. 
+	VertexObject* GetVO() { return vertexObjects[0]; }
+
 private:
 	ObjectType objectType = ObjectType::Textured;
 
 private:
+	// TODO: meshes class only used in the reading-FBX & initialization phase of the object.
 	std::vector<Mesh3D*> meshes;
 
+	// TODO: check that is there any objects that need multiple vertex objects
+	// if not, change this to a single one.
 	std::vector<VertexObject*> vertexObjects;
 
 	std::set<std::string> texturePaths;

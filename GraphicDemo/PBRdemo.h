@@ -20,12 +20,14 @@ class PBRDemo : public Demo
 {
 public:
 	explicit PBRDemo(OpenGLWindow& window)
-		: Demo(window) { Initialize(); }
+		: Demo(window)
+	{
+		Initialize();
+	}
 	~PBRDemo();
 
 	void Initialize() override;
 	void Update(float dt) override;
-	void ResetCamera() override;
 
 	void HandleResizeEvent(const int new_width, const int new_height) override final;
 	void HandleKeyPress(KeyboardButton button) override final;
@@ -37,9 +39,6 @@ public:
 	void DrawGUI() override;
 
 private:
-	Shader pbrShader;
-	Shader texturedShader;
-
 	SceneObject* sphere1;
 	SceneObject* sphere2;
 	SceneObject* ironSphere;
@@ -55,9 +54,9 @@ private:
 	float		 ambientOcclusion;
 	float		 metallic;
 
-	vec3<float> lightPosition;
-	vec3<float> lightColor;
-	float		lightIntensity;
+	//vec3<float> lightPosition;
+	//vec3<float> lightColor;
+	//float		lightIntensity;
 
 	Shader		 hdrShader;
 	unsigned int hdrFBO;	  // framebuffer object handle for HDR
@@ -74,6 +73,4 @@ private:
 	const char* const surfacesList[6] = { "Plastic", "Glass", "Diamond", "Iron", "Copper", "Gold" };
 	int				  surfaceIndex = 0;
 
-	UBO	matricesBlock{ 128 };
-	UBO lightsBlock{ 48 };
 };

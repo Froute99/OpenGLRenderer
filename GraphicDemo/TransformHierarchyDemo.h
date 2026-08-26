@@ -50,7 +50,7 @@ private:
 	vec3<float> lightPosition;
 	vec3<float> lightColor;
 
-	UBO matricesBlock{ 128 };
+	//UBO matricesBlock{ 128 };
 
 	//mat3<float> cameraToNDC;
 

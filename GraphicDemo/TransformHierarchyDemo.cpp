@@ -20,7 +20,7 @@
 
 void TransformHierarchyDemo::Initialize()
 {
-	shader.LoadShaderFrom("../assets/shaders/texture.vert", "../assets/shaders/texture.frag");
+	shader.CanLoadShader("../assets/shaders/texture.vert", "../assets/shaders/texture.frag");
 
 	camera.SetEyePosition({ 0.f, 5.f, 30.f });
 
@@ -56,7 +56,7 @@ void TransformHierarchyDemo::Initialize()
 	moonAlbedo = new Texture();
 	moonAlbedo->LoadFromPath("../assets/Models/moon.png");
 
-	matricesBlock.BindTo(shader.GetHandleToShader(), "Matrices");
+	//matricesBlock.BindTo(shader.GetHandleToShader(), "Matrices");
 
 	lightPosition = sun->GetTransform()->GetTranslation();
 	lightColor = { 10.f };
@@ -83,10 +83,10 @@ void TransformHierarchyDemo::Update(float /*dt*/)
 	const mat4<float>& View = camera.BuildViewMatrix();
 	const mat4<float>& Projection = view.BuildProjectionMatrix();
 
-	matricesBlock.WriteData(0, 64, &View);
-	matricesBlock.WriteData(64, 64, &Projection);
+	//matricesBlock.WriteData(0, 64, &View);
+	//matricesBlock.WriteData(64, 64, &Projection);
 
-	Shader::UseShader(shader);
+	shader.Use();
 	mat4<float> Model = sun->GetModelToWorld();
 
 	shader.SendUniformVariable("model", Model);

@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	Author: JeongHak Kim	junghak.kim@digipen.edu
  *	File_name: Shader.h
  *	
@@ -17,21 +17,21 @@
 namespace ShaderHelper
 {
 	std::string ReadSourceFrom(const std::filesystem::path& path);
-	bool CheckCompileErrors(unsigned int shaderObject, const std::string& errorMsg);
+	bool IsShaderObjectValid(unsigned int shaderObject, const std::string& errorMsg);
 }
 
 class [[nodiscard]] Shader
 {
 public:
 	Shader() noexcept = default;
-	~Shader() noexcept = default;
+	~Shader();
 	Shader(const std::filesystem::path& vertex_source,
 		const std::filesystem::path& fragment_source) noexcept;
-	bool LoadShaderFrom(const std::filesystem::path& vertex_source,
+	bool CanLoadShader(const std::filesystem::path& vertex_source,
 		const std::filesystem::path& fragment_source) noexcept;
 	unsigned GetHandleToShader() const noexcept;
 
-	static void UseShader(const Shader& shader);
+	void Use();
 	static void UseNothing();
 
 	void SendUniformVariable(const char* variable_name, const int variable) const noexcept;
@@ -41,6 +41,9 @@ public:
 	void SendUniformVariable(const char* name, const mat4<float>& m) const noexcept;
 	void BindTexture(const char* uniformName, const int value, const unsigned int textureHandle) const noexcept;
 
+	void UniformBlocksAutoLink();
+
 private:
-	unsigned int handleToShader = 0;
+	unsigned int handle = 0;
+
 };

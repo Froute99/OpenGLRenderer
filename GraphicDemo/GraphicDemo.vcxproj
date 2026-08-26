@@ -28,26 +28,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -124,13 +124,13 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)Graphics;$(SolutionDir)include\GL\glfw3;$(SolutionDir)include\GL\glew;$(SolutionDir)include\stbi;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Graphics;$(SolutionDir)include\GL\glfw3;$(SolutionDir)include\GL\glew;$(SolutionDir)include\stbi;$(SolutionDir)include;$(SolutionDir)include\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
       <PreprocessorDefinitions>GLEW_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -138,8 +138,8 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)external\glfw3\$(Platform)\;$(SolutionDir)external\glew\$(Platform)\;$(SolutionDir)build\lib\Graphics\$(Platform)\$(Configuration)\;$(SolutionDir)external\assimp\$(Platform)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;Graphics.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)external\glfw3\$(Platform)\;$(SolutionDir)external\glew\$(Platform)\;$(SolutionDir)build\lib\Graphics\$(Platform)\$(Configuration)\;$(SolutionDir)external\assimp\$(Platform)\;$(SolutionDir)external\imgui\$(Platform)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;Graphics.lib;assimp.lib;imgui.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -172,11 +172,10 @@
     <ClCompile Include="Demo.cpp" />
     <ClCompile Include="SceneObject.cpp" />
     <ClCompile Include="PBRdemo.cpp" />
-    <ClCompile Include="PhongShadingDemo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="StressTestStage.cpp" />
     <ClCompile Include="TestStage.cpp" />
-    <ClCompile Include="TexturedPBRDemo.cpp" />
     <ClCompile Include="TextureDrawingDemo.cpp" />
     <ClCompile Include="TransformHierarchyDemo.cpp" />
   </ItemGroup>
@@ -185,13 +184,15 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="ComputeShaderDemo.h" />
     <ClInclude Include="Demo.h" />
+    <ClInclude Include="FrameTimeGraph.h" />
+    <ClInclude Include="GPUTimer.h" />
+    <ClInclude Include="Log.h" />
     <ClInclude Include="SceneObject.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="PBRdemo.h" />
-    <ClInclude Include="PhongShadingDemo.h" />
     <ClInclude Include="Skybox.h" />
+    <ClInclude Include="StressTestStage.h" />
     <ClInclude Include="TestStage.h" />
-    <ClInclude Include="TexturedPBRDemo.h" />
     <ClInclude Include="TextureDrawingDemo.h" />
     <ClInclude Include="TransformHierarchyDemo.h" />
   </ItemGroup>

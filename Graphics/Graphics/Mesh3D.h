@@ -25,6 +25,7 @@ public:
 	}
 
 	vec3<float> GetPoint(int index) const noexcept { return points.at(index); }
+	std::vector<vec3<float>> GetPoints() const noexcept { return points; }
 	vec3<float> GetNormal(int index) const noexcept { return normals.at(index); }
 	vec2<float> GetTextureCoordinate(int index) const noexcept { return textureCoordinates.at(index); }
 	Color4f		GetColor(int index) const noexcept { return colors.at(index); }
@@ -35,6 +36,7 @@ public:
 	int					GetPointsCount() const noexcept { return static_cast<int>(points.size()); }
 	int					GetIndicesCount() const noexcept { return static_cast<int>(indices.size()); }
 	const unsigned int* GetIndicesData() const noexcept { return indices.data(); }
+	unsigned int		GetIndex(int index) const noexcept { return indices[index]; }
 
 private:
 	std::vector<vec3<float>>  points;

@@ -12,6 +12,7 @@
 #include <Graphics/Draw.h>
 #include <math/Angle.hpp>
 #include <glew.h>
+#include <Graphics/UBO.h>
 #include <iostream>
 
 void Demo::Initialize()
@@ -24,6 +25,8 @@ void Demo::Initialize()
 	view.SetViewSize(width, height);
 	mousePast[0] = width / 2.f;
 	mousePast[1] = height / 2.f;
+	GlobalUniformManager::GetInstance().RegisterUpdator([this](GlobalUniformData& data) { camera.UniformRegistry(data); });
+	GlobalUniformManager::GetInstance().RegisterUpdator([this](GlobalUniformData& data) { view.UniformRegistry(data); });
 }
 
 void Demo::UpdateWrapper(float dt) noexcept
