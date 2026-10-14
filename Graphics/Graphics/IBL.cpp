@@ -16,6 +16,11 @@
 #include <fstream>
 #include <ShaderManager.h>
 
+EnvironmentMap::~EnvironmentMap()
+{
+	// clean GL buffer objects, textures, maps
+}
+
 void EnvironmentMap::InitFrameBuffer()
 {
 	glGenFramebuffers(1, &FBO);

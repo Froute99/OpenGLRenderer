@@ -29,7 +29,6 @@ public:
 	}
 	~StressTestStage() noexcept override;
 
-
 	void Initialize() override;
 	void Update(float dt) override;
 
@@ -43,11 +42,13 @@ public:
 
 private:
 	EnvironmentMap envMap{ GetScreenWidth(), GetScreenHeight() };
+	
+	// Check these memory allocated instances, if there's no reason to be allocated change to value member(not pointer)
 	std::vector<SceneObject*> objects;
 	RenderQueue				  rq;
 
 	std::vector<SimpleMaterialPBR*> stockMaterials;
-	SimpleMaterialPBR*				material;					// not for a new memory.
+	SimpleMaterialPBR*				material;					// non-owning
 
 	FrameTimeGraph frameTimeGraph{ 60, 60 };
 	GPUTimer	   gpuTimer;

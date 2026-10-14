@@ -22,6 +22,8 @@ public:
 	EnvironmentMap(const int screenWidth, const int screenHeight)
 		: screenWidth(screenWidth), screenHeight(screenHeight) {}
 
+	~EnvironmentMap();
+
 	void InitFrameBuffer();
 	bool LoadHDRTexture(const char* path);
 	void ConvertToCubemap();
